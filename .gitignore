@@ -2,3 +2,6 @@
 .env.*.php
 .env.php
 .env
+/config/database.php
+/.idea/*
+/node_modules/*
