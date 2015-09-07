@@ -1,0 +1,22 @@
+{
+  "name": "flag-sprites",
+  "version": "1.1.1",
+  "homepage": "https://github.com/LeoColomb/flag-sprites",
+  "authors": [
+    "Leo Colombaro"
+  ],
+  "description": "Country flags in a LESS sprite",
+  "keywords": [
+    "flag",
+    "sprites",
+    "less"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
