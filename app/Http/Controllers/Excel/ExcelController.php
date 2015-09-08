@@ -7,15 +7,16 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Helper\XML;
 use App\Helper\File as file;
 use App\Helper\Excel_;
+
 
 class ExcelController extends Controller
 {
 
-    protected $url;
-    protected $data;
+    private $url;
+
+    private $data;
 
     public function __construct()
     {
@@ -23,41 +24,28 @@ class ExcelController extends Controller
         view()->share('type', 'work');
     }
 
-    public function loadXml(Request $request)
-    {
-        if ($file = $request->file('xml')) {
 
-            $xml = new XML();
+    /**
+     * parce xls
+     */
+    public function importXLS(Request $request){
 
-            if ($file->getMimeType() == 'application/xml') {
+        if ($file = $request->file('xls')) {
 
-                $this->url = $file->move('xml/'.file::_get_path(), $file->getFilename());
+            if ($file->getMimeType() == 'application/vnd.ms-office') {
 
-                $data = $xml->parseFromUrl($this->url);
-                $data->count_student = $xml->countStudents();
+                $this->url = $file->move('xls/'.file::_get_path(), $file->getClientOriginalName());
 
-                Logs::_create('User parse XML '.$this->url);
+                $this->data = Excel_::_loadXls($this->url);
 
-                $excel = new Excel_($data->getContent());
-                $excel->_getMockup();
-                
-                return view('admin.excel.load', compact('data'));
+                return view('admin.excel.viewDataFromXls',['data'=>$this->data]);
             } else {
-                return view('admin.xml.loadxml');
+                return view('admin.excel.import')->with(['error'=>'No type file']);
             }
         }else{
-            return view('admin.xml.loadxml');
+            return view('admin.excel.import');
         }
 
     }
-
-    public function viewXml($xml_path)
-    {
-        $xml = new XML();
-        $data = $xml->parseFromUrl($xml_path);
-        $data->count_student = $xml->countStudents();
-        return view('admin.excel.load', compact('data'));
-    }
-
 
 }

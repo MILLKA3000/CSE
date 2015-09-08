@@ -29,10 +29,16 @@ Route::group(['prefix' => '/', 'middleware' => 'auth'], function() {
     Route::resource('user', 'Admin\UserController');
 
     # work with excel
-    Route::get('excel/data', 'Excel\ExcelController@data');
-    Route::get('excel/loadXML', 'Excel\ExcelController@loadXML');
-    Route::post('excel/loadXML', 'Excel\ExcelController@loadXML');
-    Route::post('excel/_getMockup', 'Excel\ExcelController@_getMockup');
+    Route::get('excel/data', 'Excel\XMLController@data');
+    Route::get('excel/loadXML', 'Excel\XMLController@loadXML');
+    Route::post('excel/loadXML', 'Excel\XMLController@loadXML');
+    Route::get('excel/downloadXLS/{file}', 'Excel\XMLController@downloadXLS');
+
+    Route::get('excel/importXLS', 'Excel\ExcelController@importXLS');
+    Route::post('excel/importXLS', 'Excel\ExcelController@importXLS');
+
+
+
 
     # subject of students
     Route::get('subject/data', 'Admin\SubjectContingentController@data');

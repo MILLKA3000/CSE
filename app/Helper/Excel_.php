@@ -36,4 +36,13 @@ class Excel_ extends Model
             });
         })->export('xls');
     }
+
+    static public function _loadXls($url){
+        $data = Excel::load($url, function($reader) {
+           return $reader->all();
+        });
+
+        return $data;
+    }
+
 }

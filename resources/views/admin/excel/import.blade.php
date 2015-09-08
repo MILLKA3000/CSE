@@ -1,14 +1,14 @@
 @extends('admin.layouts.default')
 
 {{-- Web site Title --}}
-@section('title') {!! trans("admin/modules/getExcel.loadXMLtitle") !!} :: @parent
+@section('title') {!! trans("admin/modules/Excel.loadXLStitle") !!} :: @parent
 @stop
 
 {{-- Content --}}
 @section('main')
     <div class="page-header">
         <h3>
-            {!! trans("admin/modules/getExcel.loadXMLtitle") !!}
+            {!! trans("admin/modules/Excel.loadXLStitle") !!}
             <div class="pull-right">
                 <div class="pull-right">
 
@@ -20,7 +20,7 @@
 
         <div class="panel panel-info">
             <div class="panel-heading" style="color:#000000">
-                {!! trans("admin/modules/getExcel.Change_XML_file") !!}
+                {!! trans("admin/modules/Excel.Change_XLS_file") !!}
             </div>
             <div class="panel-body">
                 @if(Session::has('success'))
@@ -28,11 +28,11 @@
                         <h2>{!! Session::get('success') !!}</h2>
                     </div>
                 @endif
-                {!! Form::open(array('url'=>'excel/loadXML','method'=>'post', 'files'=>true)) !!}
+                {!! Form::open(array('url'=>'excel/importXLS','method'=>'post', 'files'=>true)) !!}
                 <div class="control-group">
                     <div class="controls">
-                        {!! Form::file('xml') !!}
-                        <p class="errors">{!!$errors->first('xml')!!}</p>
+                        {!! Form::file('xls') !!}
+                        <p class="errors">{!!$errors->first('xls')!!}</p>
                         @if(isset($error))
                             <p class="text-danger">{!! $error !!}</p>
                         @endif

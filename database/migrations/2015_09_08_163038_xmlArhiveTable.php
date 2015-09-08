@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class LogsTable extends Migration
+class XmlArhiveTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,11 +12,11 @@ class LogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('logs', function (Blueprint $table) {
+        Schema::create('xml_arhive', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->integer('user_id')->references('id')->on('user')->onDelete('set null');
-            $table->string('title');
+            $table->string('path');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class LogsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('logs');
+        Schema::drop('xml_arhive');
     }
 }

@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -11,22 +12,15 @@
         <meta name="author" content="Jon Doe"/>
     @show @section('meta_description')
         <meta name="description"
-              content=""/>
+              content="Lorem ipsum dolor sit amet, nihil fabulas et sea, nam posse menandri scripserit no, mei."/>
     @show
-
-    <link href="{{ asset('css/site.css') }}" rel="stylesheet">
     <link href="{{ asset('css/admin.css') }}" rel="stylesheet">
-
-
-    <script src="{{ asset('js/site.js') }}"></script>
     <script src="{{ asset('js/admin.js') }}"></script>
-
     @yield('styles')
 </head>
 <body>
-<div id="wrapper" class="row">
+<div id="wrapper">
     @include('admin.partials.nav')
-
     <div id="page-wrapper">
         @yield('main')
     </div>

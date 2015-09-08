@@ -43,14 +43,13 @@
         </div>
         <div class="col-xs-6">
             <h3 class="text-center">{!! trans("admin/modules/getExcel.detailed") !!}</h3>
-            <div class="h3">
+            <div class="h4">
                 <span class="text-muted">{!! trans("admin/modules/getExcel.name_discipline") !!}</span>: {{$data->getContent()->testlist->discipline}}<br/>
                 <span class="text-muted">{!! trans("admin/modules/getExcel.name_moduletheme") !!}</span>: {{$data->getContent()->testlist->modulenum}}. {{$data->getContent()->testlist->moduletheme}}<br/>
                 <span class="text-muted">{!! trans("admin/modules/getExcel.count_group") !!}</span>: {{count($data->getContent()->testlist)}}<br/>
                 <span class="text-muted">{!! trans("admin/modules/getExcel.count_student") !!}</span>: {{$data->count_student}}<br/>
             </div>
-            <a href="{{$data->urlXLS}}" id="download_XLS" class="btn btn-sm btn-danger">
-
+            <a href="{{url('excel/downloadXLS/'.$data->file_name)}}" id="download_XLS" class="btn btn-sm btn-danger">
                 <div>{{ trans("admin/modules/getExcel.downloadXls") }}!</div>
             </a>
 

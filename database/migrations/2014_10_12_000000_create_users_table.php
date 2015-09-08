@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('password', 60);
             $table->string('confirmation_code');
             $table->boolean('confirmed')->default(false);
-            $table->boolean('role_id')->references('id')->on('role')->onDelete('set null');
+            $table->integer('role_id')->references('id')->on('roles')->onDelete('set null');
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
