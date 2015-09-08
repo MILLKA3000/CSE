@@ -1,5 +1,4 @@
 <?php
-
 Route::model('language', 'App\Language');
 Route::model('user', 'App\User');
 Route::pattern('id', '[0-9]+');
@@ -28,6 +27,12 @@ Route::group(['prefix' => '/', 'middleware' => 'auth'], function() {
     Route::get('user/{user}/edit', 'Admin\UserController@edit');
     Route::get('user/{user}/delete', 'Admin\UserController@delete');
     Route::resource('user', 'Admin\UserController');
+
+    # work with excel
+    Route::get('excel/data', 'Excel\ExcelController@data');
+    Route::get('excel/loadXML', 'Excel\ExcelController@loadXML');
+    Route::post('excel/loadXML', 'Excel\ExcelController@loadXML');
+    Route::post('excel/_getMockup', 'Excel\ExcelController@_getMockup');
 
     # subject of students
     Route::get('subject/data', 'Admin\SubjectContingentController@data');

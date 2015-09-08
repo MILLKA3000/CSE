@@ -1,16 +1,20 @@
-@extends('admin.layouts.modal')
+@extends('admin.layouts.default')
 {{-- Content --}}
-@section('content')
-        <!-- Tabs -->
-<ul class="nav nav-tabs">
-    <li class="active"><a href="#tab-general" data-toggle="tab"> {{
-			trans("admin/modal.general") }}</a></li>
-</ul>
-<!-- ./ tabs -->
+@section('main')
+    <div class="page-header">
+        <h3>
+            {!! trans("admin/users.users") !!}
+            <div class="pull-right">
+                <div class="pull-right">
+
+                </div>
+            </div>
+        </h3>
+    </div>
 @if (isset($user))
-{!! Form::model($user, array('url' => URL::to('user') . '/' . $user->id, 'method' => 'put', 'class' => 'bf', 'files'=> true)) !!}
+{!! Form::model($user, array('url' => URL::to('user') . '/' . $user->id, 'method' => 'PUT', 'class' => 'bf', 'files'=> true)) !!}
 @else
-{!! Form::open(array('url' => URL::to('user'), 'method' => 'post', 'class' => 'bf', 'files'=> true)) !!}
+{!! Form::open(array('url' => URL::to('user'), 'method' => 'POST', 'class' => 'bf', 'files'=> true)) !!}
 @endif
         <!-- Tabs Content -->
 <div class="tab-content">
@@ -73,10 +77,6 @@
     </div>
     <div class="form-group">
         <div class="col-md-12">
-            <button type="reset" class="btn btn-sm btn-warning close_popup">
-                <span class="glyphicon glyphicon-ban-circle"></span> {{
-				trans("admin/modal.cancel") }}
-            </button>
             <button type="reset" class="btn btn-sm btn-default">
                 <span class="glyphicon glyphicon-remove-circle"></span> {{
 				trans("admin/modal.reset") }}

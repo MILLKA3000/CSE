@@ -16,7 +16,27 @@ class role extends Seeder
         ]);
 
         \App\Role::create([
+            'name' => 'Self-Admin',
+        ]);
+
+        \App\Role::create([
+            'name' => 'Inspektor',
+        ]);
+
+        \App\Role::create([
+            'name' => 'Dekanat',
+        ]);
+
+        \App\Role::create([
+            'name' => 'Teacher',
+        ]);
+
+        \App\Role::create([
             'name' => 'Student',
+        ]);
+
+        \App\Role::create([
+            'name' => 'Guest',
         ]);
 
     }

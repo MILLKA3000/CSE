@@ -15,7 +15,7 @@ class Departments extends Model
 
     static public function getAllDepartment(){
 
-        $departments = Departments::all();
+        $departments = Departments::select()->where('USE','=',1)->get();
 
         foreach($departments as $department){
             $department->DEPARTMENT = Recoding::winToUtf($department->DEPARTMENT);

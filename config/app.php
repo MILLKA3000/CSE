@@ -154,6 +154,8 @@ return [
          * for firebird
          */
         Firebird\FirebirdServiceProvider::class,
+        Orchestra\Parser\XmlServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
     ],
 
     /*
@@ -207,6 +209,9 @@ return [
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
+
+        'XmlParser' => Orchestra\Parser\Xml\Facade::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ],
 
 ];

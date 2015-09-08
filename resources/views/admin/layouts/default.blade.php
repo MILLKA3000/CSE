@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -12,7 +11,7 @@
         <meta name="author" content="Jon Doe"/>
     @show @section('meta_description')
         <meta name="description"
-              content="Lorem ipsum dolor sit amet, nihil fabulas et sea, nam posse menandri scripserit no, mei."/>
+              content=""/>
     @show
 
     <link href="{{ asset('css/site.css') }}" rel="stylesheet">
@@ -25,10 +24,8 @@
     @yield('styles')
 </head>
 <body>
-<div id="wrapper">
+<div id="wrapper" class="row">
     @include('admin.partials.nav')
-
-    {{isset($flash_message) ? $flash_message : ''}}
 
     <div id="page-wrapper">
         @yield('main')

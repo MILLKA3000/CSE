@@ -11,4 +11,8 @@ class Students extends Model
     protected $guarded  = array('STUDENTID');
 
     protected $table = 'STUDENTS';
+
+
+
+
 }

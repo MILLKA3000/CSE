@@ -10,6 +10,7 @@ use App\Http\Requests\Admin\DeleteRequest;
 use App\Http\Requests\Admin\ReorderRequest;
 use Illuminate\Support\Facades\Auth;
 use Datatables;
+use App\Logs;
 
 class LanguageController extends AdminController {
 
@@ -50,6 +51,7 @@ class LanguageController extends AdminController {
         $language = new Language($request->all());
         $language -> user_id = Auth::id();
         $language -> save();
+        Logs::_create('User create language '.$language->name);
 	}
 	/**
 	 * Show the form for editing the specified resource.
@@ -72,6 +74,7 @@ class LanguageController extends AdminController {
 	{
         $language -> user_id_edited = Auth::id();
         $language -> update($request->all());
+        Logs::_create('User update language '.$language->name);
 	}
 
     /**
@@ -83,6 +86,7 @@ class LanguageController extends AdminController {
 
     public function delete(Language $language)
     {
+        Logs::_create('User deleted language '.$language->name);
         $language->delete();
         return redirect()->back();
     }
@@ -99,7 +103,7 @@ class LanguageController extends AdminController {
             ->orderBy('languages.position', 'ASC')
             ->select(array('languages.id', 'languages.name', 'languages.lang_code as lang_code'));
         return Datatables::of($language)
-            ->add_column('actions', '<a href="{{{ URL::to(\'language/\' . $id . \'/edit\' ) }}}" class="btn btn-success btn-sm iframe" ><span class="glyphicon glyphicon-pencil"></span> {{ trans("admin/modal.edit") }}</a>
+            ->add_column('actions', '<a href="{{{ URL::to(\'language/\' . $id . \'/edit\' ) }}}" class="btn btn-success btn-sm" ><span class="glyphicon glyphicon-pencil"></span> {{ trans("admin/modal.edit") }}</a>
                     <a href="{{{ URL::to(\'language/\' . $id . \'/delete\' ) }}}" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-trash"></span> {{ trans("admin/modal.delete") }}</a>
                     <input type="hidden" name="row" value="{{$id}}" id="row">')
             ->remove_column('id')

@@ -18,7 +18,7 @@ class Speciality extends Model
         $specialities = Speciality::select()->where('USE','=',1)->get();
 
         foreach($specialities as $speciality){
-            $speciality->SPECIALITY = Recoding::winToUtf($speciality->SPECIALITY);
+            $speciality->SPECIALITYCODE = Recoding::winToUtf($speciality->SPECIALITY)." ( ".$speciality->CODE." )";
         }
 
         return $specialities;

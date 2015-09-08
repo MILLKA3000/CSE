@@ -5,7 +5,7 @@ use App\Role;
 use App\User;
 use App\Http\Requests\Admin\UserRequest;
 use Datatables;
-
+use App\Logs;
 
 class UserController extends AdminController
 {
@@ -51,6 +51,7 @@ class UserController extends AdminController
         $user->password = bcrypt($request->password);
         $user->confirmation_code = str_random(32);
         $user->save();
+        Logs::_create('User create '.$user->name);
     }
 
     /**
@@ -81,6 +82,7 @@ class UserController extends AdminController
                 $user->password = bcrypt($password);
             }
         }
+        Logs::_create('User update '.$user->name);
         $user->update($request->except('password','password_confirmation'));
     }
 
@@ -93,6 +95,7 @@ class UserController extends AdminController
 
     public function delete(User $user)
     {
+        Logs::_create('User deleted '.$user->name);
         $user->delete();
         return redirect()->back();
     }
@@ -113,7 +116,7 @@ class UserController extends AdminController
 
         return Datatables::of($users)
             ->edit_column('confirmed', '@if ($confirmed=="1") <span class="glyphicon glyphicon-ok"></span> @else <span class=\'glyphicon glyphicon-remove\'></span> @endif')
-            ->add_column('actions', '@if ($id!="1")<a href="{{{ URL::to(\'user/\' . $id . \'/edit\' ) }}}" class="btn btn-success btn-sm iframe" ><span class="glyphicon glyphicon-pencil"></span>  {{ trans("admin/modal.edit") }}</a>
+            ->add_column('actions', '@if ($id!="1")<a href="{{{ URL::to(\'user/\' . $id . \'/edit\' ) }}}" class="btn btn-success btn-sm " ><span class="glyphicon glyphicon-pencil"></span>  {{ trans("admin/modal.edit") }}</a>
                     <a href="{{{ URL::to(\'user/\' . $id . \'/delete\' ) }}}" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-trash"></span> {{ trans("admin/modal.delete") }}</a>
                 @endif')
             ->remove_column('id')

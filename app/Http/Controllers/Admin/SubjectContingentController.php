@@ -13,13 +13,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Datatables;
 
+
+
 class SubjectContingentController extends Controller
 {
 
     public function __construct()
     {
+        $this->value_student=[];
         $this->middleware('role:Admin');
         view()->share('type', 'subject');
+
     }
 
     /**
@@ -29,11 +33,11 @@ class SubjectContingentController extends Controller
      */
     public function index()
     {
-        $departments = Departments::getAllDepartment();
 
-        $speciality = Speciality::getAllSpeciality();
 
-        return view('admin.subject.index',compact('departments','speciality'));
+        $data = $stub->load('xml/1.xml');
+        $this->value_student = $data;
+
     }
 
     /**
@@ -109,15 +113,8 @@ class SubjectContingentController extends Controller
      */
     public function data()
     {
-        $subjects = Speciality::all(['SPECIALITY','SPECIALITYID']);
-
-        foreach($subjects as $subject){
-            $subject->SPECIALITY = iconv("windows-1251","utf-8",$subject->SPECIALITY);
-        }
-
-
-        return Datatables::of($subjects)
-            ->make();
+//        return Datatables::of($this->value_student->getContent()->students->student->fio->toArray())
+//            ->make();
     }
 
 }

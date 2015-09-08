@@ -1,12 +1,15 @@
-@extends('admin.layouts.modal')
+@extends('admin.layouts.default')
 {{-- Content --}}
-@section('content')
-<!-- Tabs -->
-<ul class="nav nav-tabs">
-	<li class="active"><a href="#tab-general" data-toggle="tab"> {{
-			trans("admin/modal.general") }}</a></li>
-</ul>
-<!-- ./ tabs -->
+@section('main')
+    <div class="page-header">
+        <h3>
+            {!! trans("admin/language.languages") !!}
+
+            <div class="pull-right">
+
+            </div>
+        </h3>
+    </div>
 @if (isset($language))
     {!! Form::model($language, array('url' => URL::to('language') . '/' . $language->id, 'method' => 'put', 'class' => 'bf', 'files'=> true)) !!}
 @else
