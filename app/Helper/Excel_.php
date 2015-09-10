@@ -24,17 +24,12 @@ class Excel_ extends Model
             });
 
             $excel->sheet('Table decode', function($sheet) {
-                $sheet->fromArray(Array_::formXLSArrayToTableDecode($this->data));
-                $sheet->row(1, array('ID', 'FIO','KODE'));
+                $sheet->fromArray(Array_::formXLSArrayGrade($this->data));
+                $sheet->row(1, array('ID', 'FIO','KODE','GROUP','GRADES'));
                 $sheet->setAutoSize(true);
             });
 
-            $excel->sheet('Grades', function($sheet) {
-                $sheet->fromArray(Array_::formXLSArrayGrade($this->data));
-                $sheet->row(1, array('ID', 'FIO','Grades'));
-                $sheet->setAutoSize(true);
-            });
-        })->export('xls');
+        })->export('xlsx');
     }
 
     static public function _loadXls($url){

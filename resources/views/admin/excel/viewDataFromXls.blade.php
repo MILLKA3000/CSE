@@ -36,29 +36,30 @@
                         <? $i++ ?>
                         <div class="tab-pane" id="tab{{$i}}">
                             <br/>
+
                             <table id="tablet{{$i}}" class="table table-striped table-hover">
                                 <thead>
                                 <tr>
-                                    <th>{!! trans("admin/student.id") !!}</th>
-                                    <th>{!! trans("admin/student.fio") !!}</th>
-                                    <th>{!! trans("admin/student.credits_cur") !!}</th>
+                                    @foreach ($item as $k=>$it)
+                                        @foreach ($it as $key=>$col)
+                                            <th>{{$key}}</th>
+                                        @endforeach
+                                        <? break; ?>
+                                    @endforeach
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($item as $ite)
-                                        <tr>
+                                @foreach ($item as $k=>$it)
+                                    <tr>
+                                    @foreach ($it as $key=>$col)
+
                                             <td>
-                                                sss
-                                            </td>
-                                            <td>
-                                                sss
-                                            </td>
-                                            <td>
-                                                sss
+                                                {{$it[$key]}}
                                             </td>
 
-                                        </tr>
                                     @endforeach
+                                    </tr>
+                                @endforeach
                                 </tbody>
                             </table>
                         </div>

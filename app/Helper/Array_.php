@@ -10,7 +10,7 @@ class Array_ extends Model
         $data = [];
         foreach($obj as $d){
             foreach($d->students->student as $student){
-                $data[] = [(string)$student->id,(string)$student->fio,(string)$student->credits_cur];
+                $data[] = [(string)$student->id,(string)$student->fio,'',(string)$d->groupnum,(string)$student->credits_cur];
             }
         }
         return $data;
