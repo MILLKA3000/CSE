@@ -543,7 +543,7 @@ return array(
     'SebastianBergmann\\RecursionContext\\InvalidArgumentException' => $vendorDir . '/sebastian/recursion-context/src/InvalidArgumentException.php',
     'SebastianBergmann\\Version' => $vendorDir . '/sebastian/version/src/Version.php',
     'SessionHandlerInterface' => $vendorDir . '/symfony/http-foundation/Resources/stubs/SessionHandlerInterface.php',
-    'TableConsultingGrades' => $baseDir . '/database/migrations/2015_09_11_112344_table_consulting_grades.php',
+    'TableConsultingGrades' => $baseDir . '/database/migrations/2015_09_11_112328_table_consulting_grades.php',
     'TableFileInfo' => $baseDir . '/database/migrations/2015_09_11_112258_table_file_info.php',
     'TableGrades' => $baseDir . '/database/migrations/2015_09_11_112330_table_grades.php',
     'TableGradesFile' => $baseDir . '/database/migrations/2015_09_11_112323_table_grades_file.php',
@@ -551,6 +551,5 @@ return array(
     'TestCase' => $baseDir . '/tests/TestCase.php',
     'Text_Template' => $vendorDir . '/phpunit/php-text-template/src/Template.php',
     'UserTableSeeder' => $baseDir . '/database/seeds/UserTableSeeder.php',
-    'XmlArhiveTable' => $baseDir . '/database/migrations/2015_09_08_163038_xmlArhiveTable.php',
     'role' => $baseDir . '/database/seeds/role.php',
 );

@@ -13,11 +13,11 @@ class TableConsultingGrades extends Migration
     public function up()
     {
         Schema::create('consulting_grades', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
-            $table->increments('id')->unsigned();
+            $table->increments('id');
             $table->bigInteger('id_student');
             $table->integer('id_num_plan');
-            $table->integer('user_id')->references('id')->on('user')->onDelete('set null');
+            $table->unsignedInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             $table->timestamps();
         });
     }

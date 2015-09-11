@@ -12,13 +12,7 @@ class Role extends Migration
      */
     public function up()
     {
-        Schema::create('roles', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
-            $table->increments('id')->unsigned();
-            $table->string('name');
-            $table->timestamps();
-            $table->softDeletes();
-        });
+
     }
 
     /**
@@ -28,6 +22,6 @@ class Role extends Migration
      */
     public function down()
     {
-        Schema::drop('roles');
+
     }
 }

@@ -13,8 +13,7 @@ class TableTypeExam extends Migration
     public function up()
     {
         Schema::create('type_exam', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
-            $table->increments('id')->unsigned();
+            $table->increments('id');
             $table->string('name');
         });
     }

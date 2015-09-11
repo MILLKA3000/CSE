@@ -13,10 +13,10 @@ class TableFileInfo extends Migration
     public function up()
     {
         Schema::create('file_info', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
-            $table->increments('id')->unsigned();
+            $table->increments('id');
             $table->string('path');
-            $table->integer('user_id')->references('id')->on('user')->onDelete('set null');
+            $table->unsignedInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             $table->timestamps();
             $table->softDeletes();
         });
