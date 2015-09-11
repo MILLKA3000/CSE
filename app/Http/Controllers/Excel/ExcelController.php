@@ -32,7 +32,9 @@ class ExcelController extends Controller
 
         if ($file = $request->file('xls')) {
 
-            if ($file->getMimeType() == 'application/vnd.ms-office') {
+            if (array_keys([
+                'application/vnd.ms-office',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],$file->getMimeType())) {
 
                 $this->url = $file->move('xls/'.file::_get_path(), $file->getClientOriginalName());
 
