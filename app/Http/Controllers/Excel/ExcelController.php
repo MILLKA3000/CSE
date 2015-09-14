@@ -40,6 +40,8 @@ class ExcelController extends Controller
 
                 $this->data = Excel_::_loadXls($this->url);
 
+
+
                 return view('admin.excel.viewDataFromXls',['data'=>$this->data]);
             } else {
                 return view('admin.excel.import')->with(['error'=>'No type file']);
