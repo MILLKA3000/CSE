@@ -16,6 +16,7 @@ return [
     'dataInFile' => 'Datas in file',
     'count_student'=>'Quantity Students in File',
     'Change_XML_file' => 'Change XML File.',
-    'downloadXls' => 'Download XLS Mockup'
+    'downloadXls' => 'Download XLS Mockup',
+    'type_exam' => 'Type Exams'
 
 ];

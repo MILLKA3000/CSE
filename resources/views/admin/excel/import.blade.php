@@ -29,6 +29,15 @@
                     </div>
                 @endif
                 {!! Form::open(array('url'=>'excel/importXLS','method'=>'post', 'files'=>true)) !!}
+
+                    <div class="form-group col-xs-3 {{ $errors->has('type_exam') ? 'has-error' : '' }}">
+                        {!! Form::label('type_exam', trans("admin/modules/getExcel.type_exam"), array('class' => 'control-label')) !!}
+                        <div class="controls">
+                            {!! Form::select('type_exam', $type_exam->lists('name', 'id'), '',array('class' => 'form-control')) !!}
+                            <span class="help-block">{{ $errors->first('type_exam', ':message') }}</span>
+                        </div>
+                    </div>
+
                 <div class="control-group">
                     <div class="controls">
                         {!! Form::file('xls') !!}

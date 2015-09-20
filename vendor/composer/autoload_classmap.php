@@ -552,4 +552,5 @@ return array(
     'Text_Template' => $vendorDir . '/phpunit/php-text-template/src/Template.php',
     'UserTableSeeder' => $baseDir . '/database/seeds/UserTableSeeder.php',
     'role' => $baseDir . '/database/seeds/role.php',
+    'type_exam' => $baseDir . '/database/seeds/type_exam.php',
 );
