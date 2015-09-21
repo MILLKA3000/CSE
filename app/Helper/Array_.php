@@ -3,6 +3,7 @@
 namespace App\Helper;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Model\Contingent\Students as ContStudent;
 
 class Array_ extends Model
 {
@@ -35,10 +36,13 @@ class Array_ extends Model
     {
         $data = [];
         $data[] = [
-            (string)$obj->testlist->testlistid,
-            (string)$obj->testlist->disciplineid,
+            (string)$obj->testlist->eduyear,
+            (string)$obj->testlist->semester,
+            (string)$obj->testlist->departmentid,
+             ContStudent::where('STUDENTID',$obj->testlist->students->student->id)->get()->first()->SPECIALITYID,
             (string)$obj->testlist->disciplinevariantid,
             (string)$obj->testlist->modulevariantid,
+            (string)$obj->testlist->modulenum,
             (string)$obj->testlist->discipline,
             (string)$obj->testlist->moduletheme,
         ];

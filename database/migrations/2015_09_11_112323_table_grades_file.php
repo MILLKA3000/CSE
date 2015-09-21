@@ -15,10 +15,13 @@ class TableGradesFile extends Migration
         Schema::create('grades_files', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('TestListID');
-            $table->string('DisciplineID');
+            $table->string('EduYear');
+            $table->string('Semester');
+            $table->string('DepartmentId');
+            $table->string('SpecialityId');
             $table->string('DisciplineVariantID');
             $table->string('ModuleVariantID');
+            $table->string('ModuleNum');
             $table->string('NameDiscipline');
             $table->string('NameModule');
             $table->unsignedInteger('user_id')->nullable();

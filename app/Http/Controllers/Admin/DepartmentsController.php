@@ -135,7 +135,7 @@ class DepartmentsController extends Controller
         $departments = Departments::all(array('departments.id', 'departments.name', 'departments.active'));
 
         foreach($departments as $department) {
-            $department->user = $department->getNameUser($department->getUser()->user_id)->name;
+            $department->user = User::find($department->getUser()->user_id)->name;
         }
 
         return Datatables::of($departments)

@@ -33,14 +33,17 @@ class Excel_ extends Model
             $excel->sheet('Table Info', function($sheet) {
                 $sheet->fromArray(Array_::getInfoForXLS($this->data));
                 $sheet->row(1, array(
-                    'TestListID',
-                    'DisciplineID',
+                    'EduYear',
+                    'Semester',
+                    'DepartmentId',
+                    'SpecialityId',
                     'DisciplineVariantID',
                     'ModuleVariantID',
+                    'ModuleNum',
                     'NameDiscipline',
                     'NameModule',
                 ));
-                $sheet->setAutoSize(true);
+                $sheet->setAutoSize(false);
             });
         })->export('xlsx');
     }
