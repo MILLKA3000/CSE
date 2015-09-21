@@ -10,6 +10,7 @@ return array(
     'CreatePasswordResetsTable' => $baseDir . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
     'CreateUsersTable' => $baseDir . '/database/migrations/2014_10_12_000000_create_users_table.php',
     'DatabaseSeeder' => $baseDir . '/database/seeds/DatabaseSeeder.php',
+    'Departments' => $baseDir . '/database/migrations/2015_09_21_065856_departments.php',
     'File_Iterator' => $vendorDir . '/phpunit/php-file-iterator/src/Iterator.php',
     'File_Iterator_Facade' => $vendorDir . '/phpunit/php-file-iterator/src/Facade.php',
     'File_Iterator_Factory' => $vendorDir . '/phpunit/php-file-iterator/src/Factory.php',
@@ -551,6 +552,9 @@ return array(
     'TestCase' => $baseDir . '/tests/TestCase.php',
     'Text_Template' => $vendorDir . '/phpunit/php-text-template/src/Template.php',
     'UserTableSeeder' => $baseDir . '/database/seeds/UserTableSeeder.php',
+    'UserToDepartment' => $baseDir . '/database/seeds/UserToDepartment.php',
+    'UserToDepartments' => $baseDir . '/database/migrations/2015_09_21_072337_userToDepartments.php',
+    'departaments' => $baseDir . '/database/seeds/departaments.php',
     'role' => $baseDir . '/database/seeds/role.php',
     'type_exam' => $baseDir . '/database/seeds/type_exam.php',
 );

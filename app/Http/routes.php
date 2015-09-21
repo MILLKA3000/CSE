@@ -1,6 +1,7 @@
 <?php
 Route::model('language', 'App\Language');
 Route::model('user', 'App\User');
+Route::model('department', 'App\Departments');
 Route::pattern('id', '[0-9]+');
 
 Route::controllers([
@@ -38,7 +39,10 @@ Route::group(['prefix' => '/', 'middleware' => 'auth'], function() {
     Route::post('excel/importXLS', 'Excel\ExcelController@importXLS');
 
 
-
+    # Departments
+    Route::get('department/data', 'Admin\DepartmentsController@data');
+    Route::get('department/{department}/delete', 'Admin\DepartmentsController@delete');
+    Route::resource('department', 'Admin\DepartmentsController');
 
     # subject of students
     Route::get('subject/data', 'Admin\SubjectContingentController@data');

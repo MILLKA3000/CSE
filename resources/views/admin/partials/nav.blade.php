@@ -91,6 +91,11 @@
                     </a>
                     <ul class="nav collapse">
                         <li>
+                            <a href="{{url('department')}}">
+                                <i class="glyphicon glyphicon-list"></i> Departments
+                            </a>
+                        </li>
+                        <li>
                             <a href="{{url('user')}}">
                                 <i class="glyphicon glyphicon-list"></i> Users
                             </a>

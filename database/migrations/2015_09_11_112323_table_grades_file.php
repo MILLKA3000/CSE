@@ -21,6 +21,8 @@ class TableGradesFile extends Migration
             $table->string('ModuleVariantID');
             $table->string('NameDiscipline');
             $table->string('NameModule');
+            $table->unsignedInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             $table->unsignedInteger('file_info_id')->nullable();
             $table->foreign('file_info_id')->references('id')->on('file_info')->onDelete('set null');
             $table->unsignedInteger('type_exam_id')->nullable();

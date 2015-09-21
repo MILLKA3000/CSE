@@ -52,6 +52,7 @@ class UserController extends AdminController
         $user->confirmation_code = str_random(32);
         $user->save();
         Logs::_create('User create '.$user->name);
+        return redirect('/user');
     }
 
     /**
@@ -84,6 +85,7 @@ class UserController extends AdminController
         }
         Logs::_create('User update '.$user->name);
         $user->update($request->except('password','password_confirmation'));
+        return redirect('/user');
     }
 
     /**

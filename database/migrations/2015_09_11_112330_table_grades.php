@@ -17,10 +17,6 @@ class TableGrades extends Migration
             $table->bigInteger('id_student');
             $table->integer('exam_grade');
             $table->integer('grade');
-            $table->unsignedInteger('consulting_grade_id')->nullable();
-            $table->foreign('consulting_grade_id')->references('id')->on('consulting_grades')->onDelete('set null');
-            $table->unsignedInteger('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             $table->unsignedInteger('grade_file_id')->nullable();
             $table->foreign('grade_file_id')->references('id')->on('grades_files')->onDelete('set null');
             $table->timestamps();

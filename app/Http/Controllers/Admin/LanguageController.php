@@ -52,6 +52,7 @@ class LanguageController extends AdminController {
         $language -> user_id = Auth::id();
         $language -> save();
         Logs::_create('User create language '.$language->name);
+         return redirect('/language');
 	}
 	/**
 	 * Show the form for editing the specified resource.
@@ -64,26 +65,28 @@ class LanguageController extends AdminController {
         return view('admin/language/create_edit',compact('language'));
 	}
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
+    /**
+     *
+     * Update the specified resource in storage.
+     * @param LanguageRequest $request
+     * @param Language $language
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
 	public function update(LanguageRequest $request, Language $language)
 	{
         $language -> user_id_edited = Auth::id();
         $language -> update($request->all());
         Logs::_create('User update language '.$language->name);
+        return redirect('/language');
 	}
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param $id
-     * @return Response
+     * @param Language $language
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
      */
-
     public function delete(Language $language)
     {
         Logs::_create('User deleted language '.$language->name);
