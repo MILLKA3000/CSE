@@ -17,18 +17,67 @@ class Excel extends Model
 
     private $data;
 
+    private $grades;
+
+    private $errorMessages;
+
+    /**
+     * Construct for init data
+     * Original data this is data from xls
+     * data this is array which has inside url,name xml,etc.
+     *
+     * @param array $OriginalData
+     * @param $data
+     */
     public function __construct($OriginalData,$data)
     {
        $this->OriginalData = $OriginalData;
        $this->data = $data;
     }
 
-    public function SaveData(){
 
-        $id_file = $this->setFileInfo();
-        $this->setGradeFile($id_file->id);
+    /**
+     * This function save ll data in tables
+     */
+    public function SaveData(){
+        $this->validateTables($this->OriginalData);
+       // $id_file = $this->setFileInfo();
+       // $this->setGradeFile($id_file->id);
+//        $this->setGrades($this->OriginalData);
     }
 
+
+    private function validateTables($data){
+        if($this->validationRepeatCode($data)){
+            $this->validationCodeAndGrades($data);
+        };
+
+    }
+
+    private function validationCodeAndGrades($data){
+        $dataToSave = [];
+        foreach($data->get()[1] as $secondSheets) { // iteration in second sheet
+            $dataOfGrades = $this->findGradesInFirstSheet($data->get()[0],$secondSheets['kode']);
+            if($dataOfGrades){
+                $this->grades['code'] = (int)$dataOfGrades['code'];
+                $this->grades['id_student'] = $secondSheets['id'];
+                $this->grades['fio'] = $secondSheets['fio'];
+                $this->grades['group'] = (int)$secondSheets['group'];
+                $this->grades['exam_grade'] = (int)$dataOfGrades['exam_grade'];
+                $this->grades['grade'] = (int)$secondSheets['modulegrade'];
+                $dataToSave[] = $this->grades;
+            }else{
+                $this->errorMessages[] = 'Don\'t code in First Sheets : '. $secondSheets['kode'];
+            }
+
+        }
+    }
+
+    /**
+     * Save to information table
+     *
+     * @return static
+     */
     private function setFileInfo(){
 
         $data['path']=$this->data['path'];
@@ -37,6 +86,11 @@ class Excel extends Model
         return FileInfo::create($data);
     }
 
+
+    /**
+     * @param $id_file
+     * @return static
+     */
     private function setGradeFile($id_file){
         $data['name']=$this->data['urlOriginalName'];
         $data['file_info_id']=$id_file;
@@ -54,5 +108,22 @@ class Excel extends Model
         return GradesFiles::create($data);
     }
 
+    private function findGradesInFirstSheet($sheet,$kode){
+        foreach($sheet as $firstSheets){
+            $kodeInFirstSheet = $this->convertCellFromFirstSheet($firstSheets);
+            if($kodeInFirstSheet['code']==$kode){
+                return $kodeInFirstSheet;
+            }
+        }
+        return false;
+    }
+
+
+    private function convertCellFromFirstSheet($arr){
+        $tmp = array_values(array_values((array)$arr)[1]);
+        $data['code'] = $tmp[2];
+        $data['exam_grade'] = $tmp[3];
+        return $data;
+    }
 
 }

@@ -15,6 +15,9 @@ class TableGrades extends Migration
         Schema::create('grades', function (Blueprint $table) {
             $table->increments('id');
             $table->bigInteger('id_student');
+            $table->string('fio');
+            $table->integer('group');
+            $table->integer('code');
             $table->integer('exam_grade');
             $table->integer('grade');
             $table->unsignedInteger('grade_file_id')->nullable();
