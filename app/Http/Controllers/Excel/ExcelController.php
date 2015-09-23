@@ -44,9 +44,8 @@ class ExcelController extends Controller
                 $this->data = Excel_::_loadXls($this->otherData['path']);
 
                 $Model_Excel = new Model_Excel($this->data,$this->otherData);
-                $Model_Excel->SaveData();
-
-                return view('admin.excel.viewDataFromXls',['data'=>$this->data]);
+                $message = $Model_Excel->SaveData();
+                return view('admin.excel.viewDataFromXls',['data'=>$this->data, 'message'=>$message]);
             } else {
                 return view('admin.excel.import')->with(['error'=>'No type file']);
             }

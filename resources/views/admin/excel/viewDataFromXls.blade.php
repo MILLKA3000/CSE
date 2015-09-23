@@ -16,6 +16,26 @@
             </div>
         </h3>
     </div>
+    @if(isset($message['success']))
+        <div class="alert alert-success">
+            {!! $message['success'][0] !!}
+        </div>
+    @elseif(isset($message['error']))
+        <div class="alert alert-danger">
+            <h4>System has next problems. Please recheck them</h4>
+            <ul>
+            @foreach($message['error'] as $err)
+                <li>{!! $err !!}</li>
+            @endforeach
+            </ul>
+        </div>
+    @endif
+
+    @if(isset($message['success']))
+        <a href="#!inline" id="vid" class="btn btn-warning btn-sm "> Get all Documents </a>
+        <a href="#!inline" id="stat" class="btn btn-warning btn-sm "> Get all Statistics </a>
+    @endif
+
     <div class="row ">
         <div class="col-xs-12">
             <h3 class="text-center">{!! trans("admin/modules/Excel.dataInFile") !!}</h3>

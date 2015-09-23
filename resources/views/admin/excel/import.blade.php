@@ -23,11 +23,7 @@
                 {!! trans("admin/modules/Excel.Change_XLS_file") !!}
             </div>
             <div class="panel-body">
-                @if(Session::has('success'))
-                    <div class="alert-box success">
-                        <h2>{!! Session::get('success') !!}</h2>
-                    </div>
-                @endif
+
                 {!! Form::open(array('url'=>'excel/importXLS','method'=>'post', 'files'=>true)) !!}
 
                     <div class="form-group col-xs-3 {{ $errors->has('type_exam') ? 'has-error' : '' }}">

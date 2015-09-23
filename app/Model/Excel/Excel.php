@@ -12,14 +12,24 @@ use Auth;
 
 class Excel extends Model
 {
-
+    /**
+     * Obj with data from xls
+     */
     private $OriginalData;
 
+    /**
+     * Obj with data from form (path, name_file, etc)
+     */
     private $data;
 
-    private $grades;
 
-    private $errorMessages;
+
+    private $dataToSave;
+
+    /**
+     * for view message
+     */
+    private $messages=[[]];
 
     /**
      * Construct for init data
@@ -40,36 +50,63 @@ class Excel extends Model
      * This function save ll data in tables
      */
     public function SaveData(){
-        $this->validateTables($this->OriginalData);
-       // $id_file = $this->setFileInfo();
-       // $this->setGradeFile($id_file->id);
-//        $this->setGrades($this->OriginalData);
+        if($this->validateTables()){
+            $id_file = $this->setFileInfo();
+            $this->setGradeFile($id_file->id);
+            $this->setGrades($id_file->id);
+            $this->messages['success'][] = 'Save data complicated!';
+        }
+        return $this->messages;
     }
 
-
-    private function validateTables($data){
-        if($this->validationRepeatCode($data)){
-            $this->validationCodeAndGrades($data);
-        };
-
+    /**
+     * This func has all functions of validate
+     */
+    private function validateTables(){
+        $checkError = true;
+        $this->validationCodeAndGrades();
+        $this->validationRepeatCode();
+        if(isset($this->messages['error'])){
+            $checkError = false;
+        }
+        return $checkError;
     }
 
-    private function validationCodeAndGrades($data){
-        $dataToSave = [];
-        foreach($data->get()[1] as $secondSheets) { // iteration in second sheet
-            $dataOfGrades = $this->findGradesInFirstSheet($data->get()[0],$secondSheets['kode']);
-            if($dataOfGrades){
-                $this->grades['code'] = (int)$dataOfGrades['code'];
-                $this->grades['id_student'] = $secondSheets['id'];
-                $this->grades['fio'] = $secondSheets['fio'];
-                $this->grades['group'] = (int)$secondSheets['group'];
-                $this->grades['exam_grade'] = (int)$dataOfGrades['exam_grade'];
-                $this->grades['grade'] = (int)$secondSheets['modulegrade'];
-                $dataToSave[] = $this->grades;
-            }else{
-                $this->errorMessages[] = 'Don\'t code in First Sheets : '. $secondSheets['kode'];
+    /**
+     * each code of student from second sheet find code of student in first sheet and add together
+     */
+    private function validationCodeAndGrades(){
+        $grades = [];
+        foreach($this->OriginalData->get()[1] as $secondSheets) { // iteration in second sheet
+            if ($secondSheets['kode']!='n' or $secondSheets['kode']!='0') {
+                $dataOfGrades = $this->findGradesInFirstSheet($this->OriginalData->get()[0], $secondSheets['kode']);
+                if ($dataOfGrades) {
+                    $grades['code'] = (int)$dataOfGrades['code'];
+                    $grades['id_student'] = $secondSheets['id'];
+                    $grades['fio'] = $secondSheets['fio'];
+                    $grades['group'] = (int)$secondSheets['group'];
+                    $grades['exam_grade'] = (int)$dataOfGrades['exam_grade'];
+                    $grades['grade'] = (int)$secondSheets['modulegrade'];
+                    $this->dataToSave[] = $grades;
+                } else {
+                    $this->messages['error'][] = 'Don\'t find code in First Sheets : ' . $secondSheets['kode'];
+                }
             }
 
+        }
+    }
+
+    /**
+     * find duplicate code of student
+     */
+    private function validationRepeatCode(){
+        $countArrGrades = count($this->dataToSave);
+        for ($i=0;$i<$countArrGrades;$i++){
+            for ($j=$i+1;$j<$countArrGrades;$j++){
+                if ($this->dataToSave[$i]['code'] == $this->dataToSave[$j]['code']){
+                    $this->messages['error'][] = 'Find duplicate code : '. $this->dataToSave[$i]['code']. ', students: '.$this->dataToSave[$i]['fio'].', '.$this->dataToSave[$j]['fio'];
+                }
+            }
         }
     }
 
@@ -84,6 +121,15 @@ class Excel extends Model
         $data['user_id']=Auth::user()->id;
 
         return FileInfo::create($data);
+    }
+
+
+    private function setGrades($id_file){
+        foreach($this->dataToSave as $data){
+            $data['grade_file_id'] = $id_file;
+            Grades::create($data);
+        }
+        return true;
     }
 
 
@@ -108,6 +154,11 @@ class Excel extends Model
         return GradesFiles::create($data);
     }
 
+    /**
+     * @param $sheet
+     * @param $kode
+     * @return bool
+     */
     private function findGradesInFirstSheet($sheet,$kode){
         foreach($sheet as $firstSheets){
             $kodeInFirstSheet = $this->convertCellFromFirstSheet($firstSheets);
@@ -118,7 +169,10 @@ class Excel extends Model
         return false;
     }
 
-
+    /**
+     * @param $arr
+     * @return mixed
+     */
     private function convertCellFromFirstSheet($arr){
         $tmp = array_values(array_values((array)$arr)[1]);
         $data['code'] = $tmp[2];
