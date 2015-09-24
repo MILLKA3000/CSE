@@ -44,6 +44,18 @@ Route::group(['prefix' => '/', 'middleware' => 'auth'], function() {
     Route::get('department/{department}/delete', 'Admin\DepartmentsController@delete');
     Route::resource('department', 'Admin\DepartmentsController');
 
+    # Create Documents
+        #Documents
+            Route::get('documents/{id}/getAllDocuments', 'Admin\DocumentsController@getAllDocuments');
+        #Statistics
+            Route::get('documents/{id}/getAllStatistics', 'Admin\DocumentsController@getAllStatistics');
+
+    #Arhives
+        #XML
+
+        #XLS
+
+
     # subject of students
     Route::get('subject/data', 'Admin\SubjectContingentController@data');
     Route::resource('subject', 'Admin\SubjectContingentController');

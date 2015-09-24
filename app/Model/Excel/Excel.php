@@ -22,7 +22,7 @@ class Excel extends Model
      */
     private $data;
 
-
+    public $id_file;
 
     private $dataToSave;
 
@@ -51,9 +51,9 @@ class Excel extends Model
      */
     public function SaveData(){
         if($this->validateTables()){
-            $id_file = $this->setFileInfo();
-            $this->setGradeFile($id_file->id);
-            $this->setGrades($id_file->id);
+            $this->id_file = $this->setFileInfo();
+            $this->setGradeFile($this->id_file->id);
+            $this->setGrades($this->id_file->id);
             $this->messages['success'][] = 'Save data complicated!';
         }
         return $this->messages;
