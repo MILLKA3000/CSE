@@ -23,5 +23,6 @@ return array(
     'Diff' => array($vendorDir . '/phpspec/php-diff/lib'),
     'DebugBar' => array($vendorDir . '/maximebf/debugbar/src'),
     'Cron' => array($vendorDir . '/mtdowling/cron-expression/src'),
+    'Chumper\\Zipper' => array($vendorDir . '/chumper/zipper/src'),
     'Carbon' => array($vendorDir . '/nesbot/carbon/src'),
 );

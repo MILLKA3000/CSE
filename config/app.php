@@ -149,6 +149,7 @@ return [
         Barryvdh\Debugbar\ServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Cviebrock\EloquentSluggable\SluggableServiceProvider::class,
+        Chumper\Zipper\ZipperServiceProvider::class,
 
         /*
          * for firebird
@@ -212,6 +213,7 @@ return [
 
         'XmlParser' => Orchestra\Parser\Xml\Facade::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'Zipper' => Chumper\Zipper\Zipper::class
     ],
 
 ];

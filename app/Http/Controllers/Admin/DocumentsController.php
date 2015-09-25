@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Model\CreateDocuments\Documents;
+use App\Helper\File;
+use Illuminate\Support\Facades\Response;
+
 
 class DocumentsController extends Controller
 {
@@ -18,7 +21,7 @@ class DocumentsController extends Controller
     public function getAllDocuments($idFileGrade)
     {
         $doc = new Documents($idFileGrade);
-        $doc->formDocument();
+        return Response::download($doc->formDocument(),'Documents.zip',array('content-type' => 'application/zip'));
     }
 
 
