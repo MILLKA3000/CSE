@@ -33,7 +33,7 @@
 
     @if(isset($message['success']))
         <a href="/documents/{{$id_file}}/getAllDocuments" id="vid" class="btn btn-warning btn-sm "> Get all Documents </a>
-        <a href="#!inline" id="stat" class="btn btn-warning btn-sm "> Get all Statistics </a>
+        <a href="/documents/{{$id_file}}/getAllStatistics" id="stat" class="btn btn-warning btn-sm "> Get all Statistics </a>
     @endif
 
     <div class="row ">

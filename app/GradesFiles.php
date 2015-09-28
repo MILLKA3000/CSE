@@ -10,4 +10,8 @@ class GradesFiles extends Model
 
     protected $table = 'grades_files';
 
+    public function get_path()
+    {
+        return $this->hasOne('App\FileInfo','id');
+    }
 }

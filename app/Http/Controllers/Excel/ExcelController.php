@@ -38,7 +38,7 @@ class ExcelController extends Controller
                 'application/vnd.ms-office',
                 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],$file->getMimeType())) {
 
-                $this->otherData['path'] = $file->move('xls/'.file::_get_path(), $file->getClientOriginalName());
+                $this->otherData['path'] = $file->move('xls\\'.file::_get_path(), $file->getClientOriginalName());
                 $this->otherData['urlOriginalName'] = $file->getClientOriginalName();
                 $this->otherData['type_exam'] = $request->get('type_exam');
                 $this->data = Excel_::_loadXls($this->otherData['path']);
@@ -48,7 +48,7 @@ class ExcelController extends Controller
                 return view('admin.excel.viewDataFromXls',[
                     'data'=>$this->data,
                     'message'=>$message,
-                    'id_file'=>$Model_Excel->id_file->id
+                    'id_file'=>(isset($Model_Excel->id_file->id))?$Model_Excel->id_file->id:false
                 ]);
             } else {
                 return view('admin.excel.import')->with(['error'=>'No type file']);

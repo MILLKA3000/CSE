@@ -54,7 +54,7 @@ Route::group(['prefix' => '/', 'middleware' => 'auth'], function() {
         #XML
 
         #XLS
-
+            Route::get('arhive/', 'Admin\ArhiveController@index');
 
     # subject of students
     Route::get('subject/data', 'Admin\SubjectContingentController@data');

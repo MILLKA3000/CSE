@@ -2,6 +2,7 @@
 
 namespace App\Model\Excel;
 
+use App\Helper\File;
 use Illuminate\Database\Eloquent\Model;
 use App\FileInfo;
 use App\Grades;
@@ -52,8 +53,8 @@ class Excel extends Model
     public function SaveData(){
         if($this->validateTables()){
             $this->id_file = $this->setFileInfo();
-            $this->setGradeFile($this->id_file->id);
-            $this->setGrades($this->id_file->id);
+            $this->setGradeFile();
+            $this->setGrades();
             $this->messages['success'][] = 'Save data complicated!';
         }
         return $this->messages;
@@ -78,7 +79,7 @@ class Excel extends Model
     private function validationCodeAndGrades(){
         $grades = [];
         foreach($this->OriginalData->get()[1] as $secondSheets) { // iteration in second sheet
-            if ($secondSheets['kode']!='n' or $secondSheets['kode']!='0') {
+            if (($secondSheets['kode']!=999) && ($secondSheets['kode']!=0)) {
                 $dataOfGrades = $this->findGradesInFirstSheet($this->OriginalData->get()[0], $secondSheets['kode']);
                 if ($dataOfGrades) {
                     $grades['code'] = (int)$dataOfGrades['code'];
@@ -91,6 +92,14 @@ class Excel extends Model
                 } else {
                     $this->messages['error'][] = 'Don\'t find code in First Sheets : ' . $secondSheets['kode'];
                 }
+            }else{
+                $grades['code'] = $secondSheets['kode'];
+                $grades['id_student'] = $secondSheets['id'];
+                $grades['fio'] = $secondSheets['fio'];
+                $grades['group'] = (int)$secondSheets['group'];
+                $grades['exam_grade'] = 0;
+                $grades['grade'] = (int)$secondSheets['modulegrade'];
+                $this->dataToSave[] = $grades;
             }
 
         }
@@ -117,16 +126,16 @@ class Excel extends Model
      */
     private function setFileInfo(){
 
-        $data['path']=$this->data['path'];
+        $data['path']=File::_getTimestampPath($this->data['path']);
         $data['user_id']=Auth::user()->id;
 
         return FileInfo::create($data);
     }
 
 
-    private function setGrades($id_file){
+    private function setGrades(){
         foreach($this->dataToSave as $data){
-            $data['grade_file_id'] = $id_file;
+            $data['grade_file_id'] = $this->id_file->id;
             Grades::create($data);
         }
         return true;
@@ -134,12 +143,11 @@ class Excel extends Model
 
 
     /**
-     * @param $id_file
      * @return static
      */
-    private function setGradeFile($id_file){
+    private function setGradeFile(){
         $data['name']=$this->data['urlOriginalName'];
-        $data['file_info_id']=$id_file;
+        $data['file_info_id']=$this->id_file->id;
         $data['EduYear']=(string)$this->OriginalData->get()[2][0]['eduyear'];
         $data['Semester']=(string)$this->OriginalData->get()[2][0]['semester'];
         $data['DepartmentId']=(string)$this->OriginalData->get()[2][0]['departmentid'];

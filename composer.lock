@@ -5,7 +5,6 @@
         "This file is @generated automatically"
     ],
     "hash": "7ce01763c2e6966c04bfc867fe72e1d7",
-    "content-hash": "e2a720ca64dc03bed2aed7350301f81e",
     "packages": [
         {
             "name": "barryvdh/laravel-debugbar",
@@ -2345,16 +2344,16 @@
         },
         {
             "name": "yajra/laravel-datatables-oracle",
-            "version": "v5.11.9",
+            "version": "v5.11.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yajra/laravel-datatables.git",
-                "reference": "73651c4f33b68a48463bdf94eecf1fc811fd1a8c"
+                "reference": "c8af152ece191282d31a5e18c03b8ec1bd7e7345"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yajra/laravel-datatables/zipball/73651c4f33b68a48463bdf94eecf1fc811fd1a8c",
-                "reference": "73651c4f33b68a48463bdf94eecf1fc811fd1a8c",
+                "url": "https://api.github.com/repos/yajra/laravel-datatables/zipball/c8af152ece191282d31a5e18c03b8ec1bd7e7345",
+                "reference": "c8af152ece191282d31a5e18c03b8ec1bd7e7345",
                 "shasum": ""
             },
             "require": {
@@ -2396,7 +2395,7 @@
                 "laravel4",
                 "laravel5"
             ],
-            "time": "2015-09-21 09:40:45"
+            "time": "2015-09-28 04:24:27"
         }
     ],
     "packages-dev": [

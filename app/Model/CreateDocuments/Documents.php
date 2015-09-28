@@ -5,6 +5,7 @@ namespace App\Model\CreateDocuments;
 use App\Grades;
 use App\GradesFiles;
 use App\Helper\File as HelperFile;
+use App\Model\Contingent\Departments;
 use App\Model\Contingent\Speciality;
 use Chumper\Zipper\Facades\Zipper;
 use Illuminate\Database\Eloquent\Model;
@@ -24,28 +25,31 @@ class Documents extends Model
 
     protected $speciality;
 
-    protected $idFileGrade;
+    protected $department;
+
+    protected $idFileGrade = 0;
 
     protected $shablon;
 
     public function __construct($idFileGrade)
     {
-        $this->DOC_PATH = public_path().'/documents/'.HelperFile::_get_path().'/'.date('Y-m-d');
         $this->idFileGrade = $idFileGrade;
+        $this->dataOfFile = GradesFiles::find($this->idFileGrade);
+        $this->DOC_PATH = '\documents\\'.$this->dataOfFile->get_path()->get()->first()->path;
     }
 
     /**
      * Public func for prepare get data
      */
-    public function formDocument(){
+    public function formDocuments(){
 
         $this->dataGradesOfStudentsGroups = Grades::select('group')->where('grade_file_id',$this->idFileGrade)->distinct()->get();
-        $this->dataOfFile = GradesFiles::find($this->idFileGrade);
         $this->speciality = Speciality::where('SPECIALITYID',$this->dataOfFile->SpecialityId)->get()->first()->SPECIALITY;
+        $this->department = Departments::where('DEPARTMENTID',$this->dataOfFile->DepartmentId)->get()->first()->DEPARTMENT;
         $this->formHtml();
-        $files = glob($this->DOC_PATH.'/docs');
-        Zipper::make($this->DOC_PATH.'/Docs.zip')->add($files);
-        return $this->DOC_PATH.'/Docs.zip';
+        Zipper::make(public_path().$this->DOC_PATH.'\Docs.zip')->add(glob(public_path().$this->DOC_PATH.'\docs'));
+        return $this->DOC_PATH.'\Docs.zip';
+
     }
 
     /**
@@ -56,8 +60,8 @@ class Documents extends Model
         foreach($this->dataGradesOfStudentsGroups as $group) {
             $this->studentsOfGroup = Grades::where('grade_file_id',$this->idFileGrade)->where('group',$group->group)->get();
             $this->putToShablon();
-            File::makeDirectory($this->DOC_PATH.'/docs', 0775, true,true);
-            File::put($this->DOC_PATH.'/docs/'.$group->group.'.doc', $this->shablon);
+            File::makeDirectory(public_path().$this->DOC_PATH.'\docs', 0775, true,true);
+            File::put(public_path().$this->DOC_PATH.'\docs\\'.$group->group.'.doc', $this->shablon);
         }
     }
 
@@ -69,7 +73,10 @@ class Documents extends Model
         $this->createHeaderShablon();
         $num = 1;
         foreach($this->studentsOfGroup as $student) {
-            $this->shablon.="<tr><td width=10%>".($num++)."</td><td width=50%>".$student->fio."</td><td width=15%>".ContStudent::where('STUDENTID',$student->id_student)->get()->first()->RECORDBOOKNUM."</td><td width=10%>".$student->exam_grade."</td></tr>";
+            $student->exam_grade = ($student->exam_grade==0) ? "0(не склав)":$student->exam_grade;
+            $student->exam_grade = ($student->code==999) ? "(не з'явився)":$student->exam_grade;
+            $this->shablon.="<tr><td width=10%>".($num++)."</td><td width=50%>".$student->fio."</td><td width=15%>".ContStudent::where('STUDENTID',$student->id_student)->get()->first()->RECORDBOOKNUM."</td>
+            <td width=10%>".$student->exam_grade."</td></tr>";
         }
         $this->createFooterShablon();
     }
@@ -99,7 +106,7 @@ class Documents extends Model
         <body>
         <p align=center>МІНІСТЕРСТВО ОХОРОНИ ЗДОРОВЯ УКРАЇНИ </p>
         <p align=center><b><u>Тернопільський державний медичний університет імені І.Я. Горбачевського</u></b></p>
-        <span align=left> Факультет <u>" . iconv("Windows-1251", "UTF-8", $this->speciality) . "</u></span><br>
+        <span align=left> Факультет <u>" . iconv("Windows-1251", "UTF-8", $this->department) . "</u></span><br>
         <span align=left> Спеціальність <u>" . iconv("Windows-1251", "UTF-8", $this->speciality) . "</u></span>
         <span align=right>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Група_<u>" . $this->studentsOfGroup->first()->group . "</u>___</span>
         &nbsp;&nbsp;&nbsp;&nbsp;".$this->dataOfFile->EduYear . "/" . ($this->dataOfFile->EduYear + 1)." &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

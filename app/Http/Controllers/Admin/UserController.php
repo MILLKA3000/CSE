@@ -13,7 +13,7 @@ class UserController extends AdminController
 
     public function __construct()
     {
-        $this->middleware('role:Admin');
+        $this->middleware('role:Admin,Self-Admin');
         view()->share('type', 'user');
     }
 
