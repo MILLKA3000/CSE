@@ -14,4 +14,9 @@ class GradesFiles extends Model
     {
         return $this->hasOne('App\FileInfo','id');
     }
+
+    public function getUserId()
+    {
+        return $this->hasOne('App\FileInfo','id')->get()->first()->user_id;
+    }
 }

@@ -2,6 +2,7 @@
 Route::model('language', 'App\Language');
 Route::model('user', 'App\User');
 Route::model('department', 'App\Departments');
+Route::model('arhive', 'App\GradesFiles');
 Route::pattern('id', '[0-9]+');
 
 Route::controllers([
@@ -54,7 +55,8 @@ Route::group(['prefix' => '/', 'middleware' => 'auth'], function() {
         #XML
 
         #XLS
-            Route::get('arhive/', 'Admin\ArhiveController@index');
+            Route::get('arhive/data', 'Admin\ArhiveController@data');
+            Route::get('arhive', 'Admin\ArhiveController@index');
 
     # subject of students
     Route::get('subject/data', 'Admin\SubjectContingentController@data');

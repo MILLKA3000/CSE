@@ -42,7 +42,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{url('excel/toDecan')}}">
+                            <a href="#">
                                 <i class="glyphicon glyphicon-list"></i> Get XML for Department
                             </a>
                         </li>
@@ -59,11 +59,6 @@
                                 <i class="glyphicon glyphicon-list"></i>  Import XLS
                             </a>
                         </li>
-                        <li>
-                            <a href="{{url('admin/article')}}">
-                                <i class="glyphicon glyphicon-list"></i> ...
-                            </a>
-                        </li>
                     </ul>
                 </li>
                 <li>
@@ -74,12 +69,7 @@
                     <ul class="nav collapse">
                         <li>
                             <a href="{{url('arhive')}}">
-                                <i class="glyphicon glyphicon-list"></i> Arhive XLS
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{url('arhive')}}">
-                                <i class="glyphicon glyphicon-list"></i> Arhive XML
+                                <i class="glyphicon glyphicon-list"></i> Archive Exam
                             </a>
                         </li>
                     </ul>
