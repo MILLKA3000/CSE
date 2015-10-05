@@ -15,6 +15,15 @@ class TableGradesFile extends Migration
         Schema::create('grades_files', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->string('EduYear');
+            $table->string('Semester');
+            $table->string('DepartmentId');
+            $table->string('SpecialityId');
+            $table->string('DisciplineVariantID');
+            $table->string('ModuleVariantID');
+            $table->string('ModuleNum');
+            $table->string('NameDiscipline');
+            $table->string('NameModule');
             $table->unsignedInteger('xml_file_id')->nullable();
             $table->foreign('xml_file_id')->references('id')->on('xml_file_info')->onDelete('set null');
             $table->unsignedInteger('file_info_id')->nullable();

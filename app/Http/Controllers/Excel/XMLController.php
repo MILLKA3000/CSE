@@ -3,18 +3,27 @@
 namespace App\Http\Controllers\Excel;
 
 use App\Logs;
+use App\XmlAgregate;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Helper\XML;
-use App\Helper\File as file;
+use App\Helper\File as fileHelp;
 use App\Helper\Excel_;
+use Chumper\Zipper\Facades\Zipper;
+use Storage;
+use File;
+use Auth;
 
 
 class XMLController extends Controller
 {
     private $xml;
+
+    private $path;
+
+    private $AllFilespath;
 
     protected $url;
 
@@ -22,9 +31,10 @@ class XMLController extends Controller
 
     public function __construct()
     {
-        $this->xml = new XML();
         $this->middleware('role:Admin');
         view()->share('type', 'work');
+
+        $this->path = 'xml\\'.fileHelp::_get_path();
     }
 
     /**
@@ -39,11 +49,20 @@ class XMLController extends Controller
 
             if ($file->getMimeType() == 'application/xml') {
 
-                $this->url = $file->move('xml/'.file::_get_path(), $file->getFilename());
+                $this->moveFile($file);
                 $this->_parce($this->url);
-                Logs::_create('User parse XML '.$this->url);
-                $this->data->file_name = $file->getFilename();
-                return view('admin.xml.view', ['data'=>$this->data]);
+                $this->saveLog();
+                $this->AllFilespath[] = $this->url->getPathName();
+
+                return view('admin.xml.view', ['data'=>$this->data,'files'=>$this->saveArchiveXml()]);
+
+            } elseif ($file->getMimeType() == 'application/zip') {
+
+                $this->moveFile($file);
+                $this->_parceZIP($file);
+                $this->saveLog();
+                return view('admin.xml.view', ['data'=>$this->data,'files'=>$this->saveArchiveXml()]);
+
             } else {
                 return view('admin.xml.loadxml')->with(['error'=>'No type file']);
             }
@@ -59,14 +78,60 @@ class XMLController extends Controller
         return view('admin.xml.view', ['data'=>$this->data]);
     }
 
-    public function downloadXLS($xml_file){
-        $this->_parce('xml/'.file::_get_path().'/'.$xml_file);
-        $excel = new Excel_($this->data->getContent());
+    public function downloadXLS($id){
+        $excel = new Excel_(XmlAgregate::where('id',$id)->get()->first());
         $excel->_getMockup();
     }
 
-    private function _parce($xml_path){
-        $this->data = $this->xml->parseFromUrl($xml_path);
-        $this->data->count_student = $this->xml->countStudents();
+    public function _parce($xml_path){
+        $this->xml = new XML();
+        $data['data'] = $this->xml->parseFromUrl($xml_path);
+        $data['student'] = $this->xml->countStudents();
+        $this->data[] = $data;
+
+    }
+
+
+    private function _parceZIP($file){
+        $pathZip = $this->path;
+        File::makeDirectory($pathZip.'\xml', 0775, true,true);
+        Zipper::make($pathZip.'\\'.$file->getClientOriginalName())->extractTo($pathZip.'\xml\\');
+        $files = Storage::files(str_replace ( '\\' ,'/' , $pathZip.'\xml\\' ));
+
+        foreach($files as $file){
+            $this->_parce($file);
+            $this->AllFilespath[] = $file;
+        }
+    }
+
+
+    /**
+     * @param $file
+     */
+    private function moveFile($file){
+        $this->url = $file->move($this->path, $file->getClientOriginalName());
+    }
+
+    /**
+     * Save Log
+     */
+    private function saveLog(){
+        Logs::_create('User parse XML '.$this->url);
+    }
+
+    /**
+     * @return mixed
+     */
+    private function saveArchiveXml(){
+        $id = XmlAgregate::create([
+            'files_path'=> json_encode($this->AllFilespath),
+            'user_id'=>Auth::user()->id
+        ]);
+
+        return $id->id;
+    }
+
+    public function getData(){
+        return $this->data;
     }
 }

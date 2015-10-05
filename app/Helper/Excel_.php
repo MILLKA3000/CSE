@@ -5,15 +5,25 @@ namespace App\Helper;
 use Illuminate\Database\Eloquent\Model;
 use Maatwebsite\Excel\Facades\Excel;
 use Auth;
+use App\Http\Controllers\Excel\XMLController;
 
 class Excel_ extends Model
 {
 
     protected $data;
 
+    protected $filesXml;
+
     public function __construct($data)
     {
-        $this->data = $data;
+        $this->filesXml = json_decode($data->files_path);
+        $parce = new XMLController();
+
+        foreach($this->filesXml as $file){
+            $parce->_parce($file);
+        }
+
+        $this->data = $parce->getData();
     }
 
 
@@ -25,8 +35,14 @@ class Excel_ extends Model
             });
 
             $excel->sheet('Table decode', function($sheet) {
+                $sheet->fromArray(Array_::formXLSConnectTable($this->data[0]['data']));
+                $sheet->row(1, array('ID', 'FIO','Kode','Group'));
+                $sheet->setAutoSize(true);
+            });
+
+            $excel->sheet('Module Grades', function($sheet) {
                 $sheet->fromArray(Array_::formXLSArrayGrade($this->data));
-                $sheet->row(1, array('ID', 'FIO','Kode','Group','ModuleGrade'));
+                $sheet->row(1, array('ID', 'FIO'));
                 $sheet->setAutoSize(true);
             });
 

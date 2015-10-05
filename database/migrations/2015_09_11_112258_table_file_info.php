@@ -23,16 +23,7 @@ class TableFileInfo extends Migration
 
         Schema::create('xml_file_info', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('EduYear');
-            $table->string('Semester');
-            $table->string('DepartmentId');
-            $table->string('SpecialityId');
-            $table->string('DisciplineVariantID');
-            $table->string('ModuleVariantID');
-            $table->string('ModuleNum');
-            $table->string('NameDiscipline');
-            $table->string('NameModule');
-            $table->string('path');
+            $table->string('files_path',1024);
             $table->unsignedInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             $table->timestamps();
