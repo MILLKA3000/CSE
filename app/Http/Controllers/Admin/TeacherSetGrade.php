@@ -2,25 +2,25 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\CacheDepartment;
-use App\CacheSpeciality;
-use App\GradesFiles;
-use App\FileInfo;
-use App\Model\Contingent\Departments;
-use App\Model\Contingent\Speciality;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\ConsultingGrades;
+use App\User;
+use App\CacheDepartment;
+use App\CacheSpeciality;
+use App\GradesFiles;
 use Datatables;
 
-class ArhiveController extends Controller
+class TeacherSetGrade extends Controller
 {
 
-    public function __construct()
+    function __construct()
     {
-        $this->middleware('role:Admin,Self-Admin');
-        view()->share('type', 'arhive');
+        $this->middleware('role:Admin,Teacher');
+        view()->share('type', 'teacher');
     }
+
 
     /**
      * Display a listing of the resource.
@@ -29,7 +29,7 @@ class ArhiveController extends Controller
      */
     public function index()
     {
-        return view('admin.archive.docs.index');
+        return view('admin.consulting.index');
     }
 
     /**
@@ -98,30 +98,16 @@ class ArhiveController extends Controller
         //
     }
 
-    /**
-     * Show a list of archive.
-     *
-     * @return Datatables JSON
-     */
     public function data()
     {
 
         $grades = GradesFiles::select(array(
-            'grades_files.created_at',
+            'grades_files.EduYear',
             'grades_files.Semester',
             'grades_files.DepartmentId',
             'grades_files.SpecialityId',
             'grades_files.NameDiscipline',
-            'type_exam.name as typeExamName',
-            'users.name',
-            'grades_files.id',
-            'file_info.path',
-            'grades_files.name as fileName',
-            ))
-            ->join('type_exam','grades_files.type_exam_id', '=', 'type_exam.id')
-            ->join('file_info','grades_files.file_info_id', '=', 'file_info.id')
-            ->join('users','file_info.user_id', '=', 'users.id')
-            ->get();
+        ))->get();
 
         foreach($grades as $grade){
             $grade->DepartmentId = CacheDepartment::getDepartment($grade->DepartmentId)->name;
@@ -129,10 +115,8 @@ class ArhiveController extends Controller
         }
 
         return Datatables::of($grades)
-//            ->edit_column('EduYear', '{{$EduYear}}/{{$EduYear+1}}')
-//            ->remove_column('id')
+            ->edit_column('EduYear', '{{$EduYear}}/{{$EduYear+1}}')
+            ->remove_column('id')
             ->make();
     }
-
-
 }

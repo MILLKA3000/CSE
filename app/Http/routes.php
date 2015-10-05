@@ -58,6 +58,10 @@ Route::group(['prefix' => '/', 'middleware' => 'auth'], function() {
             Route::get('arhive/data', 'Admin\ArhiveController@data');
             Route::get('arhive', 'Admin\ArhiveController@index');
 
+    # Teacher
+    Route::get('teacher/data', 'Admin\TeacherSetGrade@data');
+    Route::resource('teacher', 'Admin\TeacherSetGrade');
+
     # subject of students
     Route::get('subject/data', 'Admin\SubjectContingentController@data');
     Route::resource('subject', 'Admin\SubjectContingentController');

@@ -2,6 +2,7 @@
 
 namespace App\Model\CreateDocuments;
 
+use App\CacheSpeciality;
 use App\Grades;
 use App\GradesFiles;
 use App\Helper\File as HelperFile;
@@ -11,6 +12,7 @@ use Chumper\Zipper\Facades\Zipper;
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Contingent\Students as ContStudent;
 use File;
+use App\CacheDepartment;
 
 
 class Documents extends Model
@@ -44,8 +46,8 @@ class Documents extends Model
     public function formDocuments(){
 
         $this->dataGradesOfStudentsGroups = Grades::select('group')->where('grade_file_id',$this->idFileGrade)->distinct()->get();
-        $this->speciality = Speciality::where('SPECIALITYID',$this->dataOfFile->SpecialityId)->get()->first()->SPECIALITY;
-        $this->department = Departments::where('DEPARTMENTID',$this->dataOfFile->DepartmentId)->get()->first()->DEPARTMENT;
+        $this->speciality = CacheSpeciality::getSpeciality( $this->dataOfFile->SpecialityId)->name;
+        $this->department = CacheDepartment::getDepartment( $this->dataOfFile->DepartmentId)->name;
         $this->formHtml();
         Zipper::make(public_path().$this->DOC_PATH.'\Docs.zip')->add(glob(public_path().$this->DOC_PATH.'\docs'));
         return $this->DOC_PATH.'\Docs.zip';
@@ -106,8 +108,8 @@ class Documents extends Model
         <body>
         <p align=center>МІНІСТЕРСТВО ОХОРОНИ ЗДОРОВЯ УКРАЇНИ </p>
         <p align=center><b><u>Тернопільський державний медичний університет імені І.Я. Горбачевського</u></b></p>
-        <span align=left> Факультет <u>" . iconv("Windows-1251", "UTF-8", $this->department) . "</u></span><br>
-        <span align=left> Спеціальність <u>" . iconv("Windows-1251", "UTF-8", $this->speciality) . "</u></span>
+        <span align=left> Факультет <u>" . $this->department . "</u></span><br>
+        <span align=left> Спеціальність <u>" . $this->speciality . "</u></span>
         <span align=right>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Група_<u>" . $this->studentsOfGroup->first()->group . "</u>___</span>
         &nbsp;&nbsp;&nbsp;&nbsp;".$this->dataOfFile->EduYear . "/" . ($this->dataOfFile->EduYear + 1)." &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
