@@ -21,7 +21,7 @@
     <ul class="nav nav-tabs">
         <?php $i=0 ?>
         @foreach($data as $item)
-            <li class=""><a href="#tab{{$i++}}" data-toggle="tab" aria-expanded="true">{{$item['data']->getContent()->testlist->modulenum}}. {{$item['data']->getContent()->testlist->moduletheme}}</a></li>
+            <li class=""><a href="#tab{{$i++}}" data-toggle="tab" aria-expanded="true">{{(count($data)<4)?$item['data']->getContent()->testlist->moduletheme:$i}}</a></li>
         @endforeach
     </ul>
     <div class="tab-content">

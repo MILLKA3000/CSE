@@ -51,7 +51,7 @@ class ExcelController extends Controller
                     'id_file'=>(isset($Model_Excel->id_file->id))?$Model_Excel->id_file->id:false
                 ]);
             } else {
-                return view('admin.excel.import')->with(['error'=>'No type file']);
+                return view('admin.excel.import',['type_exam'=>TypeExam::all()])->with(['error'=>'No type file']);
             }
         }else{
             return view('admin.excel.import',['type_exam'=>TypeExam::all()]);

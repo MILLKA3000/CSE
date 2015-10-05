@@ -30,7 +30,7 @@
                         {!! Form::label('type_exam', trans("admin/modules/getExcel.type_exam"), array('class' => 'control-label')) !!}
                         <div class="controls">
                             {!! Form::select('type_exam', $type_exam->lists('name', 'id'), '',array('class' => 'form-control')) !!}
-                            <span class="help-block">{{ $errors->first('type_exam', ':message') }}</span>
+                            {{--<span class="help-block">{{ $errors->first('type_exam', ':message') }}</span>--}}
                         </div>
                     </div>
 

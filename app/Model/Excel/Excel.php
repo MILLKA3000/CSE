@@ -25,12 +25,23 @@ class Excel extends Model
 
     public $id_file;
 
+    public $id_grade_info;
+
     private $dataToSave;
 
     /**
      * for view message
      */
     private $messages=[[]];
+
+    /**
+     * @var array for examgrade
+     */
+    private $firstSheets = [];
+
+    private $secondSheets = [];
+
+    private $threeSheets = [];
 
     /**
      * Construct for init data
@@ -53,8 +64,14 @@ class Excel extends Model
     public function SaveData(){
         if($this->validateTables()){
             $this->id_file = $this->setFileInfo();
-            $this->setGradeFile();
-            $this->setGrades();
+            $module = 0;
+            foreach($this->OriginalData->get()[3] as $fourSheets) {
+                $this->id_grade_info = $this->setGradeFile($fourSheets);
+                $this->setGrades($this->dataToSave[$module]);
+                $module++;
+            }
+//            $this->setGradeFile();
+//            $this->setGrades();
             $this->messages['success'][] = 'Save data complicated!';
         }
         return $this->messages;
@@ -65,8 +82,12 @@ class Excel extends Model
      */
     private function validateTables(){
         $checkError = true;
+        $this->rebuildDataInFirstSheets(); // for find student code in index array
+        $this->rebuildDataInSecondSheets();
+        $this->rebuildDataInThreeSheets();
+
         $this->validationCodeAndGrades();
-        $this->validationRepeatCode();
+//        $this->validationRepeatCode();
         if(isset($this->messages['error'])){
             $checkError = false;
         }
@@ -78,45 +99,31 @@ class Excel extends Model
      */
     private function validationCodeAndGrades(){
         $grades = [];
-        foreach($this->OriginalData->get()[1] as $secondSheets) { // iteration in second sheet
-            if (($secondSheets['kode']!=999) && ($secondSheets['kode']!=0)) {
-                $dataOfGrades = $this->findGradesInFirstSheet($this->OriginalData->get()[0], $secondSheets['kode']);
-                if ($dataOfGrades) {
-                    $grades['code'] = (int)$dataOfGrades['code'];
-                    $grades['id_student'] = $secondSheets['id'];
-                    $grades['fio'] = $secondSheets['fio'];
-                    $grades['group'] = (int)$secondSheets['group'];
-                    $grades['exam_grade'] = (int)$dataOfGrades['exam_grade'];
-                    $grades['grade'] = (int)$secondSheets['modulegrade'];
-                    $this->dataToSave[] = $grades;
-                } else {
-                    $this->messages['error'][] = 'Don\'t find code in First Sheets : ' . $secondSheets['kode'];
-                }
-            }else{
-                $grades['code'] = $secondSheets['kode'];
-                $grades['id_student'] = $secondSheets['id'];
+        $module = 0;
+
+        foreach($this->OriginalData->get()[3] as $fourSheets) {
+
+            foreach($this->OriginalData->get()[1] as $secondSheets) { // iteration in second sheet
+                $grades['code'] = (int)$secondSheets['kode'];
+                $grades['id_student'] = (string)$secondSheets['id'];
                 $grades['fio'] = $secondSheets['fio'];
                 $grades['group'] = (int)$secondSheets['group'];
-                $grades['exam_grade'] = 0;
-                $grades['grade'] = (int)$secondSheets['modulegrade'];
-                $this->dataToSave[] = $grades;
-            }
-
-        }
-    }
-
-    /**
-     * find duplicate code of student
-     */
-    private function validationRepeatCode(){
-        $countArrGrades = count($this->dataToSave);
-        for ($i=0;$i<$countArrGrades;$i++){
-            for ($j=$i+1;$j<$countArrGrades;$j++){
-                if ($this->dataToSave[$i]['code'] == $this->dataToSave[$j]['code']){
-                    $this->messages['error'][] = 'Find duplicate code : '. $this->dataToSave[$i]['code']. ', students: '.$this->dataToSave[$i]['fio'].', '.$this->dataToSave[$j]['fio'];
+                $grades['grade'] = (int)$this->threeSheets[(string)$secondSheets['id']][$module];
+                if (($secondSheets['kode']!=999) && ($secondSheets['kode']!=0)) {
+                    if (isset($this->firstSheets[$secondSheets['kode']])) {
+                        $grades['exam_grade'] = (int)$this->firstSheets[$secondSheets['kode']][$module];
+                        $this->dataToSave[$module][] = $grades;
+                    } else {
+                        $this->messages['error'][] = 'Don\'t find code in First Sheets : ' . $secondSheets['kode'];
+                    };
+                }else{
+                    $grades['exam_grade'] = 0;
+                    $this->dataToSave[$module][] = $grades;
                 }
             }
+            $module++;
         }
+
     }
 
     /**
@@ -133,9 +140,9 @@ class Excel extends Model
     }
 
 
-    private function setGrades(){
-        foreach($this->dataToSave as $data){
-            $data['grade_file_id'] = $this->id_file->id;
+    private function setGrades($dataGrades){
+        foreach($dataGrades as $data){
+            $data['grade_file_id'] = $this->id_grade_info->id;
             Grades::create($data);
         }
         return true;
@@ -145,18 +152,18 @@ class Excel extends Model
     /**
      * @return static
      */
-    private function setGradeFile(){
+    private function setGradeFile($fourSheets){
         $data['name']=$this->data['urlOriginalName'];
         $data['file_info_id']=$this->id_file->id;
-        $data['EduYear']=(string)$this->OriginalData->get()[2][0]['eduyear'];
-        $data['Semester']=(string)$this->OriginalData->get()[2][0]['semester'];
-        $data['DepartmentId']=(string)$this->OriginalData->get()[2][0]['departmentid'];
-        $data['SpecialityId']=(string)$this->OriginalData->get()[2][0]['specialityid'];
-        $data['DisciplineVariantID']=(string)$this->OriginalData->get()[2][0]['disciplinevariantid'];
-        $data['ModuleVariantID']=(string)$this->OriginalData->get()[2][0]['modulevariantid'];
-        $data['ModuleNum']=(string)$this->OriginalData->get()[2][0]['modulenum'];
-        $data['NameDiscipline']=(string)$this->OriginalData->get()[2][0]['namediscipline'];
-        $data['NameModule']=(string)$this->OriginalData->get()[2][0]['namemodule'];
+        $data['EduYear']=(string)$fourSheets['eduyear'];
+        $data['Semester']=(string)$fourSheets['semester'];
+        $data['DepartmentId']=(string)$fourSheets['departmentid'];
+        $data['SpecialityId']=(string)$fourSheets['specialityid'];
+        $data['DisciplineVariantID']=(string)$fourSheets['disciplinevariantid'];
+        $data['ModuleVariantID']=(string)$fourSheets['modulevariantid'];
+        $data['ModuleNum']=(string)$fourSheets['modulenum'];
+        $data['NameDiscipline']=(string)$fourSheets['namediscipline'];
+        $data['NameModule']=(string)$fourSheets['namemodule'];
         $data['type_exam_id']=$this->data['type_exam'];
 
         return GradesFiles::create($data);
@@ -184,8 +191,51 @@ class Excel extends Model
     private function convertCellFromFirstSheet($arr){
         $tmp = array_values(array_values((array)$arr)[1]);
         $data['code'] = $tmp[2];
-        $data['exam_grade'] = $tmp[3];
+        for($i=3;$i<count($tmp);$i++){
+            $data['exam_grade'][] = $tmp[$i];
+        }
         return $data;
+    }
+
+    /**
+     * @param $arr
+     * @return mixed
+     */
+    private function convertCellFromThreeSheet($arr){
+        $tmp = array_values(array_values((array)$arr)[1]);
+        $data['studentId'] = $tmp[0];
+        for($i=2;$i<count($tmp);$i++){
+            $data['grade'][] = $tmp[$i];
+        }
+        return $data;
+    }
+
+
+    private function rebuildDataInFirstSheets(){
+        foreach($this->OriginalData->get()[0] as $key=>$secondSheets) { // iteration in first sheet
+            $afterGet = $this->convertCellFromFirstSheet($secondSheets);
+            if (isset($this->firstSheets[$afterGet['code']])){
+                $this->messages['error'][] = 'In first sheet duplicate code: '.$afterGet['code'];
+            }
+            $this->firstSheets[$afterGet['code']] = $afterGet['exam_grade'];
+        }
+    }
+
+    private function rebuildDataInSecondSheets(){
+        foreach($this->OriginalData->get()[1] as $key=>$secondSheets) { // iteration in first sheet
+            $afterGet = $this->convertCellFromFirstSheet($secondSheets);
+            if (isset($this->secondSheets[$afterGet['code']]) && $afterGet['code']!=999 && $afterGet['code']!=0){
+                $this->messages['error'][] = 'In second sheet duplicate code: '.$afterGet['code'];
+            }
+            $this->secondSheets[$afterGet['code']] = true;
+        }
+    }
+
+    private function rebuildDataInThreeSheets(){
+        foreach($this->OriginalData->get()[2] as $key=>$secondSheets) { // iteration in first sheet
+            $afterGet = $this->convertCellFromThreeSheet($secondSheets);
+            $this->threeSheets[(string)$afterGet['studentId']] = $afterGet['grade'];
+        }
     }
 
 }
