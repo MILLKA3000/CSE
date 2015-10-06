@@ -25,6 +25,8 @@ class Documents extends Model
 
     protected $dataOfFile;
 
+    protected $dataEachOfFile;
+
     protected $speciality;
 
     protected $department;
@@ -33,24 +35,30 @@ class Documents extends Model
 
     protected $shablon;
 
+    private $numModule = 1;
+
     public function __construct($idFileGrade)
     {
         $this->idFileGrade = $idFileGrade;
-        $this->dataOfFile = GradesFiles::find($this->idFileGrade);
-        $this->DOC_PATH = '\documents\\'.$this->dataOfFile->get_path()->get()->first()->path;
+        $this->dataOfFile = GradesFiles::where('file_info_id',$this->idFileGrade)->get();
+        $this->DOC_PATH = '\documents\\' . $this->dataOfFile[0]->get_path()->get()->first()->path;
     }
 
     /**
      * Public func for prepare get data
      */
-    public function formDocuments(){
-
-        $this->dataGradesOfStudentsGroups = Grades::select('group')->where('grade_file_id',$this->idFileGrade)->distinct()->get();
-        $this->speciality = CacheSpeciality::getSpeciality( $this->dataOfFile->SpecialityId)->name;
-        $this->department = CacheDepartment::getDepartment( $this->dataOfFile->DepartmentId)->name;
-        $this->formHtml();
-        Zipper::make(public_path().$this->DOC_PATH.'\Docs.zip')->add(glob(public_path().$this->DOC_PATH.'\docs'));
-        return $this->DOC_PATH.'\Docs.zip';
+    public function formDocuments()
+    {
+        foreach($this->dataOfFile as $dataOfFile) {
+            $this->dataEachOfFile = $dataOfFile;
+            $this->dataGradesOfStudentsGroups = Grades::select('group')->where('grade_file_id', $this->idFileGrade)->distinct()->get();
+            $this->speciality = CacheSpeciality::getSpeciality($dataOfFile->SpecialityId)->name;
+            $this->department = CacheDepartment::getDepartment($dataOfFile->DepartmentId)->name;
+            $this->formHtml();
+            $this->numModule++;
+        }
+        Zipper::make(public_path() . $this->DOC_PATH . '\Docs.zip')->add(glob(public_path() . $this->DOC_PATH . '\docs'));
+        return $this->DOC_PATH . '\Docs.zip';
 
     }
 
@@ -59,11 +67,11 @@ class Documents extends Model
      */
     private function formHtml()
     {
-        foreach($this->dataGradesOfStudentsGroups as $group) {
-            $this->studentsOfGroup = Grades::where('grade_file_id',$this->idFileGrade)->where('group',$group->group)->get();
+        foreach ($this->dataGradesOfStudentsGroups as $group) {
+            $this->studentsOfGroup = Grades::where('grade_file_id', $this->idFileGrade)->where('group', $group->group)->get();
             $this->putToShablon();
-            File::makeDirectory(public_path().$this->DOC_PATH.'\docs', 0775, true,true);
-            File::put(public_path().$this->DOC_PATH.'\docs\\'.$group->group.'.doc', $this->shablon);
+            File::makeDirectory(public_path() . $this->DOC_PATH . '\docs', 0775, true, true);
+            File::put(public_path() . $this->DOC_PATH . '\docs\\' .$this->numModule.'.'. $group->group . '.doc', $this->shablon);
         }
     }
 
@@ -74,11 +82,11 @@ class Documents extends Model
     {
         $this->createHeaderShablon();
         $num = 1;
-        foreach($this->studentsOfGroup as $student) {
-            $student->exam_grade = ($student->exam_grade==0) ? "0(не склав)":$student->exam_grade;
-            $student->exam_grade = ($student->code==999) ? "(не з'явився)":$student->exam_grade;
-            $this->shablon.="<tr><td width=10%>".($num++)."</td><td width=50%>".$student->fio."</td><td width=15%>".ContStudent::where('STUDENTID',$student->id_student)->get()->first()->RECORDBOOKNUM."</td>
-            <td width=10%>".$student->exam_grade."</td></tr>";
+        foreach ($this->studentsOfGroup as $student) {
+            $student->exam_grade = ($student->exam_grade == 0) ? "0(не склав)" : $student->exam_grade;
+            $student->exam_grade = ($student->code == 999) ? "(не з'явився)" : $student->exam_grade;
+            $this->shablon .= "<tr><td width=10%>" . ($num++) . "</td><td width=50%>" . $student->fio . "</td><td width=15%>" . ContStudent::where('STUDENTID', $student->id_student)->get()->first()->RECORDBOOKNUM . "</td>
+            <td width=10%>" . $student->exam_grade . "</td></tr>";
         }
         $this->createFooterShablon();
     }
@@ -89,7 +97,7 @@ class Documents extends Model
      */
     private function findSemester()
     {
-        return ($this->dataOfFile->Semester & 1) ? ($this->dataOfFile->Semester+1)/2 : $this->dataOfFile->Semester/2;
+        return ($this->dataEachOfFile->Semester & 1) ? ($this->dataEachOfFile->Semester + 1) / 2 : $this->dataEachOfFile->Semester / 2;
     }
 
     /**
@@ -111,12 +119,12 @@ class Documents extends Model
         <span align=left> Факультет <u>" . $this->department . "</u></span><br>
         <span align=left> Спеціальність <u>" . $this->speciality . "</u></span>
         <span align=right>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Група_<u>" . $this->studentsOfGroup->first()->group . "</u>___</span>
-        &nbsp;&nbsp;&nbsp;&nbsp;".$this->dataOfFile->EduYear . "/" . ($this->dataOfFile->EduYear + 1)." &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;" . $this->dataEachOfFile->EduYear . "/" . ($this->dataEachOfFile->EduYear + 1) . " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Курс _<u>" . $this->findSemester() . "</u>___<br />
         <p align=center>ЕКЗАМЕНАЦІЙНА ВІДОМІСТЬ №____ </p>
-        <p>З <u>" . $this->dataOfFile->ModuleNum . ". " . $this->dataOfFile->NameDiscipline . "</u> - <u>" . $this->dataOfFile->NameModule . "</u></p>
-        <p>За _<u>" . $this->dataOfFile->Semester . "</u>___ навчальний семестр, екзамен <u>_" . date('d.m.Y') . "___</u></p>
+        <p>З <u>" . $this->dataEachOfFile->ModuleNum . ". " . $this->dataEachOfFile->NameDiscipline . "</u> - <u>" . $this->dataEachOfFile->NameModule . "</u></p>
+        <p>За _<u>" . $this->dataEachOfFile->Semester . "</u>___ навчальний семестр, екзамен <u>_" . date('d.m.Y') . "___</u></p>
         <table class=guestbook width=600 align=center cellspacing=0 cellpadding=3 border=1>
             <tr>
                 <td width=10%>
@@ -140,7 +148,7 @@ class Documents extends Model
      */
     private function createFooterShablon()
     {
-        $this->shablon.="</table><br />
+        $this->shablon .= "</table><br />
         Голова комісії _______________________________________________________________ <br>
         (вчені звання, прізвище та ініціали)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(підпис)<br />
         Члени комісії ________________________________________________________________ <br>

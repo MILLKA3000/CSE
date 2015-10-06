@@ -33,7 +33,6 @@ class ExcelController extends Controller
     public function importXLS(Request $request){
 
         if ($file = $request->file('xls')) {
-
             if (array_keys([
                 'application/vnd.ms-office',
                 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],$file->getMimeType())) {

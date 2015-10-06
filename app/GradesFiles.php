@@ -12,7 +12,7 @@ class GradesFiles extends Model
 
     public function get_path()
     {
-        return $this->hasOne('App\FileInfo','id');
+        return $this->hasOne('App\FileInfo','id','file_info_id');
     }
 
     public function getUserId()

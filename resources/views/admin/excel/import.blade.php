@@ -4,6 +4,10 @@
 @section('title') {!! trans("admin/modules/Excel.loadXLStitle") !!} :: @parent
 @stop
 
+@section('styles')
+    <link href="{{ asset('css/fileinput.min.css') }}" rel="stylesheet">
+@endsection
+
 {{-- Content --}}
 @section('main')
     <div class="page-header">
@@ -36,7 +40,16 @@
 
                 <div class="control-group">
                     <div class="controls">
-                        {!! Form::file('xls') !!}
+                        <label class="control-label">Select File</label>
+                        <input id="input-1a"
+                               type="file"
+                               class="file btn btn-success btn-sm"
+                               multiple="false"
+                               name="xls"
+                               data-show-upload="false"
+                               data-show-preview="false"
+                               data-show-caption="true"
+                               data-allowed-file-extensions='["xls", "xlsx"]'>
                         <p class="errors">{!!$errors->first('xls')!!}</p>
                         @if(isset($error))
                             <p class="text-danger">{!! $error !!}</p>
@@ -62,8 +75,13 @@
 
 {{-- Scripts --}}
 @section('scripts')
-    <script>
+        <script src="{{ asset('js/fileinput.js') }}"></script>
 
+    <script>
+        $(document).ready(function () {
+            $('.btn.btn-file , .btn.fileinput-remove').attr('style','height:35px');
+            $('.glyphicon.glyphicon-folder-open, .glyphicon.glyphicon-trash').hide();
+        });
         $('#tablet').DataTable();
 
     </script>

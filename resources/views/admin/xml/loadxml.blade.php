@@ -4,6 +4,10 @@
 @section('title') {!! trans("admin/modules/getExcel.loadXMLtitle") !!} :: @parent
 @stop
 
+@section('styles')
+    <link href="{{ asset('css/fileinput.min.css') }}" rel="stylesheet">
+@endsection
+
 {{-- Content --}}
 @section('main')
     <div class="page-header">
@@ -29,15 +33,20 @@
                     </div>
                 @endif
                 {!! Form::open(array('url'=>'excel/loadXML','method'=>'post', 'files'=>true)) !!}
-                <div class="control-group">
-                    <div class="controls">
-                        {!! Form::file('xml') !!}
+
+                        <label class="control-label">Select XML or ZIP File</label>
+                    <input id="input-2" type="file"
+                           class="file btn btn-success btn-sm"
+                           multiple="true"
+                           name="xml[]"
+                           data-show-upload="false"
+                           data-show-caption="true"
+                           data-allowed-file-extensions='["xml", "zip"]'>
+                        {{--{!! Form::file('xml[]', array('multiple'=>true,'array'=>'file','data-show-upload'=>'false','data-show-caption'=>'true')) !!}--}}
                         <p class="errors">{!!$errors->first('xml')!!}</p>
                         @if(isset($error))
                             <p class="text-danger">{!! $error !!}</p>
                         @endif
-                    </div>
-                </div>
                 <div id="success"> </div>
                 {!! Form::submit('Upload', array('class'=>'btn btn-success btn-sm cboxElement')) !!}
                 {!! Form::close() !!}
@@ -57,9 +66,15 @@
 
 {{-- Scripts --}}
 @section('scripts')
-    <script>
 
-        $('#tablet').DataTable();
+    <script src="{{ asset('js/fileinput.js') }}"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.btn.btn-file , .btn.fileinput-remove').attr('style','height:35px');
+            $('.glyphicon.glyphicon-folder-open, .glyphicon.glyphicon-trash').hide();
+        });
+//        $('#tablet').DataTable();
 
     </script>
 @stop

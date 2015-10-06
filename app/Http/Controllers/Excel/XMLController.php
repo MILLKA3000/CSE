@@ -47,25 +47,28 @@ class XMLController extends Controller
     {
         if ($file = $request->file('xml')) {
 
-            if ($file->getMimeType() == 'application/xml') {
-
-                $this->moveFile($file);
-                $this->_parce($this->url);
-                $this->saveLog();
-                $this->AllFilespath[] = $this->url->getPathName();
-
-                return view('admin.xml.view', ['data'=>$this->data,'files'=>$this->saveArchiveXml()]);
-
-            } elseif ($file->getMimeType() == 'application/zip') {
-
-                $this->moveFile($file);
-                $this->_parceZIP($file);
-                $this->saveLog();
-                return view('admin.xml.view', ['data'=>$this->data,'files'=>$this->saveArchiveXml()]);
-
-            } else {
-                return view('admin.xml.loadxml')->with(['error'=>'No type file']);
+            if (count($file)>1){
+                $files = [];
+                foreach($file as $f){
+                    if ($f->getMimeType() == 'application/xml') {
+                        $this->moveFile($f);
+                    }
+                }
+                $this->foreachFileParce($files = Storage::files(str_replace ( '\\' ,'/' , $this->path)));
+            }elseif (!is_null($file[0])) {
+                if ($file[0]->getMimeType() == 'application/xml') {
+                    $this->moveFile($file[0]);
+                    $this->_parce($this->url);
+                    $this->AllFilespath[] = $this->url->getPathName();
+                } elseif ($file[0]->getMimeType() == 'application/zip') {
+                    $this->moveFile($file[0]);
+                    $this->_parceZIP($file[0]);
+                }
+            }else {
+                    return view('admin.xml.loadxml')->with(['error'=>'You uploaded not this type files.<br> You must upload files of type [xml(single or multiple), zip(only single)]']);
             }
+            $this->saveLog();
+            return view('admin.xml.view', ['data' => $this->data, 'files' => $this->saveArchiveXml()]);
         }else{
             return view('admin.xml.loadxml');
         }
@@ -98,6 +101,11 @@ class XMLController extends Controller
         Zipper::make($pathZip.'\\'.$file->getClientOriginalName())->extractTo($pathZip.'\xml\\');
         $files = Storage::files(str_replace ( '\\' ,'/' , $pathZip.'\xml\\' ));
 
+        $this->foreachFileParce($files);
+    }
+
+
+    private function foreachFileParce($files){
         foreach($files as $file){
             $this->_parce($file);
             $this->AllFilespath[] = $file;
