@@ -70,8 +70,6 @@ class Excel extends Model
                 $this->setGrades($this->dataToSave[$module]);
                 $module++;
             }
-//            $this->setGradeFile();
-//            $this->setGrades();
             $this->messages['success'][] = 'Save data complicated!';
         }
         return $this->messages;
@@ -87,7 +85,6 @@ class Excel extends Model
         $this->rebuildDataInThreeSheets();
 
         $this->validationCodeAndGrades();
-//        $this->validationRepeatCode();
         if(isset($this->messages['error'])){
             $checkError = false;
         }
@@ -167,21 +164,6 @@ class Excel extends Model
         $data['type_exam_id']=$this->data['type_exam'];
 
         return GradesFiles::create($data);
-    }
-
-    /**
-     * @param $sheet
-     * @param $kode
-     * @return bool
-     */
-    private function findGradesInFirstSheet($sheet,$kode){
-        foreach($sheet as $firstSheets){
-            $kodeInFirstSheet = $this->convertCellFromFirstSheet($firstSheets);
-            if($kodeInFirstSheet['code']==$kode){
-                return $kodeInFirstSheet;
-            }
-        }
-        return false;
     }
 
     /**

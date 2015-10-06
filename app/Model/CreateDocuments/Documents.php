@@ -5,31 +5,29 @@ namespace App\Model\CreateDocuments;
 use App\CacheSpeciality;
 use App\Grades;
 use App\GradesFiles;
-use App\Helper\File as HelperFile;
-use App\Model\Contingent\Departments;
-use App\Model\Contingent\Speciality;
 use Chumper\Zipper\Facades\Zipper;
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Contingent\Students as ContStudent;
 use File;
+use Storage;
 use App\CacheDepartment;
 
 
 class Documents extends Model
 {
-    protected $DOC_PATH;
+    protected $DOC_PATH; // for puts files
 
-    protected $studentsOfGroup;
+    protected $studentsOfGroup; // Students of group
 
-    protected $dataGradesOfStudentsGroups;
+    protected $dataGradesOfStudentsGroups; // for find all groups
 
-    protected $dataOfFile;
+    protected $dataOfFile; // each module
 
-    protected $dataEachOfFile;
+    protected $dataEachOfFile; // select module
 
-    protected $speciality;
+    protected $speciality; // get from cache speciality
 
-    protected $department;
+    protected $department; // get from cache department
 
     protected $idFileGrade = 0;
 
@@ -39,9 +37,17 @@ class Documents extends Model
 
     public function __construct($idFileGrade)
     {
-        $this->idFileGrade = $idFileGrade;
-        $this->dataOfFile = GradesFiles::where('file_info_id',$this->idFileGrade)->get();
+        $this->dataOfFile = GradesFiles::where('file_info_id',$idFileGrade)->get();
+
+        /**
+         * get data from bd about module (generals data for each docs)
+         */
         $this->DOC_PATH = '\documents\\' . $this->dataOfFile[0]->get_path()->get()->first()->path;
+        $this->speciality = CacheSpeciality::getSpeciality($this->dataOfFile[0]->SpecialityId)->name;
+        $this->department = CacheDepartment::getDepartment($this->dataOfFile[0]->DepartmentId)->name;
+
+        Storage::deleteDirectory($this->DOC_PATH . '\docs');
+//        Storage::delete($this->DOC_PATH . '\Docs.zip');
     }
 
     /**
@@ -49,17 +55,17 @@ class Documents extends Model
      */
     public function formDocuments()
     {
-        foreach($this->dataOfFile as $dataOfFile) {
-            $this->dataEachOfFile = $dataOfFile;
-            $this->dataGradesOfStudentsGroups = Grades::select('group')->where('grade_file_id', $this->idFileGrade)->distinct()->get();
-            $this->speciality = CacheSpeciality::getSpeciality($dataOfFile->SpecialityId)->name;
-            $this->department = CacheDepartment::getDepartment($dataOfFile->DepartmentId)->name;
+        foreach($this->dataOfFile as $this->dataEachOfFile) {
+            $this->studentsOfGroup = [];
+            $this->dataGradesOfStudentsGroups = Grades::where('grade_file_id', $this->dataEachOfFile->id)->get();
+            foreach ($this->dataGradesOfStudentsGroups as $student) {
+                $this->studentsOfGroup[$student['group']][] = $student;
+            }
             $this->formHtml();
             $this->numModule++;
         }
         Zipper::make(public_path() . $this->DOC_PATH . '\Docs.zip')->add(glob(public_path() . $this->DOC_PATH . '\docs'));
         return $this->DOC_PATH . '\Docs.zip';
-
     }
 
     /**
@@ -67,28 +73,18 @@ class Documents extends Model
      */
     private function formHtml()
     {
-        foreach ($this->dataGradesOfStudentsGroups as $group) {
-            $this->studentsOfGroup = Grades::where('grade_file_id', $this->idFileGrade)->where('group', $group->group)->get();
-            $this->putToShablon();
+        foreach ($this->studentsOfGroup as $group=>$students) {
+            $this->createHeaderShablon($group);
+            $num = 1;
+            foreach($students as $student) {
+                $exam_grade = ($student->exam_grade == 0) ? "0(не склав)" : $student->exam_grade;
+                $exam_grade = ($student->code == 999) ? "(не з'явився)" : $exam_grade;
+                $this->shablon .= "<tr><td width=10%>" . ($num++) . "</td><td width=50%>" . $student->fio . "</td><td width=15%>" . ContStudent::getStudentBookNum($student->id_student) . "</td><td width=10%>" . $exam_grade . "</td></tr>";
+            }
+            $this->createFooterShablon();
             File::makeDirectory(public_path() . $this->DOC_PATH . '\docs', 0775, true, true);
-            File::put(public_path() . $this->DOC_PATH . '\docs\\' .$this->numModule.'.'. $group->group . '.doc', $this->shablon);
+            File::put(public_path() . $this->DOC_PATH . '\docs\\' . $this->numModule . '.' . $group . '.doc', $this->shablon);
         }
-    }
-
-    /**
-     * put data to shablon
-     */
-    private function putToShablon()
-    {
-        $this->createHeaderShablon();
-        $num = 1;
-        foreach ($this->studentsOfGroup as $student) {
-            $student->exam_grade = ($student->exam_grade == 0) ? "0(не склав)" : $student->exam_grade;
-            $student->exam_grade = ($student->code == 999) ? "(не з'явився)" : $student->exam_grade;
-            $this->shablon .= "<tr><td width=10%>" . ($num++) . "</td><td width=50%>" . $student->fio . "</td><td width=15%>" . ContStudent::where('STUDENTID', $student->id_student)->get()->first()->RECORDBOOKNUM . "</td>
-            <td width=10%>" . $student->exam_grade . "</td></tr>";
-        }
-        $this->createFooterShablon();
     }
 
     /**
@@ -103,7 +99,7 @@ class Documents extends Model
     /**
      * Create block for header of shablon
      */
-    private function createHeaderShablon()
+    private function createHeaderShablon($group)
     {
         $this->shablon = "
         <html>
@@ -118,7 +114,7 @@ class Documents extends Model
         <p align=center><b><u>Тернопільський державний медичний університет імені І.Я. Горбачевського</u></b></p>
         <span align=left> Факультет <u>" . $this->department . "</u></span><br>
         <span align=left> Спеціальність <u>" . $this->speciality . "</u></span>
-        <span align=right>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Група_<u>" . $this->studentsOfGroup->first()->group . "</u>___</span>
+        <span align=right>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Група_<u>" . $group . "</u>___</span>
         &nbsp;&nbsp;&nbsp;&nbsp;" . $this->dataEachOfFile->EduYear . "/" . ($this->dataEachOfFile->EduYear + 1) . " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Курс _<u>" . $this->findSemester() . "</u>___<br />

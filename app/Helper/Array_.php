@@ -66,7 +66,7 @@ class Array_ extends Model
     static public function getInfoForXLS($obj)
     {
         $data = [];
-        $specialityId = ContStudent::where('STUDENTID', $obj[0]['data']->getContent()->testlist->students->student->id)->get()->first()->SPECIALITYID;
+        $specialityId = ContStudent::getStudentSpeciality($obj[0]['data']->getContent()->testlist->students->student->id);
         foreach($obj as $d) {
             $content = $d['data']->getContent();
             $data[] = [
