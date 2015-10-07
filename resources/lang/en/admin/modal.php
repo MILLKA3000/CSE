@@ -13,5 +13,6 @@ return [
     'delete_message' => 'Did you want to delete this item?',
     'yes' => 'Yes',
     'no' => 'No',
+    'this' => 'This',
 
 ];

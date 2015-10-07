@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Grades;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -11,9 +12,12 @@ use App\CacheDepartment;
 use App\CacheSpeciality;
 use App\GradesFiles;
 use Datatables;
+use Auth;
 
 class TeacherSetGrade extends Controller
 {
+
+    private $about_module;
 
     function __construct()
     {
@@ -72,7 +76,27 @@ class TeacherSetGrade extends Controller
      */
     public function edit($id)
     {
-        //
+        $this->about_module = GradesFiles::where('id',$id)->get()->first();
+        $students = Grades::select('consulting_grades.id_student as stud_consult_grade',
+        'consulting_grades.grade_consulting',
+        'grades.id_student',
+        'grades.fio',
+        'grades.group',
+        'grades.exam_grade',
+        'grades.grade'
+            )->
+        where('grade_file_id',$this->about_module->id)
+            ->leftjoin('consulting_grades', function($join)
+            {
+                $join->on('consulting_grades.id_student', '=', 'grades.id_student')
+                    ->where('consulting_grades.id_num_plan','=',$this->about_module->ModuleVariantID);
+            })
+
+            ->orderBy('group', 'asc')
+            ->orderBy('fio', 'asc')
+            ->get();
+        $about_module = $this->about_module;
+        return view('admin.consulting.edit_add', compact('about_module','students'));
     }
 
     /**
@@ -82,9 +106,18 @@ class TeacherSetGrade extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function saveGrade(Request $request, ConsultingGrades $cons)
     {
-        //
+        $check = $cons->where('id_student',$request['student'])->where('id_num_plan',$request['modnum'])->get()->first();
+
+        if ($check) $cons->where('id',$check->id)->delete();
+
+        $cons->create([
+            'id_student'=>$request['student'],
+            'id_num_plan'=>$request['modnum'],
+            'grade_consulting'=>$request['value'],
+            'user_id'=>Auth::user()->id
+        ]);
     }
 
     /**
@@ -102,6 +135,7 @@ class TeacherSetGrade extends Controller
     {
 
         $grades = GradesFiles::select(array(
+            'grades_files.id',
             'grades_files.EduYear',
             'grades_files.Semester',
             'grades_files.DepartmentId',
@@ -119,7 +153,9 @@ class TeacherSetGrade extends Controller
         return Datatables::of($grades)
             ->edit_column('EduYear', '{{$EduYear}}/{{$EduYear+1}}')
             ->edit_column('NameModule', '{{$ModuleNum}}. {{$NameModule}}')
+            ->add_column('actions','<a href="{{ URL::to(\'teacher/\' . $id . \'/edit\' )}}" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-pencil"></span>  {{ trans("admin/modal.this") }}</a>')
             ->remove_column('id')
+            ->remove_column('ModuleNum')
             ->make();
     }
 }

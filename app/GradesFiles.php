@@ -19,4 +19,8 @@ class GradesFiles extends Model
     {
         return $this->hasOne('App\FileInfo','id')->get()->first()->user_id;
     }
+
+    public function getConsultingGrades(){
+        return $this->hasMany('App\ConsultingGrades','id_num_plan','ModuleVariantID');
+    }
 }

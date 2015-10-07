@@ -11,4 +11,5 @@ class Grades extends Model
     protected $table = 'grades';
 
 
+
 }
