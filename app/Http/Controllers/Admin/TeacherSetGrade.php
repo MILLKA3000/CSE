@@ -107,6 +107,8 @@ class TeacherSetGrade extends Controller
             'grades_files.DepartmentId',
             'grades_files.SpecialityId',
             'grades_files.NameDiscipline',
+            'grades_files.NameModule',
+            'grades_files.ModuleNum',
         ))->get();
 
         foreach($grades as $grade){
@@ -116,6 +118,7 @@ class TeacherSetGrade extends Controller
 
         return Datatables::of($grades)
             ->edit_column('EduYear', '{{$EduYear}}/{{$EduYear+1}}')
+            ->edit_column('NameModule', '{{$ModuleNum}}. {{$NameModule}}')
             ->remove_column('id')
             ->make();
     }

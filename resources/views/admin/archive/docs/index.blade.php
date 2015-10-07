@@ -14,6 +14,9 @@
         </h3>
     </div>
     <div class="form-group col-xs-4">
+        Search of Date
+        <br>
+        <br>
         <div class='input-group date' id='datetimepicker1'>
             <input type='text' class="form-control" />
                         <span class="input-group-addon">
@@ -21,16 +24,22 @@
                         </span>
         </div>
     </div>
-    <table id="table" class="table table-responsive table-hover">
+    <table id="table" class="table table-hover ui-datatable"
+           data-global-search="true"
+           data-ajax="{!! $type !!}/data"
+           data-paging="true"
+           data-info="true"
+           data-length-change="true"
+           data-page-length="5">
         <thead>
         <tr>
             <th>{!! trans("admin/modules/arhive.created") !!}</th>
-            <th>{!! trans("admin/modules/arhive.semester") !!}</th>
-            <th>{!! trans("admin/modules/arhive.department") !!}</th>
-            <th>{!! trans("admin/modules/arhive.speciality") !!}</th>
+            <th data-sortable="true" data-filterable="select">{!! trans("admin/modules/arhive.semester") !!}</th>
+            <th data-sortable="true" data-filterable="select">{!! trans("admin/modules/arhive.department") !!}</th>
+            <th data-sortable="true" data-filterable="select">{!! trans("admin/modules/arhive.speciality") !!}</th>
             <th>{!! trans("admin/modules/arhive.nameDiscipline") !!}</th>
-            <th>{!! trans("admin/modules/arhive.typeExam") !!}</th>
-            <th>{!! trans("admin/modules/arhive.user") !!}</th>
+            <th data-sortable="true" data-filterable="select">{!! trans("admin/modules/arhive.typeExam") !!}</th>
+            <th data-sortable="true" data-filterable="select">{!! trans("admin/modules/arhive.user") !!}</th>
         </tr>
         </thead>
         <tbody></tbody>
@@ -42,7 +51,9 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
     <script src="{{ asset('js/datePicker/bootstrap-datetimepicker.min.js') }}"></script>
 
+    <script src="{{ asset('js/dataTablesSelect.js') }}"></script>
     <script>
+
         $(function () {
             $('#table_filter').hide();
             dp = $('#datetimepicker1').datetimepicker({
@@ -51,13 +62,11 @@
             }).on('dp.change', function (e) {
                 oTable.search(moment(e.date).format("YYYY-MM-DD")).ajax.reload();
             });
-
             oTable.search(moment(dp.date).format("YYYY-MM-DD")).ajax.reload();
 
             $('#table tbody').on('click', 'td', function () {
                 var tr = $(this).closest('tr');
                 var row = oTable.row( tr );
-
                 if ( row.child.isShown() ) {
                     row.child.hide();
                     tr.removeClass('shown');

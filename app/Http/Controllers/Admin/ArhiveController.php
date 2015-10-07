@@ -106,30 +106,38 @@ class ArhiveController extends Controller
     public function data()
     {
 
-        $grades = GradesFiles::select(array(
-            'grades_files.created_at',
+        $modules = FileInfo::select(array(
+            'xls_file_info.created_at',
             'grades_files.Semester',
             'grades_files.DepartmentId',
             'grades_files.SpecialityId',
-            'grades_files.NameDiscipline',
+            'users.name as disciplines',
             'type_exam.name as typeExamName',
             'users.name',
-            'grades_files.id',
-            'file_info.path',
-            'grades_files.name as fileName',
-            ))
+            'xls_file_info.id',
+            'xls_file_info.path',
+        ))
+            ->join('users','xls_file_info.user_id', '=', 'users.id')
+            ->join('grades_files','grades_files.file_info_id', '=', 'xls_file_info.id')
             ->join('type_exam','grades_files.type_exam_id', '=', 'type_exam.id')
-            ->join('file_info','grades_files.file_info_id', '=', 'file_info.id')
-            ->join('users','file_info.user_id', '=', 'users.id')
+            ->distinct()
             ->get();
 
-        foreach($grades as $grade){
-            $grade->DepartmentId = CacheDepartment::getDepartment($grade->DepartmentId)->name;
-            $grade->SpecialityId = CacheSpeciality::getSpeciality($grade->SpecialityId)->name;
+        foreach($modules as $module){
+            $module['disciplines'] =  GradesFiles::select(array(
+                'grades_files.NameDiscipline',
+                'grades_files.NameModule',
+            ))->where('file_info_id',$module['id'])
+                ->get();
         }
 
-        return Datatables::of($grades)
-//            ->edit_column('EduYear', '{{$EduYear}}/{{$EduYear+1}}')
+        foreach($modules as $module){
+            $module->DepartmentId = CacheDepartment::getDepartment($module->DepartmentId)->name;
+            $module->SpecialityId = CacheSpeciality::getSpeciality($module->SpecialityId)->name;
+        }
+
+        return Datatables::of($modules)
+            ->edit_column('disciplines', '<? $i=0; ?>@foreach($disciplines as $discipline) <span style="border-bottom: 1px solid #64DD8A;width:100%;display: block;">{{++$i}}. {{$discipline["NameDiscipline"]}}({{$discipline["NameModule"]}}), <br></span> @endforeach')
 //            ->remove_column('id')
             ->make();
     }
