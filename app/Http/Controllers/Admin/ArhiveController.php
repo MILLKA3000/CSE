@@ -18,7 +18,7 @@ class ArhiveController extends Controller
 
     public function __construct()
     {
-        $this->middleware('role:Admin,Self-Admin');
+        $this->middleware('role:Admin,Self-Admin,Inspektor,Dekanat');
         view()->share('type', 'arhive');
     }
 
@@ -111,14 +111,15 @@ class ArhiveController extends Controller
             'grades_files.Semester',
             'grades_files.DepartmentId',
             'grades_files.SpecialityId',
-            'users.name as disciplines',
+            'users.id as disciplines',
             'type_exam.name as typeExamName',
-            'users.name',
+            'users.name as userName',
             'xls_file_info.id',
             'xls_file_info.path',
+            'grades_files.name',
         ))
-            ->join('users','xls_file_info.user_id', '=', 'users.id')
             ->join('grades_files','grades_files.file_info_id', '=', 'xls_file_info.id')
+            ->join('users', 'users.id', '=', 'xls_file_info.user_id')
             ->join('type_exam','grades_files.type_exam_id', '=', 'type_exam.id')
             ->distinct()
             ->get();

@@ -24,13 +24,7 @@
                         </span>
         </div>
     </div>
-    <table id="table" class="table table-hover ui-datatable"
-           data-global-search="true"
-           data-ajax="{!! $type !!}/data"
-           data-paging="true"
-           data-info="true"
-           data-length-change="true"
-           data-page-length="5">
+    <table id="table" class="table table-hover ui-datatable">
         <thead>
         <tr>
             <th>{!! trans("admin/modules/arhive.created") !!}</th>
@@ -39,7 +33,7 @@
             <th data-sortable="true" data-filterable="select">{!! trans("admin/modules/arhive.speciality") !!}</th>
             <th>{!! trans("admin/modules/arhive.nameDiscipline") !!}</th>
             <th data-sortable="true" data-filterable="select">{!! trans("admin/modules/arhive.typeExam") !!}</th>
-            <th data-sortable="true" data-filterable="select">{!! trans("admin/modules/arhive.user") !!}</th>
+            <th>{!! trans("admin/modules/arhive.user") !!}</th>
         </tr>
         </thead>
         <tbody></tbody>
@@ -81,11 +75,11 @@
             function addButton ( d ) {
                 return  '<a href="/xls/'+d[8]+'/'+d[9]+'" class="btn btn-success btn-sm "> Get original xls </a>'+
                         '&nbsp;&nbsp;'+
-                        '<a href="/documents/'+d[7]+'/getAllDocuments" class="btn btn-warning btn-sm "> Get all Documents </a>' +
+                        '@if(!in_array(Auth::user()->role_id,[4,5,6,7]))<a href="/documents/'+d[7]+'/getAllDocuments" class="btn btn-warning btn-sm "> Get all Documents </a>' +
                         '&nbsp;&nbsp;'+
-                        '<a href="/documents/'+d[7]+'/getAllStatistics" class="btn btn-warning btn-sm "> Get all Statistics </a>' +
+                        '<a href="/documents/'+d[7]+'/getAllStatistics" class="btn btn-warning btn-sm "> Get all Statistics </a>@endif' +
                         '&nbsp;&nbsp;'+
-                        '<a href="/recheck/'+d[7]+'/examGrade" class="btn btn-danger btn-sm "> Recheck Exam Grade </a>';
+                        '@if(!in_array(Auth::user()->role_id,[2,4,5,6,7]))<a href="/recheck/'+d[7]+'/examGrade" class="btn btn-danger btn-sm "> Recheck Exam Grade </a>@endif';
             };
         });
     </script>

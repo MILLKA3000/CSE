@@ -30,6 +30,7 @@
                         <i class="fa fa-dashboard fa-fw"></i> Dashboard
                     </a>
                 </li>
+                @if(!in_array(Auth::user()->role_id,[3,4,5,6,7]))
                 <li>
                     <a href="#">
                         <i class="fa fa-sort-desc"></i> Export
@@ -48,6 +49,8 @@
                         </li>
                     </ul>
                 </li>
+                @endif
+                @if(!in_array(Auth::user()->role_id,[3,4,5,6,7]))
                 <li>
                     <a href="#">
                         <i class="fa fa-sort-desc"></i> Import
@@ -61,6 +64,8 @@
                         </li>
                     </ul>
                 </li>
+                @endif
+                @if(!in_array(Auth::user()->role_id,[5,6,7]))
                 <li>
                     <a href="#">
                         <i class="fa fa-sort-desc"></i> Arhive
@@ -74,6 +79,23 @@
                         </li>
                     </ul>
                 </li>
+                @endif
+                @if(!in_array(Auth::user()->role_id,[3,4,6,7]))
+                <li>
+                    <a href="#">
+                        <i class="fa fa-sort-desc"></i> Consulting
+                        <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav collapse">
+                        <li>
+                            <a href="{{url('teacher')}}">
+                                <i class="glyphicon glyphicon-list"></i> Add Consulting
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                @endif
+                @if(!in_array(Auth::user()->role_id,[5,6,7]))
                 <li>
                     <a href="#">
                         <i class="fa fa-sort-desc"></i> Setting
@@ -85,6 +107,7 @@
                                 <i class="glyphicon glyphicon-list"></i> Departments
                             </a>
                         </li>
+                        @if(!in_array(Auth::user()->role_id,[3,4]))
                         <li>
                             <a href="{{url('user')}}">
                                 <i class="glyphicon glyphicon-list"></i> Users
@@ -95,8 +118,10 @@
                                 <i class="fa fa-language"></i> Language
                             </a>
                         </li>
+                        @endif
                     </ul>
                 </li>
+                @endif
             </ul>
         </div>
     </div>

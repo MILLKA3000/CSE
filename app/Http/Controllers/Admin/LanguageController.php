@@ -16,7 +16,7 @@ class LanguageController extends AdminController {
 
     public function __construct()
     {
-        $this->middleware('role:Admin');
+        $this->middleware('role:Admin,Self-Admin');
         view()->share('type', 'language');
     }
     /**

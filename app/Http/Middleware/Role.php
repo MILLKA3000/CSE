@@ -25,7 +25,7 @@ class Role
         }
 
 
-        $rolesList[] = Auth::user()->roles->name;
+        $rolesList[] = Auth::user()->getNameRole->name;
 
 
         // if $params is an array type then we must work with foreach loop

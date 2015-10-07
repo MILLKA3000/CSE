@@ -9,6 +9,7 @@
         {{$title}}
     </h3>
     <div class="row">
+        @if(!in_array(Auth::user()->role_id,[3,4,5,6,7]))
         <div class="col-lg-2 col-md-2">
             <div class="panel panel-info">
                 <a href="{{URL::to('excel/loadXML')}}">
@@ -26,7 +27,8 @@
                 </a>
             </div>
         </div>
-
+        @endif
+        @if(!in_array(Auth::user()->role_id,[3,4,5,6,7]))
         <div class="col-lg-2 col-md-2">
             <div class="panel panel-info">
                 <a href="{{URL::to('excel/importXLS')}}">
@@ -44,7 +46,8 @@
 
             </div>
         </div>
-
+        @endif
+        @if(!in_array(Auth::user()->role_id,[4,5,6,7]))
         <div class="col-lg-2 col-md-2">
             <div class="panel panel-info">
                 <a href="{{URL::to('arhive')}}">
@@ -62,7 +65,26 @@
                 </a>
             </div>
         </div>
-
+        @endif
+        @if(!in_array(Auth::user()->role_id,[3,4,6,7]))
+        <div class="col-lg-2 col-md-2">
+            <div class="panel panel-info">
+                <a href="{{URL::to('teacher')}}">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="glyphicon glyphicon-export fa-2x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge"></div>
+                                <div>Add consulting!</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        @endif
 
         {{--<div class="col-lg-2 col-md-2">--}}
             {{--<div class="panel panel-info">--}}

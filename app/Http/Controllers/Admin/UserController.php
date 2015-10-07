@@ -113,7 +113,7 @@ class UserController extends AdminController
         $users = User::all(array('users.id', 'users.name', 'users.email', 'users.confirmed', 'users.created_at','users.role_id'));
 
         foreach($users as $user){
-            $user->role_id = $user->roles()->first()->name;
+            $user->role_id = $user->getNameRole()->first()->name;
         }
 
         return Datatables::of($users)

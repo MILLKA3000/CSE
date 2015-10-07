@@ -32,6 +32,12 @@ class UserRequest extends FormRequest {
 				];
 			}
 			case 'PUT':
+            {
+                return [
+                    'name' => 'required|min:3',
+                    'email' => 'required|email',
+                ];
+            }
 			case 'PATCH':
 			{
 				return [
