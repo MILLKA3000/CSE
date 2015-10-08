@@ -30,4 +30,10 @@ class File extends Model
         return implode('/',$pathArr);
     }
 
+    static function _getNameFromPath($fullPath){
+        $pathArr = explode('/',$fullPath);
+        if (count($pathArr)==1) $pathArr = explode('\\',$fullPath);
+        return $pathArr[4];
+    }
+
 }

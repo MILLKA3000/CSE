@@ -37,7 +37,10 @@ class DocumentsController extends Controller
     public function getAllStatistics($idFileGrade)
     {
         $doc = new Statistics($idFileGrade);
-        $doc->formDocuments();
+        $data['general'] = $doc->formGeneralStat();
+        $data['bk'] = $doc->formGeneralBKStat();
+
+        return view('admin.documents.allStatistics',compact('data'));
     }
 
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Excel;
 
+use App\ArhiveXmlFiles;
 use App\Logs;
 use App\XmlAgregate;
 use Illuminate\Http\Request;
@@ -90,6 +91,7 @@ class XMLController extends Controller
         $this->xml = new XML();
         $data['data'] = $this->xml->parseFromUrl($xml_path);
         $data['student'] = $this->xml->countStudents();
+        $data['name_xml'] = fileHelp::_getNameFromPath($xml_path);
         $this->data[] = $data;
 
     }
@@ -131,12 +133,22 @@ class XMLController extends Controller
      * @return mixed
      */
     private function saveArchiveXml(){
-        $id = XmlAgregate::create([
-            'files_path'=> json_encode($this->AllFilespath),
-            'user_id'=>Auth::user()->id
+        $idPath = XmlAgregate::create([
+            'files_path'=> $this->path,
+            'user_id'=>Auth::user()->id,
         ]);
 
-        return $id->id;
+        foreach($this->data as $data){
+            ArhiveXmlFiles::create([
+                'name_file'=>$data["name_xml"],
+                'testlistid'=>$data["data"]->getContent()->testlist->testlistid,
+                'modulevariantid'=>$data["data"]->getContent()->testlist->modulevariantid,
+                'id_info_xml'=>$idPath->id,
+            ]);
+        }
+
+
+        return $idPath->id;
     }
 
     public function getData(){

@@ -16,7 +16,7 @@ class CacheSpeciality extends Model
     static public function getSpeciality($id)
     {
         $speciality = self::where('id_from', $id)->get()->first();
-        if ($speciality) {
+        if (isset($speciality)) {
             return $speciality;
         } else {
             $name = iconv("Windows-1251", "UTF-8", Speciality::where('SPECIALITYID', $id)->get()->first()->SPECIALITY);

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Maatwebsite\Excel\Facades\Excel;
 use Auth;
 use App\Http\Controllers\Excel\XMLController;
+use App\ArhiveXmlFiles;
 
 class Excel_ extends Model
 {
@@ -16,11 +17,14 @@ class Excel_ extends Model
 
     public function __construct($data)
     {
-        $this->filesXml = json_decode($data->files_path);
+        $this->filesXml = ArhiveXmlFiles::where('id_info_xml',$data->id)->get();
         $parce = new XMLController();
 
+
+
         foreach($this->filesXml as $file){
-            $parce->_parce($file);
+            $parce->_parce($data->files_path.'\\'.$file->name_file);
+//            dd($data->files_path.'\/'.$file->name_file);
         }
 
         $this->data = $parce->getData();
