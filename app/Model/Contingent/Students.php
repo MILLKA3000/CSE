@@ -12,7 +12,6 @@ class Students extends Model
 
     protected $table = 'STUDENTS';
 
-
     static private function getStudentFromOtherDB($id){
         return self::where('STUDENTID', $id)->get()->first();
     }
@@ -23,6 +22,15 @@ class Students extends Model
 
     static public function getStudentSpeciality($id){
         return self::getStudentFromOtherDB($id)->SPECIALITYID;
+    }
+
+    static public function getSumContractOrButjetStudent($students){
+        $basisid = ['C'=>0,'B'=>0];
+        foreach($students as $student){
+        $getEduBasisisStudent = (iconv("Windows-1251", "UTF-8",self::getStudentFromOtherDB($student['id_student'])->EDUBASISID)=='К')?'C':'B';
+            $basisid[$getEduBasisisStudent]++;
+        }
+        return $basisid;
     }
 
 }

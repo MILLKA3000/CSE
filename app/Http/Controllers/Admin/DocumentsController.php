@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Model\CreateDocuments\Documents;
-use App\Helper\File;
+use File;
 use App\Model\CreateDocuments\Statistics;
 use Illuminate\Support\Facades\Response;
 
@@ -39,8 +39,32 @@ class DocumentsController extends Controller
         $doc = new Statistics($idFileGrade);
         $data['general'] = $doc->formGeneralStat();
         $data['bk'] = $doc->formGeneralBKStat();
+        $data['detailed'] = $doc->formDetailedStat();
 
-        return view('admin.documents.allStatistics',compact('data'));
+        return view('admin.documents.allStatistics',compact('data','idFileGrade'));
+    }
+
+
+    /**
+     * @param $name
+     */
+    public function downloadStatistics($name,$idFileGrade){
+        $doc = new Statistics($idFileGrade);
+        File::makeDirectory(public_path() . '\tmp', 0775, true, true);
+        switch($name){
+            case "general":
+                File::put(public_path().'\tmp\formGeneralStat.doc', $doc->formGeneralStat()['body']);
+                return '\tmp\formGeneralStat.doc';
+                break;
+            case "bk":
+                File::put(public_path().'\tmp\formGeneralBKStat.doc', $doc->formGeneralBKStat()['body']);
+                return '\tmp\formGeneralBKStat.doc';
+                break;
+            case "detailed":
+                File::put(public_path().'\tmp\formDetailedStat.doc', $doc->formDetailedStat()['body']);
+                return '\tmp\formDetailedStat.doc';
+                break;
+        }
     }
 
 
