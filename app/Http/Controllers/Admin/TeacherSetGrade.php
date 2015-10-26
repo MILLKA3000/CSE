@@ -74,9 +74,9 @@ class TeacherSetGrade extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($moduleVariant)
     {
-        $this->about_module = GradesFiles::where('id',$id)->get()->first();
+        $this->about_module = GradesFiles::where('ModuleVariantID',$moduleVariant)->get()->first();
         $students = Grades::select('consulting_grades.id_student as stud_consult_grade',
         'consulting_grades.grade_consulting',
         'grades.id_student',
@@ -135,7 +135,7 @@ class TeacherSetGrade extends Controller
     {
 
         $grades = GradesFiles::select(array(
-            'grades_files.id',
+//            'grades_files.id',
             'grades_files.EduYear',
             'grades_files.Semester',
             'grades_files.DepartmentId',
@@ -143,7 +143,8 @@ class TeacherSetGrade extends Controller
             'grades_files.NameDiscipline',
             'grades_files.NameModule',
             'grades_files.ModuleNum',
-        ))->get();
+            'grades_files.ModuleVariantID',
+        ))->distinct('ModuleVariantID')->get();
 
         foreach($grades as $grade){
             $grade->DepartmentId = CacheDepartment::getDepartment($grade->DepartmentId)->name;
@@ -153,8 +154,8 @@ class TeacherSetGrade extends Controller
         return Datatables::of($grades)
             ->edit_column('EduYear', '{{$EduYear}}/{{$EduYear+1}}')
             ->edit_column('NameModule', '{{$ModuleNum}}. {{$NameModule}}')
-            ->add_column('actions','<a href="{{ URL::to(\'teacher/\' . $id . \'/edit\' )}}" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-pencil"></span>  {{ trans("admin/modal.this") }}</a>')
-            ->remove_column('id')
+            ->add_column('actions','<a href="{{ URL::to(\'teacher/\' . $ModuleVariantID . \'/edit\' )}}" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-pencil"></span>  {{ trans("admin/modal.this") }}</a>')
+            ->remove_column('ModuleVariantID')
             ->remove_column('ModuleNum')
             ->make();
     }
