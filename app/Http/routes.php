@@ -67,4 +67,10 @@ Route::group(['prefix' => '/', 'middleware' => 'auth'], function() {
     # subject of students
     Route::get('subject/data', 'Admin\SubjectContingentController@data');
     Route::resource('subject', 'Admin\SubjectContingentController');
+
+    # recheck grades
+    Route::get('recheck/data', 'Admin\RecheckGradesController@data');
+    Route::get('recheck/{id}/examGrade', 'Admin\RecheckGradesController@examGrade');
+    Route::post('recheck/saveGrade', 'Admin\RecheckGradesController@saveGrade');
+    Route::resource('recheck', 'Admin\RecheckGradesController');
 });

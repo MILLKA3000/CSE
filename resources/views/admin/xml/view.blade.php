@@ -77,9 +77,7 @@
 @section('scripts')
     <script>
         $.each($('.table'),function(){
-            $('#'+$(this).attr('id')).DataTable()
-            console.log($(this).attr('id'));
+            $(this).DataTable();
         })
-//        $('.table').DataTable();
     </script>
 @stop

@@ -25,7 +25,7 @@
             {!! trans("admin/modules/arhive.nameModule") !!}: {{$about_module->ModuleNum}}. {{$about_module->NameModule}}
         </h3>
     </div>
-    <input name="_token" id="_token" type="hidden" value="DXFILBcl4ZA9YdcGyA8yXChIl7vO4PG9ltslzVQ3">
+    <input name="_token" id="_token" type="hidden" value="{{  csrf_token() }}">
     <table id="table" class="table">
         <tr>
             <td>
