@@ -14,7 +14,7 @@ class File extends Model
      */
     static function _get_path(){
         $date = new DateTime();
-        return  Auth::user()->roles->name.'\\'.Auth::user()->name.'\\'.$date->getTimestamp();
+        return  Auth::user()->roles->name.DIRECTORY_SEPARATOR.Auth::user()->name.DIRECTORY_SEPARATOR.$date->getTimestamp();
     }
 
     /**
@@ -23,16 +23,15 @@ class File extends Model
      * @return string
      */
     static function _getTimestampPath($fullPath){
-        $pathArr = explode('/',$fullPath);
-        if (count($pathArr)==1) $pathArr = explode('\\',$fullPath);
+        $pathArr = explode(DIRECTORY_SEPARATOR,$fullPath);
+        if (count($pathArr)==1) $pathArr = explode(DIRECTORY_SEPARATOR,$fullPath);
         unset($pathArr[4]);
         unset($pathArr[0]);
-        return implode('/',$pathArr);
+        return implode(DIRECTORY_SEPARATOR,$pathArr);
     }
 
     static function _getNameFromPath($fullPath){
         $pathArr = explode('/',$fullPath);
-        if (count($pathArr)==1) $pathArr = explode('\\',$fullPath);
         return $pathArr[4];
     }
 

@@ -35,7 +35,7 @@ class XMLController extends Controller
         $this->middleware('role:Admin');
         view()->share('type', 'work');
 
-        $this->path = 'xml\\'.fileHelp::_get_path();
+        $this->path = 'xml'.DIRECTORY_SEPARATOR.fileHelp::_get_path();
     }
 
     /**
@@ -99,10 +99,9 @@ class XMLController extends Controller
 
     private function _parceZIP($file){
         $pathZip = $this->path;
-        File::makeDirectory($pathZip.'\xml', 0775, true,true);
-        Zipper::make($pathZip.'\\'.$file->getClientOriginalName())->extractTo($pathZip.'\xml\\');
-        $files = Storage::files(str_replace ( '\\' ,'/' , $pathZip.'\xml\\' ));
-
+        File::makeDirectory($pathZip.DIRECTORY_SEPARATOR.'xml', 0775, true,true);
+        Zipper::make($pathZip.DIRECTORY_SEPARATOR.$file->getClientOriginalName())->extractTo($pathZip.DIRECTORY_SEPARATOR.'xml'.DIRECTORY_SEPARATOR);
+//        $files = Storage::files(str_replace ( '\\' ,'/' , $pathZip.'\xml\\' ));
         $this->foreachFileParce($files);
     }
 

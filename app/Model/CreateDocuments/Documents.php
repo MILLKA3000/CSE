@@ -42,11 +42,11 @@ class Documents extends Model
         /**
          * get data from bd about module (generals data for each docs)
          */
-        $this->DOC_PATH = '\documents\\' . $this->dataOfFile[0]->get_path()->get()->first()->path;
+        $this->DOC_PATH = DIRECTORY_SEPARATOR.'documents'.DIRECTORY_SEPARATOR . $this->dataOfFile[0]->get_path()->get()->first()->path;
         $this->speciality = CacheSpeciality::getSpeciality($this->dataOfFile[0]->SpecialityId)->name;
         $this->department = CacheDepartment::getDepartment($this->dataOfFile[0]->DepartmentId)->name;
 
-        Storage::deleteDirectory($this->DOC_PATH . '\docs');
+        Storage::deleteDirectory($this->DOC_PATH . DIRECTORY_SEPARATOR.'docs');
 //        Storage::delete($this->DOC_PATH . '\Docs.zip');
     }
 
@@ -64,8 +64,8 @@ class Documents extends Model
             $this->formHtml();
             $this->numModule++;
         }
-        Zipper::make(public_path() . $this->DOC_PATH . '\Docs.zip')->add(glob(public_path() . $this->DOC_PATH . '\docs'));
-        return $this->DOC_PATH . '\Docs.zip';
+        Zipper::make(public_path() . $this->DOC_PATH . DIRECTORY_SEPARATOR.'Docs.zip')->add(glob(public_path() . $this->DOC_PATH . DIRECTORY_SEPARATOR.'docs'));
+        return $this->DOC_PATH . DIRECTORY_SEPARATOR.'Docs.zip';
     }
 
     /**
@@ -82,8 +82,8 @@ class Documents extends Model
                 $this->shablon .= "<tr><td width=10%>" . ($num++) . "</td><td width=50%>" . $student->fio . "</td><td width=15%>" . ContStudent::getStudentBookNum($student->id_student) . "</td><td width=10%>" . $exam_grade . "</td></tr>";
             }
             $this->createFooterShablon();
-            File::makeDirectory(public_path() . $this->DOC_PATH . '\docs', 0775, true, true);
-            File::put(public_path() . $this->DOC_PATH . '\docs\\' . $this->numModule . '.' . $group . '.doc', $this->shablon);
+            File::makeDirectory(public_path() . $this->DOC_PATH . DIRECTORY_SEPARATOR.'docs', 0775, true, true);
+            File::put(public_path() . $this->DOC_PATH . DIRECTORY_SEPARATOR.'docs'.DIRECTORY_SEPARATOR . $this->numModule . '.' . $group . '.doc', $this->shablon);
         }
     }
 

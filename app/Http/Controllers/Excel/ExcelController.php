@@ -37,7 +37,7 @@ class ExcelController extends Controller
                 'application/vnd.ms-office',
                 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],$file->getMimeType())) {
 
-                $this->otherData['path'] = $file->move('xls\\'.file::_get_path(), $file->getClientOriginalName());
+                $this->otherData['path'] = $file->move('xls'.DIRECTORY_SEPARATOR.file::_get_path(), $file->getClientOriginalName());
                 $this->otherData['urlOriginalName'] = $file->getClientOriginalName();
                 $this->otherData['type_exam'] = $request->get('type_exam');
                 $this->data = Excel_::_loadXls($this->otherData['path']);
