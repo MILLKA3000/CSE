@@ -23,7 +23,7 @@ class Excel_ extends Model
 
 
         foreach($this->filesXml as $file){
-            $parce->_parce($data->files_path.'\\'.$file->name_file);
+            $parce->_parce($data->files_path.DIRECTORY_SEPARATOR.$file->name_file);
 //            dd($data->files_path.'\/'.$file->name_file);
         }
 
