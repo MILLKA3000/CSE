@@ -138,7 +138,7 @@ class ArhiveController extends Controller
         }
 
         return Datatables::of($modules)
-            ->edit_column('disciplines', '<? $i=0; ?>@foreach($disciplines as $discipline) <span style="border-bottom: 1px solid #64DD8A;width:100%;display: block;">{{++$i}}. {{$discipline["NameDiscipline"]}}({{$discipline["NameModule"]}}), <br></span> @endforeach')
+            ->edit_column('disciplines', '{{ $i=0; }}@foreach($disciplines as $discipline) <span style="border-bottom: 1px solid #64DD8A;width:100%;display: block;">{{++$i}}. {{$discipline["NameDiscipline"]}}({{$discipline["NameModule"]}}), <br></span> @endforeach')
 //            ->remove_column('id')
             ->make();
     }
