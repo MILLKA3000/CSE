@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\User;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -29,13 +30,11 @@ class Oauth2 extends Controller
 
             // Send a request with it
             $result = json_decode($googleService->request('https://www.googleapis.com/oauth2/v1/userinfo'), true);
-
-//            $message = 'Your unique Google user id is: ' . $result['id'] . ' and your name is ' . $result['name'];
-//            echo $message . "<br/>";
-
-            if (Auth::attempt(['email' => $result['email']])) {
-                return redirect()->intended('/');
+            $user = User::where('email',$result['email'])->get()->first();
+            if (Auth::login($user)) {
+                return redirect('/');
             }
+            dd();
         } else {
             // get googleService authorization
             $url = $googleService->getAuthorizationUri();
@@ -43,6 +42,6 @@ class Oauth2 extends Controller
             // return to google login url
             return redirect((string)$url);
         }
-        return false;
+        return redirect('/');
     }
 }
