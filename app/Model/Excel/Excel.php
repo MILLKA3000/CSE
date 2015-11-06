@@ -101,17 +101,17 @@ class Excel extends Model
         foreach($this->OriginalData->get()[3] as $fourSheets) {
 
             foreach($this->OriginalData->get()[1] as $secondSheets) { // iteration in second sheet
-                $grades['code'] = (int)$secondSheets['kode'];
+                $grades['code'] = (int)$secondSheets['code'];
                 $grades['id_student'] = (string)$secondSheets['id'];
                 $grades['fio'] = $secondSheets['fio'];
                 $grades['group'] = (int)$secondSheets['group'];
                 $grades['grade'] = (int)$this->threeSheets[(string)$secondSheets['id']][$module];
-                if (($secondSheets['kode']!=999) && ($secondSheets['kode']!=0)) {
-                    if (isset($this->firstSheets[$secondSheets['kode']])) {
-                        $grades['exam_grade'] = (int)$this->firstSheets[$secondSheets['kode']][$module];
+                if (($secondSheets['code']!=999) && ($secondSheets['code']!=0)) {
+                    if (isset($this->firstSheets[$secondSheets['code']])) {
+                        $grades['exam_grade'] = (int)$this->firstSheets[$secondSheets['code']][$module];
                         $this->dataToSave[$module][] = $grades;
                     } else {
-                        $this->messages['error'][] = 'Don\'t find code in First Sheets : ' . $secondSheets['kode'];
+                        $this->messages['error'][] = 'Don\'t find code in First Sheets : ' . $secondSheets['code'];
                     };
                 }else{
                     $grades['exam_grade'] = 0;
