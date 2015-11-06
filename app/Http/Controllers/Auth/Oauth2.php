@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use OAuth;
 
 class Oauth2 extends Controller
@@ -29,12 +30,12 @@ class Oauth2 extends Controller
             // Send a request with it
             $result = json_decode($googleService->request('https://www.googleapis.com/oauth2/v1/userinfo'), true);
 
-            $message = 'Your unique Google user id is: ' . $result['id'] . ' and your name is ' . $result['name'];
-            echo $message . "<br/>";
+//            $message = 'Your unique Google user id is: ' . $result['id'] . ' and your name is ' . $result['name'];
+//            echo $message . "<br/>";
 
-            //Var_dump
-            //display whole array.
-            dd($result);
+            if (Auth::attempt(['email' => $result['email']])) {
+                return redirect()->intended('/');
+            }
         } else {
             // get googleService authorization
             $url = $googleService->getAuthorizationUri();
