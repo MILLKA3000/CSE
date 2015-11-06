@@ -25,7 +25,7 @@ abstract class ResourceAbstract implements ResourceInterface
      *
      * @var array
      */
-    protected $meta = array();
+    protected $meta = [];
 
     /**
      * The resource key.
@@ -50,7 +50,7 @@ abstract class ResourceAbstract implements ResourceInterface
      *
      * @return void
      */
-    public function __construct($data, $transformer, $resourceKey = null)
+    public function __construct($data = null, $transformer = null, $resourceKey = null)
     {
         $this->data = $data;
         $this->transformer = $transformer;
@@ -60,11 +60,24 @@ abstract class ResourceAbstract implements ResourceInterface
     /**
      * Get the data.
      *
-     * @return array|ArrayIterator
+     * @return mixed
      */
     public function getData()
     {
         return $this->data;
+    }
+
+    /**
+     * Set the data.
+     *
+     * @param mixed $data
+     * @return \League\Fractal\Resource\ResourceAbstract
+     */
+    public function setData($data)
+    {
+         $this->data = $data;
+
+         return $this;
     }
 
     /**
@@ -110,7 +123,34 @@ abstract class ResourceAbstract implements ResourceInterface
     }
 
     /**
-     * Set the meta data
+     * Set the transformer.
+     *
+     * @param callable|string $transformer
+     * @return \League\Fractal\Resource\ResourceAbstract
+     */
+    public function setTransformer($transformer)
+    {
+        $this->transformer = $transformer;
+
+        return $this;
+    }
+
+    /**
+     * Set the meta data.
+     *
+     * @param array $meta
+     *
+     * @return $this
+     */
+    public function setMeta(array $meta)
+    {
+        $this->meta = $meta;
+
+        return $this;
+    }
+
+    /**
+     * Set the meta data.
      *
      * @param string $metaKey
      * @param mixed  $metaValue

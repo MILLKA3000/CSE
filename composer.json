@@ -15,7 +15,8 @@
         "maatwebsite/excel": "~2.0.0",
         "jacquestvanzuydam/laravel-firebird": "dev-5.1-support",
         "chumper/zipper": "0.6.x",
-        "kartik-v/bootstrap-fileinput": "dev-master"
+        "kartik-v/bootstrap-fileinput": "dev-master",
+      "oriceon/oauth-5-laravel": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

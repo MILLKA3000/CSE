@@ -13,6 +13,7 @@ namespace League\Fractal;
 
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
+use League\Fractal\Resource\NullResource;
 use League\Fractal\Resource\ResourceAbstract;
 
 /**
@@ -30,14 +31,14 @@ abstract class TransformerAbstract
      *
      * @var array
      */
-    protected $availableIncludes = array();
+    protected $availableIncludes = [];
 
     /**
      * Include resources without needing it to be requested.
      *
      * @var array
      */
-    protected $defaultIncludes = array();
+    protected $defaultIncludes = [];
 
     /**
      * The transformer should know about the current scope, so we can fetch relevant params.
@@ -110,7 +111,7 @@ abstract class TransformerAbstract
      */
     public function processIncludedResources(Scope $scope, $data)
     {
-        $includedData = array();
+        $includedData = [];
 
         $includes = $this->figureOutWhichIncludes($scope);
 
@@ -123,7 +124,7 @@ abstract class TransformerAbstract
             );
         }
 
-        return $includedData === array() ? false : $includedData;
+        return $includedData === [] ? false : $includedData;
     }
 
     /**
@@ -172,9 +173,9 @@ abstract class TransformerAbstract
         $params = $scope->getManager()->getIncludeParams($scopeIdentifier);
 
         // Check if the method name actually exists
-        $methodName = 'include'.str_replace(' ', '', ucwords(str_replace('_', ' ', $includeName)));
+        $methodName = 'include'.str_replace(' ', '', ucwords(str_replace('_', ' ', str_replace('-', ' ', $includeName))));
 
-        $resource = call_user_func(array($this, $methodName), $data, $params);
+        $resource = call_user_func([$this, $methodName], $data, $params);
 
         if ($resource === null) {
             return false;
@@ -261,5 +262,15 @@ abstract class TransformerAbstract
     protected function collection($data, $transformer, $resourceKey = null)
     {
         return new Collection($data, $transformer, $resourceKey);
+    }
+
+    /**
+     * Create a new null resource object.
+     *
+     * @return NullResource
+     */
+    protected function null()
+    {
+        return new NullResource();
     }
 }

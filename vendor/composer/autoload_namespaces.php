@@ -13,6 +13,8 @@ return array(
     'Prophecy\\' => array($vendorDir . '/phpspec/prophecy/src'),
     'PhpSpec' => array($vendorDir . '/phpspec/phpspec/src'),
     'PHPExcel' => array($vendorDir . '/phpoffice/phpexcel/Classes'),
+    'OAuth\\Unit' => array($vendorDir . '/lusitanian/oauth/tests'),
+    'OAuth' => array($vendorDir . '/lusitanian/oauth/src'),
     'Mockery' => array($vendorDir . '/mockery/mockery/library'),
     'Maatwebsite\\Excel\\' => array($vendorDir . '/maatwebsite/excel/src'),
     'JakubOnderka\\PhpConsoleHighlighter' => array($vendorDir . '/jakub-onderka/php-console-highlighter/src'),
@@ -24,5 +26,5 @@ return array(
     'DebugBar' => array($vendorDir . '/maximebf/debugbar/src'),
     'Cron' => array($vendorDir . '/mtdowling/cron-expression/src'),
     'Chumper\\Zipper' => array($vendorDir . '/chumper/zipper/src'),
-    'Carbon' => array($vendorDir . '/nesbot/carbon/src'),
+    'Artdarek\\OAuth' => array($vendorDir . '/oriceon/oauth-5-laravel/src'),
 );
