@@ -21,7 +21,7 @@ class TableGrades extends Migration
             $table->integer('exam_grade');
             $table->integer('grade');
             $table->unsignedInteger('grade_file_id')->nullable();
-            $table->foreign('grade_file_id')->references('id')->on('grades_files')->onDelete('set null');
+            $table->foreign('grade_file_id')->references('id')->on('grades_files')->onDelete('cascade');
             $table->timestamps();
         });
     }

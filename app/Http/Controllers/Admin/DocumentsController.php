@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\FileInfo;
+use App\Grades;
+use App\GradesFiles;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Model\CreateDocuments\ConsultingDocuments;
 use App\Model\CreateDocuments\Documents;
+use App\XmlAgregate;
 use File;
 use App\Model\CreateDocuments\Statistics;
 use Illuminate\Support\Facades\Response;
@@ -74,6 +78,11 @@ class DocumentsController extends Controller
                 return '\tmp\formDetailedStat.doc';
                 break;
         }
+    }
+
+    public function remove($id){
+        FileInfo::destroy($id);
+        return redirect()->back();
     }
 
 
