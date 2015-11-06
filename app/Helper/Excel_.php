@@ -36,11 +36,17 @@ class Excel_ extends Model
         Excel::create('Mockup('.(Auth::user()->name).')', function($excel) {
 
             $excel->sheet('Exam grades', function($sheet) {
+                $sheet->row(1, array(
+                    'Page',
+                    'Variant',
+                    'Code',
+                    'Discipline-1',
+                ));
             });
 
             $excel->sheet('Table decode', function($sheet) {
                 $sheet->fromArray(Array_::formXLSConnectTable($this->data[0]['data']));
-                $sheet->row(1, array('ID', 'FIO','Kode','Group'));
+                $sheet->row(1, array('ID', 'FIO','Code','Group'));
                 $sheet->setAutoSize(true);
             });
 

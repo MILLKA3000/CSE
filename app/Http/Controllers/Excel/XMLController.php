@@ -59,7 +59,7 @@ class XMLController extends Controller
             }elseif (!is_null($file[0])) {
                 if ($file[0]->getMimeType() == 'application/xml') {
                     $this->moveFile($file[0]);
-                    $this->_parce($this->url);
+                    $this->_parce(str_replace ( '\\' ,'/' , $this->url));
                     $this->AllFilespath[] = $this->url->getPathName();
                 } elseif ($file[0]->getMimeType() == 'application/zip') {
                     $this->moveFile($file[0]);
@@ -101,7 +101,6 @@ class XMLController extends Controller
         $pathZip = $this->path;
         File::makeDirectory($pathZip.DIRECTORY_SEPARATOR.'xml', 0775, true,true);
         Zipper::make($pathZip.DIRECTORY_SEPARATOR.$file->getClientOriginalName())->extractTo($pathZip.DIRECTORY_SEPARATOR.'xml'.DIRECTORY_SEPARATOR);
-//        $files = Storage::files(str_replace ( '\\' ,'/' , $pathZip.'\xml\\' ));
         $this->foreachFileParce($files);
     }
 
