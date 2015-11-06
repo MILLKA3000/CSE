@@ -81,7 +81,7 @@
                         '&nbsp;&nbsp;'+
                         '@if(!in_array(Auth::user()->role_id,[2,4,5,6,7]))<a href="/recheck/'+d[7]+'/examGrade" class="btn btn-danger btn-sm "> Recheck Exam Grade </a>@endif'+
                         '&nbsp;&nbsp;'+
-                        '@if(!in_array(Auth::user()->role_id,[3,4,5,6,7]))<a href="/documents/'+d[7]+'/remove" class="btn btn-primary btn-sm "> Delete this datas </a>@endif';
+                        '@if(!in_array(Auth::user()->role_id,[3,4,5,6,7]))<a href="/documents/'+d[7]+'/remove" class="btn btn-primary btn-sm" style="float:right;"> Delete this datas </a>@endif';
             };
         });
     </script>
