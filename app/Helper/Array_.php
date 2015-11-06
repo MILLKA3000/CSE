@@ -19,7 +19,7 @@ class Array_ extends Model
         $data = [];
         foreach ($obj->getContent() as $d) {
             foreach ($d->students->student as $student) {
-                $data[] = [(string)$student->id, (string)$student->fio, '', (string)$d->groupnum];
+                $data[(string)$student->id] = [(string)$student->id, (string)$student->fio, '', (string)$d->groupnum];
             }
         }
         return $data;
@@ -44,7 +44,7 @@ class Array_ extends Model
                     }else{
                         foreach($module->students->student as $findRepeate){
                             if($findRepeate->id == $student->id){
-                                $data[(string)$student->id][] = (string)$findRepeate->credits_cur;
+                                $data[(string)$student->id][$moduleNum] = (string)$findRepeate->credits_cur;
                             }
                         }
                     }
