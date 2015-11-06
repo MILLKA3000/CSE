@@ -33,7 +33,7 @@ class Oauth2 extends Controller
             $user = User::where('email',$result['email'])->get()->first();
             if (isset($user['id'])) {
                 if (Auth::login($user)) {
-                    return redirect('/');
+                    return redirect('/')->with('google','You account in Google is incorrect');
                 }
             }
         } else {
