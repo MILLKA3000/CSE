@@ -16,7 +16,6 @@ class UserController extends AdminController
         $this->middleware('role:Admin,Self-Admin');
         view()->share('type', 'user');
     }
-
     /*
     * Display a listing of the resource.
     *

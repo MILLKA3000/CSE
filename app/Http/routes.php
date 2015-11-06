@@ -10,6 +10,8 @@ Route::controllers([
     'password' => 'Auth\PasswordController',
 ]);
 
+Route::get('googleOauth2', 'Auth\Oauth2@loginWithGoogle');
+
 /***************    Admin routes  **********************************/
 Route::group(['prefix' => '/', 'middleware' => 'auth'], function() {
 

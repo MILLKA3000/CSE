@@ -157,6 +157,11 @@ return [
         Firebird\FirebirdServiceProvider::class,
         Orchestra\Parser\XmlServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+
+        /*
+         * Oauth 2
+         */
+        Artdarek\OAuth\OAuthServiceProvider::class
     ],
 
     /*
@@ -213,7 +218,9 @@ return [
 
         'XmlParser' => Orchestra\Parser\Xml\Facade::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-        'Zipper' => Chumper\Zipper\Zipper::class
+        'Zipper' => Chumper\Zipper\Zipper::class,
+
+        'OAuth' => Artdarek\OAuth\Facade\OAuth::class,
     ],
 
 ];
