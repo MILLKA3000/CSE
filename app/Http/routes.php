@@ -50,6 +50,7 @@ Route::group(['prefix' => '/', 'middleware' => 'auth'], function() {
     # Create Documents
         #Documents
             Route::get('documents/{id}/getAllDocuments', 'Admin\DocumentsController@getAllDocuments');
+            Route::get('documents/{id}/getAllConsultingDocuments', 'Admin\DocumentsController@getAllConsultingDocuments');
         #Statistics
             Route::get('documents/{id}/getAllStatistics', 'Admin\DocumentsController@getAllStatistics');
             Route::get('documents/download/{name}/{id}', 'Admin\DocumentsController@downloadStatistics');

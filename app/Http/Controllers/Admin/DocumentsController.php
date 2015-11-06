@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Model\CreateDocuments\ConsultingDocuments;
 use App\Model\CreateDocuments\Documents;
 use File;
 use App\Model\CreateDocuments\Statistics;
@@ -29,7 +30,15 @@ class DocumentsController extends Controller
         return redirect($doc->formDocuments());
     }
 
-
+    /**
+     * @param $numPlan
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function getAllConsultingDocuments($numPlan)
+    {
+        $doc = new ConsultingDocuments($numPlan);
+        return redirect($doc->formDocuments());
+    }
 
     /**
      *

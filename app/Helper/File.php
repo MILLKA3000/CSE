@@ -31,8 +31,8 @@ class File extends Model
     }
 
     static function _getNameFromPath($fullPath){
-    $pathArr = explode("/",$fullPath);
-    return $pathArr[4];
+	$pathArr = explode(DIRECTORY_SEPARATOR,$fullPath);
+    	return $pathArr[4];
     }
 
 }
