@@ -63,19 +63,7 @@ class ConsultingDocuments extends Model
         foreach ($this->dataOfFile as $student) {
                 $this->studentsOfGroup[Students::getStudentGroup($student['id_student'])][] = $student;
         }
-
-        
-
-        dd($this->studentsOfGroup);
-        foreach($this->dataOfFile as $this->dataEachOfFile) {
-//            $this->studentsOfGroup = [];
-//            $this->dataGradesOfStudentsGroups = Grades::where('ModuleVariantID', $this->dataEachOfFile->id_num_plan)->get()->first();
-//            foreach ($this->dataGradesOfStudentsGroups as $student) {
-//                $this->studentsOfGroup[$student['group']][] = $student;
-//            }
-            $this->formHtml();
-//            $this->numModule++;
-        }
+        $this->formHtml();
         Zipper::make(public_path() . $this->DOC_PATH . DIRECTORY_SEPARATOR.'Docs.zip')->add(glob(public_path() . $this->DOC_PATH . DIRECTORY_SEPARATOR.'docs'));
         return $this->DOC_PATH . DIRECTORY_SEPARATOR.'Docs.zip';
     }
@@ -89,9 +77,7 @@ class ConsultingDocuments extends Model
             $this->createHeaderShablon($group);
             $num = 1;
             foreach($students as $student) {
-                $exam_grade = ($student->exam_grade == 0) ? "0(не склав)" : $student->exam_grade;
-                $exam_grade = ($student->code == 999) ? "(не з'явився)" : $exam_grade;
-                $this->shablon .= "<tr><td width=10%>" . ($num++) . "</td><td width=50%>" . $student->fio . "</td><td width=15%>" . ContStudent::getStudentBookNum($student->id_student) . "</td><td width=10%>" . $exam_grade . "</td></tr>";
+                $this->shablon .= "<tr><td width=10%>" . ($num++) . "</td><td width=50%>" . Students::getStudentFIO($student->id_student) . "</td><td width=15%>" . ContStudent::getStudentBookNum($student->id_student) . "</td><td width=10%>" . $student->grade_consulting . "</td></tr>";
             }
             $this->createFooterShablon();
             File::makeDirectory(public_path() . $this->DOC_PATH . DIRECTORY_SEPARATOR.'docs', 0775, true, true);
@@ -130,7 +116,7 @@ class ConsultingDocuments extends Model
         &nbsp;&nbsp;&nbsp;&nbsp;" . $this->dataEachOfFile->EduYear . "/" . ($this->dataEachOfFile->EduYear + 1) . " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Курс _<u>" . $this->findSemester() . "</u>___<br />
-        <p align=center>ЕКЗАМЕНАЦІЙНА ВІДОМІСТЬ №____ </p>
+        <p align=center>ВІДОМІСТЬ №____ </p>
         <p>З <u>" . $this->dataEachOfFile->ModuleNum . ". " . $this->dataEachOfFile->NameDiscipline . "</u> - <u>" . $this->dataEachOfFile->NameModule . "</u></p>
         <p>За _<u>" . $this->dataEachOfFile->Semester . "</u>___ навчальний семестр, екзамен <u>_" . date('d.m.Y') . "___</u></p>
         <table class=guestbook width=600 align=center cellspacing=0 cellpadding=3 border=1>
@@ -156,17 +142,7 @@ class ConsultingDocuments extends Model
      */
     private function createFooterShablon()
     {
-        $this->shablon .= "</table><br />
-        Голова комісії _______________________________________________________________ <br>
-        (вчені звання, прізвище та ініціали)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(підпис)<br />
-        Члени комісії ________________________________________________________________ <br>
-        (вчені звання, прізвище та ініціали)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(підпис)<br />
-        ____________________________________________________________________________ <br><br>
-        ____________________________________________________________________________ <br><br>
-
-        1. Проти прізвища студента, який не з’явився  на підсумковий контроль, екзаменатор вказує – „не з’явився”.<br>
-        2. Відомість подається в деканат не пізніше наступного дня після проведення підсумкового контролю.
-         ";
+        $this->shablon .= "</table><br />";
     }
 
 
