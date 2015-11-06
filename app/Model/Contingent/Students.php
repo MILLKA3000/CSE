@@ -23,7 +23,12 @@ class Students extends Model
     static public function getStudentSpeciality($id){
         return self::getStudentFromOtherDB($id)->SPECIALITYID;
     }
-
+    static public function getStudentDepartment($id){
+        return self::getStudentFromOtherDB($id)->DEPARTMENTID;
+    }
+    static public function getStudentGroup($id){
+        return self::getStudentFromOtherDB($id)->GROUPNUM;
+    }
     static public function getSumContractOrButjetStudent($students){
         $basisid = ['C'=>0,'B'=>0];
         foreach($students as $student){

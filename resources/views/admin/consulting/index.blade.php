@@ -35,6 +35,7 @@
             <th data-sortable="true" data-filterable="text">{!! trans("admin/modules/arhive.nameDiscipline") !!}</th>
             <th data-sortable="true" data-filterable="text">{!! trans("admin/modules/arhive.nameModule") !!}</th>
             <th>{!! trans("admin/admin.action") !!}</th>
+            <th>Get Docs</th>
         </tr>
         </thead>
         <tbody></tbody>

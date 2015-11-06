@@ -53,20 +53,21 @@ class XMLController extends Controller
                 foreach($file as $f){
                     if ($f->getMimeType() == 'application/xml') {
                         $this->moveFile($f);
+                        $files[] = $this->url;
                     }
                 }
-                $this->foreachFileParce($files = Storage::files(str_replace ( '\\' ,'/' , $this->path)));
+                $this->foreachFileParce($files);
             }elseif (!is_null($file[0])) {
                 if ($file[0]->getMimeType() == 'application/xml') {
                     $this->moveFile($file[0]);
-                    $this->_parce(str_replace ( '\\' ,'/' , $this->url));
+                    $this->_parce($this->url);
                     $this->AllFilespath[] = $this->url->getPathName();
                 } elseif ($file[0]->getMimeType() == 'application/zip') {
                     $this->moveFile($file[0]);
                     $this->_parceZIP($file[0]);
                 }
             }else {
-                    return view('admin.xml.loadxml')->with(['error'=>'You uploaded not this type files.<br> You must upload files of type [xml(single or multiple), zip(only single)]']);
+                    return view('admin.xml.loadxml')->with(['error'=>'You uploaded not this type files.<br> You must upload files of type [xml(single or multiple)]']);
             }
             $this->saveLog();
             return view('admin.xml.view', ['data' => $this->data, 'files' => $this->saveArchiveXml()]);
