@@ -77,4 +77,8 @@ Route::group(['prefix' => '/', 'middleware' => 'auth'], function() {
     Route::get('recheck/{id}/examGrade', 'Admin\RecheckGradesController@examGrade');
     Route::post('recheck/saveGrade', 'Admin\RecheckGradesController@saveGrade');
     Route::resource('recheck', 'Admin\RecheckGradesController');
+
+    # clear cache
+    Route::get('settings/', 'Admin\Settings@index');
+    Route::get('settings/clearCache', 'Admin\Settings@clearCache');
 });

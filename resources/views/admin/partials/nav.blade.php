@@ -119,6 +119,13 @@
                             </a>
                         </li>
                         @endif
+                        @if(!in_array(Auth::user()->role_id,[3,4,5,6,7]))
+                            <li>
+                                <a href="{{url('settings')}}">
+                                    <i class="fa fa-language"></i> Settings
+                                </a>
+                            </li>
+                        @endif
                     </ul>
                 </li>
                 @endif
