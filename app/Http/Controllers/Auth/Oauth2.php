@@ -31,10 +31,11 @@ class Oauth2 extends Controller
             // Send a request with it
             $result = json_decode($googleService->request('https://www.googleapis.com/oauth2/v1/userinfo'), true);
             $user = User::where('email',$result['email'])->get()->first();
-            if (Auth::login($user)) {
-                return redirect('/');
+            if (is($user['id'])) {
+                if (Auth::login($user)) {
+                    return redirect('/');
+                }
             }
-            dd();
         } else {
             // get googleService authorization
             $url = $googleService->getAuthorizationUri();
