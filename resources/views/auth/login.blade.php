@@ -10,7 +10,7 @@
             <h2>{!! trans('site/user.login_to_account') !!}</h2>
         </div>
     </div>
-
+    {{ $errors->has('google') ? 'google' : '' }}
     <div class="container-fluid">
         <div class="row">
             {!! Form::open(array('url' => URL::to('auth/login'), 'method' => 'post', 'files'=> true)) !!}
