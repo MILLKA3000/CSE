@@ -2001,48 +2001,6 @@
         ]
     },
     {
-        "name": "jacquestvanzuydam/laravel-firebird",
-        "version": "dev-5.1-support",
-        "version_normalized": "dev-5.1-support",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/jacquestvanzuydam/laravel-firebird.git",
-            "reference": "73ae3a604ddc3f3b5c0688658392d27bff2597e6"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/jacquestvanzuydam/laravel-firebird/zipball/73ae3a604ddc3f3b5c0688658392d27bff2597e6",
-            "reference": "73ae3a604ddc3f3b5c0688658392d27bff2597e6",
-            "shasum": ""
-        },
-        "require": {
-            "illuminate/container": "5.1.*",
-            "illuminate/database": "5.1.*",
-            "illuminate/events": "5.1.*",
-            "illuminate/support": "5.1.*",
-            "php": ">=5.4.0"
-        },
-        "time": "2015-07-13 14:43:06",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Firebird\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Jacques van Zuydam",
-                "email": "jtvanzuydam@gmail.com"
-            }
-        ],
-        "description": "A Firebird database package for the Laravel Framework"
-    },
-    {
         "name": "nikic/php-parser",
         "version": "v1.4.1",
         "version_normalized": "1.4.1.0",
@@ -3842,5 +3800,47 @@
             "laravel",
             "slug"
         ]
+    },
+    {
+        "name": "jacquestvanzuydam/laravel-firebird",
+        "version": "dev-5.1-support",
+        "version_normalized": "dev-5.1-support",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/jacquestvanzuydam/laravel-firebird.git",
+            "reference": "73ae3a604ddc3f3b5c0688658392d27bff2597e6"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/jacquestvanzuydam/laravel-firebird/zipball/73ae3a604ddc3f3b5c0688658392d27bff2597e6",
+            "reference": "73ae3a604ddc3f3b5c0688658392d27bff2597e6",
+            "shasum": ""
+        },
+        "require": {
+            "illuminate/container": "5.1.*",
+            "illuminate/database": "5.1.*",
+            "illuminate/events": "5.1.*",
+            "illuminate/support": "5.1.*",
+            "php": ">=5.4.0"
+        },
+        "time": "2015-07-13 14:43:06",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Firebird\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jacques van Zuydam",
+                "email": "jtvanzuydam@gmail.com"
+            }
+        ],
+        "description": "A Firebird database package for the Laravel Framework"
     }
 ]
