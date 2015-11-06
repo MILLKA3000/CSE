@@ -27,7 +27,7 @@ class TableGradesFile extends Migration
             $table->unsignedInteger('xml_file_id')->nullable();
             $table->foreign('xml_file_id')->references('id')->on('xml_file_info')->onDelete('set null');
             $table->unsignedInteger('file_info_id')->nullable();
-            $table->foreign('file_info_id')->references('id')->on('xls_file_info')->onDelete('set null');
+            $table->foreign('file_info_id')->references('id')->on('xls_file_info')->onDelete('cascade');
             $table->unsignedInteger('type_exam_id')->nullable();
             $table->foreign('type_exam_id')->references('id')->on('type_exam')->onDelete('set null');
             $table->timestamps();
