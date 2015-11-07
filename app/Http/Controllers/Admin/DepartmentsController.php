@@ -123,7 +123,6 @@ class DepartmentsController extends Controller
         ]);
 
         AllowedDiscipline::where('departments_id',$department->id)->delete();
-        
         $allowedDiscipline = new AllowedDiscipline(['departments_id'=>$department->id,'arrayAllowed'=>json_encode($request->discipline_allowed)]);
         $allowedDiscipline->save();
 

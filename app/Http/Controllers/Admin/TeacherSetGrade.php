@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Grades;
+use App\UserToDepartments;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -23,6 +24,11 @@ class TeacherSetGrade extends Controller
     {
         $this->middleware('role:Admin,Self-Admin,Teacher');
         view()->share('type', 'teacher');
+    }
+
+    public function index()
+    {
+       return view('admin.consulting.index');
     }
 
     /**
@@ -81,6 +87,9 @@ class TeacherSetGrade extends Controller
     public function data()
     {
 
+        $allowDiscepline = UserToDepartments::where('user_id',Auth::user()->id)->join('allowed_discipline','allowed_discipline.departments_id','=','user_to_departament.departments_id')->get()->first();
+
+
         $grades = GradesFiles::select(array(
 //            'grades_files.id',
             'grades_files.EduYear',
@@ -91,8 +100,14 @@ class TeacherSetGrade extends Controller
             'grades_files.NameModule',
             'grades_files.ModuleNum',
             'grades_files.ModuleVariantID',
-        ))->distinct('ModuleVariantID')->get();
+            'grades_files.DisciplineVariantID',
+        ))->distinct('ModuleVariantID');
 
+        if(in_array(Auth::user()->role_id,[5]) && (isset($allowDiscepline->arrayAllowed))) {
+            $grades->whereIn('DisciplineVariantID',(array)json_decode($allowDiscepline->arrayAllowed));
+        }
+
+        $grades->get();
         foreach($grades as $grade){
             $grade->DepartmentId = CacheDepartment::getDepartment($grade->DepartmentId)->name;
             $grade->SpecialityId = CacheSpeciality::getSpeciality($grade->SpecialityId)->name;
@@ -104,6 +119,7 @@ class TeacherSetGrade extends Controller
             ->add_column('actions','<a href="{{ URL::to(\'teacher/\' . $ModuleVariantID . \'/edit\' )}}" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-pencil"></span>  {{ trans("admin/modal.this") }}</a>')
             ->add_column('GetDocs','<a href="{{ URL::to(\'documents/\' . $ModuleVariantID . \'/getAllConsultingDocuments\' )}}" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-pencil"></span>  Get Docs</a>')
             ->remove_column('ModuleVariantID')
+            ->remove_column('DisciplineVariantID')
             ->remove_column('ModuleNum')
             ->make();
     }
