@@ -44,7 +44,45 @@
             </div>
         </div>
 
+        <div class="form-group">
+            <div class="col-md-5">
+                <br/>
+                <span class="h5 nv-line">All Discipline</span>
+                <br/>
+                <br/>
 
+                <div class="form-group">
+                    <div class="col-md-12 ">
+                        {!! Form::select('discipline[]',$discipline->lists('NameDiscipline', 'DisciplineVariantID'), '', array('multiple' => true, 'class'=>'form-control all-discipline', 'style'=>'height:290px;')) !!}
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Block Add, Remove Allowed discipline-->
+            <div class="col-md-2 text-center" style="position: relative; top:150px; font-size: 150%">
+                <div class="row">
+                    <i class="btn btn-default fa fa-forward discipline-add"></i>
+                </div>
+                <div class="row">
+                    <i class="btn btn-default fa fa-backward discipline-remove"></i>
+                </div>
+            </div>
+
+            <div class="col-md-5">
+                <br/>
+                <span class="h5 nv-line">Allowed Discipline</span>
+                <br/>
+                <br/>
+                <div class="form-group">
+                    <div class="col-md-12 ">
+                        {!! Form::select('discipline_allowed[]',$discipline_allowed->lists('NameDiscipline', 'DisciplineVariantID'), '', array('multiple' => true, 'class'=>'form-control allowed-discipline', 'style'=>'height:290px;')) !!}
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
         <div class="form-group  {{ $errors->has('confirmed') ? 'has-error' : '' }}">
             {!! Form::label('confirmed', trans("admin/department.active"), array('class' => 'control-label')) !!}
             <div class="controls">
@@ -55,6 +93,7 @@
                 <span class="help-block">{{ $errors->first('confirmed', ':message') }}</span>
             </div>
         </div>
+
     </div>
     <div class="form-group">
         <div class="col-md-12">
@@ -62,7 +101,7 @@
                 <span class="glyphicon glyphicon-remove-circle"></span> {{
 				trans("admin/modal.reset") }}
             </button>
-            <button type="submit" class="btn btn-sm btn-success">
+            <button type="submit" class="btn btn-sm btn-success sace">
                 <span class="glyphicon glyphicon-ok-circle"></span>
                 @if	(isset($user))
                     {{ trans("admin/modal.edit") }}
@@ -72,12 +111,66 @@
             </button>
         </div>
     </div>
+</div>
     {!! Form::close() !!}
-    @stop @section('scripts')
+    @stop
+@section('scripts')
         <script type="text/javascript">
             $(function () {
                 $("#users").select2()
             });
+            $('.discipline-add').on('click',function(){
+                if ($('.all-discipline option:selected').val() != null) {
+                    var tempSelect = $('.all-discipline option:selected').val();
+                    $('.all-discipline option:selected').remove().appendTo('.allowed-discipline');
+                    $(".all-countries").attr('selectedIndex', '-1').find("option:selected").removeAttr("selected");
+                    $(".allowed-discipline").attr('selectedIndex', '-1').find("option:selected").removeAttr("selected");
+                    $(".allowed-discipline").val(tempSelect);
+                    tempSelect = '';
+                    _sort_multi_select('.allowed-discipline');
+                } else {
+                    alert("Before add please select any position.");
+                }
+            })
+
+            /*
+             action for removing countries from block 'allowed countries'
+             */
+            $('.discipline-remove').on('click',function(){
+                if ($('.allowed-discipline option:selected').val() != null) {
+                    var tempSelect = $('.allowed-discipline option:selected').val();
+                    $('.allowed-discipline option:selected').remove().appendTo('.all-discipline');
+                    $(".all-discipline").attr('selectedIndex', '-1').find("option:selected").removeAttr("selected");
+                    $(".all-discipline").attr('selectedIndex', '-1').find("option:selected").removeAttr("selected");
+                    $(".all-discipline").val(tempSelect);
+                    tempSelect = '';
+                    _sort_multi_select('.all-discipline');
+                } else {
+                    alert("Before add please select any position.");
+                }
+            })
+
+            /*
+             function for sorting array in select
+             */
+            function _sort_multi_select(selector){
+                var sel = $(selector);
+                var opts_list = sel.find('option');
+                opts_list.sort(function(a, b) { return $(a).text() > $(b).text(); });
+                sel.html('').append(opts_list);
+            }
+
+            /*
+             pre sorting select (not use, if array receive sorted)
+             */
+            _sort_multi_select('.allowed-discipline');
+            _sort_multi_select('.all-discipline');
+
+            $('.bf').submit(function(even) {
+                even.preventDefault();
+                $(".allowed-discipline option").attr('selected','selected');
+                this.submit();
+            });
+
         </script>
-</div>
 @stop

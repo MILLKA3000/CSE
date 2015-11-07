@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\AllowedDiscipline;
 use App\Departments;
+use App\GradesFiles;
 use App\Logs;
 use App\User;
 use App\UserToDepartments;
@@ -39,7 +41,9 @@ class DepartmentsController extends Controller
     public function create()
     {
         $users = User::all();
-        return view('admin.department.create_edit', compact('users'));
+        $discipline = GradesFiles::select('DisciplineVariantID','NameDiscipline')->distinct()->get();
+        $discipline_allowed = AllowedDiscipline::where('id',0)->get();
+        return view('admin.department.create_edit', compact('users','discipline','discipline_allowed'));
     }
 
     /**
@@ -50,9 +54,12 @@ class DepartmentsController extends Controller
      */
     public function store(DepartmentRequest $request)
     {
-        $department = new Departments($request->all());
+        $department = new Departments(['name'=>$request->name,'note'=>$request->note,'active'=>$request->active]);
         unset($department->users);
         $department->save();
+
+        $allowedDiscipline = new AllowedDiscipline(['departments_id'=>$department->id,'arrayAllowed'=>json_encode($request->discipline_allowed)]);
+        $allowedDiscipline->save();
 
         $userToDepartment = new UserToDepartments();
         $userToDepartment->departments_id = $department->id;
@@ -83,7 +90,21 @@ class DepartmentsController extends Controller
     public function edit(Departments $department)
     {
         $users = User::all();
-        return view('admin.department.create_edit', compact('department','users'));
+        $discipline = GradesFiles::select('DisciplineVariantID','NameDiscipline')->distinct()->get();
+        $discipline_allowed = clone $discipline;
+        $array_discipline_allowed = AllowedDiscipline::where('departments_id',$department->id)->get()->first();
+        if(isset($array_discipline_allowed->id)){
+            foreach ($discipline as $key => $dis) {
+                if (in_array($dis->DisciplineVariantID, array_flatten((array)json_decode($array_discipline_allowed->arrayAllowed)))) {
+                    unset($discipline[$key]);
+                }else{
+                    unset($discipline_allowed[$key]);
+                }
+            }
+        }else{
+            $discipline_allowed = AllowedDiscipline::where('id',0)->get();
+        }
+        return view('admin.department.create_edit', compact('department','users','discipline','discipline_allowed'));
     }
 
     /**
@@ -100,6 +121,11 @@ class DepartmentsController extends Controller
             'note'=>$request->note,
             'active'=>$request->active,
         ]);
+
+        AllowedDiscipline::where('departments_id',$department->id)->delete();
+        
+        $allowedDiscipline = new AllowedDiscipline(['departments_id'=>$department->id,'arrayAllowed'=>json_encode($request->discipline_allowed)]);
+        $allowedDiscipline->save();
 
         $userToDepartment = UserToDepartments::find($department->id);
         $userToDepartment->user_id = $request->users;
