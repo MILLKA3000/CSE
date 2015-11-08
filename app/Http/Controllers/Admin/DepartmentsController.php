@@ -12,6 +12,7 @@ use Datatables;
 use App\Http\Requests\Admin\DepartmentRequest;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class DepartmentsController extends Controller
 {
@@ -90,7 +91,7 @@ class DepartmentsController extends Controller
     public function edit(Departments $department)
     {
         $users = User::all();
-        $discipline = GradesFiles::select('DisciplineVariantID','NameDiscipline')->distinct()->get();
+        $discipline = GradesFiles::select('grades_files.DisciplineVariantID',DB::raw('CONCAT("[", type_exam.name,"] ",NameDiscipline) AS NameDiscipline'))->join('type_exam','type_exam.id','=','grades_files.type_exam_id')->distinct()->get();
         $discipline_allowed = clone $discipline;
         $array_discipline_allowed = AllowedDiscipline::where('departments_id',$department->id)->get()->first();
         if(isset($array_discipline_allowed->id)){

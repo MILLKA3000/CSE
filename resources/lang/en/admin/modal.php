@@ -3,6 +3,7 @@
 return [
     'create' => 'Create',
     'edit' => 'Edit',
+    'save' => 'Save',
     'reset' => 'Reset',
     'cancel' => 'Cancel',
     'general' => 'General',

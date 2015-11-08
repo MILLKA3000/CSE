@@ -126,6 +126,13 @@
                                 </a>
                             </li>
                         @endif
+                        @if(!in_array(Auth::user()->role_id,[3,4,5,6,7]))
+                            <li>
+                                <a href="{{url('logs')}}">
+                                    <i class="fa fa-language"></i> View Logs
+                                </a>
+                            </li>
+                        @endif
                     </ul>
                 </li>
                 @endif

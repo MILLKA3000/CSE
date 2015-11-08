@@ -44,16 +44,18 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="row form-group">
             <div class="col-md-5">
                 <br/>
                 <span class="h5 nv-line">All Discipline</span>
                 <br/>
                 <br/>
-
                 <div class="form-group">
                     <div class="col-md-12 ">
-                        {!! Form::select('discipline[]',$discipline->lists('NameDiscipline', 'DisciplineVariantID'), '', array('multiple' => true, 'class'=>'form-control all-discipline', 'style'=>'height:290px;')) !!}
+                        {!! Form::select('discipline[]',$discipline->lists('NameDiscipline', 'DisciplineVariantID'), '', array('multiple' => true, 'class'=>'form-control all-discipline', 'style'=>'    height: 257px!important;
+                        width: 100%!important;
+                        border: 1px #000!important;
+                        position: initial;')) !!}
                     </div>
                 </div>
 
@@ -62,10 +64,10 @@
             <!-- Block Add, Remove Allowed discipline-->
             <div class="col-md-2 text-center" style="position: relative; top:150px; font-size: 150%">
                 <div class="row">
-                    <i class="btn btn-default fa fa-forward discipline-add"></i>
+                    <i class="btn btn-default discipline-add"><span class="glyphicon glyphicon-forward"></span></i>
                 </div>
                 <div class="row">
-                    <i class="btn btn-default fa fa-backward discipline-remove"></i>
+                    <i class="btn btn-default discipline-remove"><span class="glyphicon glyphicon-backward"></span></i>
                 </div>
             </div>
 
@@ -117,7 +119,11 @@
 @section('scripts')
         <script type="text/javascript">
             $(function () {
-                $("#users").select2()
+                $("#users").select2();
+                $(".all-discipline").select2({
+                    placeholder: "Select a state",
+                    allowClear: true
+                });
             });
             $('.discipline-add').on('click',function(){
                 if ($('.all-discipline option:selected').val() != null) {

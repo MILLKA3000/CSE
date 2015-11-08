@@ -3,6 +3,7 @@
 namespace App\Model\Contingent;
 
 use App\Helper\Recoding;
+use App\Setting;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
@@ -19,7 +20,7 @@ class Students extends Model
     }
 
     static private function setToCache($id,$dataStudentFromContingent){
-        return Cache::add($id,$dataStudentFromContingent,9999);
+        return Cache::add($id,$dataStudentFromContingent,Setting::where('key','timeCache')->get()->first()->value);
     }
 
     static private function hasCache($id){
