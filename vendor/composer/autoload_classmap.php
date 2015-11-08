@@ -10,6 +10,7 @@ return array(
     'ArhiveXmlFiles' => $baseDir . '/database/migrations/2015_10_08_083635_arhiveXmlFiles.php',
     'CreateLanguagesTable' => $baseDir . '/database/migrations/2014_10_18_195027_create_languages_table.php',
     'CreatePasswordResetsTable' => $baseDir . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
+    'CreateSettingTable' => $baseDir . '/database/migrations/2015_11_08_121909_createSettingTable.php',
     'CreateTableCasheDepartment' => $baseDir . '/database/migrations/2015_10_01_095250_createTableCasheDepartment.php',
     'CreateTableCasheSpeciality' => $baseDir . '/database/migrations/2015_10_01_095305_createTableCasheSpeciality.php',
     'CreateUsersTable' => $baseDir . '/database/migrations/2014_10_12_000000_create_users_table.php',
@@ -561,5 +562,6 @@ return array(
     'UserToDepartments' => $baseDir . '/database/migrations/2015_09_21_072337_userToDepartments.php',
     'departaments' => $baseDir . '/database/seeds/departaments.php',
     'role' => $baseDir . '/database/seeds/role.php',
+    'settings' => $baseDir . '/database/seeds/settings.php',
     'type_exam' => $baseDir . '/database/seeds/type_exam.php',
 );

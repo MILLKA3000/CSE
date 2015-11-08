@@ -3,6 +3,8 @@ Route::model('language', 'App\Language');
 Route::model('user', 'App\User');
 Route::model('department', 'App\Departments');
 Route::model('arhive', 'App\GradesFiles');
+Route::model('logs', 'App\Logs');
+Route::model('settings', 'App\Settings');
 Route::pattern('id', '[0-9]+');
 
 Route::controllers([
@@ -79,7 +81,12 @@ Route::group(['prefix' => '/', 'middleware' => 'auth'], function() {
     Route::post('recheck/saveGrade', 'Admin\RecheckGradesController@saveGrade');
     Route::resource('recheck', 'Admin\RecheckGradesController');
 
-    # clear cache
-    Route::get('settings/', 'Admin\Settings@index');
+    # logs
+    Route::get('logs/data', 'Admin\LogsController@data');
+    Route::resource('logs', 'Admin\LogsController');
+
+    # Settings
     Route::get('settings/clearCache', 'Admin\Settings@clearCache');
+    Route::resource('settings', 'Admin\Settings');
+
 });

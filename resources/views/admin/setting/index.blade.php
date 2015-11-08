@@ -18,16 +18,28 @@
             Settings
         </h3>
     </div>
-
+    <?=(Session::get('success'))?'<div class="alert alert-success">'.Session::get('success').'</div>':''?>
     <div class="row">
-        {!! Form::open(array('url' => URL::to('auth/login'), 'method' => 'post', 'files'=> true)) !!}
+        {!! Form::open(array('url' => URL::to('settings'), 'method' => 'post', 'files'=> true)) !!}
             {!! Form::label('timeCache', "Cache time", array('class' => 'control-label col-md-2')) !!}
-            {{--<div class="controls col-md-4">--}}
-                {{--{!! Form::text('timeCache', null, array('class' => 'form-control')) !!}--}}
-            {{--</div>--}}
+            <div class="controls col-md-4">
+                {!! Form::text('timeCache', $data['timeCache'], array('class' => 'form-control')) !!}
+            </div>
             <div class="col-md-4">
                 <a class="btn btn-primary" href="{{ URL::to('settings/clearCache') }}"><i></i>Clear Cache</a>
             </div>
+
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <div class="col-md-4 col-md-offset-4">
+            <button type="submit" class="btn btn-sm btn-success sace">
+                <span class="glyphicon glyphicon-ok-circle"></span>
+                    {{trans("admin/modal.save") }}
+            </button>
+        </div>
         {!! Form::close() !!}
     </div>
 

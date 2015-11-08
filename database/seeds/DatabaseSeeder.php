@@ -33,6 +33,8 @@ class DatabaseSeeder extends Seeder
         $this->call(UserToDepartment::class);
         $this->command->info('The UserToDepartment table has been seeded!');
 
+        $this->call(settings::class);
+        $this->command->info('The Settings table has been seeded!');
         Model::reguard();
     }
 }

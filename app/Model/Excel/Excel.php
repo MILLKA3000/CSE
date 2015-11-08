@@ -3,6 +3,8 @@
 namespace App\Model\Excel;
 
 use App\Helper\File;
+use App\Model\Contingent\VariantDiscipline;
+use App\TypeExam;
 use Illuminate\Database\Eloquent\Model;
 use App\FileInfo;
 use App\Grades;
@@ -161,7 +163,7 @@ class Excel extends Model
         $data['ModuleNum']=(string)$fourSheets['modulenum'];
         $data['NameDiscipline']=(string)$fourSheets['namediscipline'];
         $data['NameModule']=(string)$fourSheets['namemodule'];
-        $data['type_exam_id']=$this->data['type_exam'];
+        $data['type_exam_id']=TypeExam::where('name',VariantDiscipline::getFormReport($data['DisciplineVariantID']))->get()->first()->id;
 
         return GradesFiles::create($data);
     }

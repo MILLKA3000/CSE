@@ -11,8 +11,8 @@ class type_exam extends Seeder
      */
     public function run()
     {
-        \App\TypeExam::create(['name' => 'Credit']);
-        \App\TypeExam::create(['name' => 'Exams']);
-        \App\TypeExam::create(['name' => 'Retake Exam']);
+        \App\TypeExam::create(['name' => 'мк']);
+        \App\TypeExam::create(['name' => 'іс']);
+        \App\TypeExam::create(['name' => 'дз']);
     }
 }

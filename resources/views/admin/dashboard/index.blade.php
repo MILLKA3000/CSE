@@ -104,23 +104,25 @@
                     </div>
                 </div>
             @endif
-        {{--<div class="col-lg-2 col-md-2">--}}
-            {{--<div class="panel panel-info">--}}
-                {{--<a href="{{URL::to('excel/get')}}">--}}
-                {{--<div class="panel-heading">--}}
-                    {{--<div class="row">--}}
-                        {{--<div class="col-xs-3">--}}
-                            {{--<i class="glyphicon glyphicon-bullhorn fa-2x"></i>--}}
-                        {{--</div>--}}
-                        {{--<div class="col-xs-9 text-right">--}}
-                            {{--<div class="huge"></div>--}}
-                            {{--<div>{{ trans("admin/modules/statistic.title") }}!</div>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
 
-            {{--</div>--}}
-        {{--</div>--}}
-
+            @if(!in_array(Auth::user()->role_id,[3,4,5,6,7]))
+                <div class="col-lg-2 col-md-2">
+                    <div class="panel panel-info">
+                        <a href="{{URL::to('logs')}}">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <i class="glyphicon glyphicon-tasks fa-2x"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right">
+                                        <div class="huge"></div>
+                                        <div>View Logs</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            @endif
     </div>
 @endsection
