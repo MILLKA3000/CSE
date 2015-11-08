@@ -63,7 +63,7 @@
                                         @foreach ($it as $key=>$col)
                                             <th>{{$key}}</th>
                                         @endforeach
-                                        <? break; ?>
+                                        <?php break; ?>
                                     @endforeach
                                 </tr>
                                 </thead>
