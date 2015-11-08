@@ -56,7 +56,7 @@
                         <div class="tab-pane" id="tab{{$i++}}">
                             <br/>
 
-                            <table id="tablet{{$i++}}" class="table table-striped table-hover">
+                            <table id="tablet{{$i}}" class="table table-striped table-hover">
                                 <thead>
                                 <tr>
                                     @foreach ($item as $k=>$it)
@@ -94,8 +94,8 @@
 {{-- Scripts --}}
 @section('scripts')
     <script>
-        $('#tablet1').DataTable();
         $('#tablet2').DataTable();
         $('#tablet3').DataTable();
+        $('#tablet4').DataTable();
     </script>
 @stop
