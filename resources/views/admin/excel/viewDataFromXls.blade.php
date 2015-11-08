@@ -51,13 +51,12 @@
                 <div class="tab-content">
 
 
-                    <?php $i=0 ?>
+                    <?php $i=1 ?>
                     @foreach($data->get() as $item)
-                        <? $i++ ?>
-                        <div class="tab-pane" id="tab{{$i}}">
+                        <div class="tab-pane" id="tab{{$i++}}">
                             <br/>
 
-                            <table id="tablet{{$i}}" class="table table-striped table-hover">
+                            <table id="tablet{{$i++}}" class="table table-striped table-hover">
                                 <thead>
                                 <tr>
                                     @foreach ($item as $k=>$it)
