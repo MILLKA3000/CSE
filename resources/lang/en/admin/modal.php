@@ -4,6 +4,8 @@ return [
     'create' => 'Create',
     'edit' => 'Edit',
     'save' => 'Save',
+    'view' => 'View',
+    'detail' => 'Detail',
     'reset' => 'Reset',
     'cancel' => 'Cancel',
     'general' => 'General',

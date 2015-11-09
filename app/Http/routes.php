@@ -39,6 +39,8 @@ Route::group(['prefix' => '/', 'middleware' => 'auth'], function() {
     Route::get('excel/loadXML', 'Excel\XMLController@loadXML');
     Route::post('excel/loadXML', 'Excel\XMLController@loadXML');
     Route::get('excel/downloadXLS/{file}', 'Excel\XMLController@downloadXLS');
+    Route::get('xml/loadXMLToDeanery', 'Excel\XMLController@loadXMLToDeanery');
+    Route::post('xml/loadXMLToDeanery', 'Excel\XMLController@loadXMLToDeanery');
 
     Route::get('excel/importXLS', 'Excel\ExcelController@importXLS');
     Route::post('excel/importXLS', 'Excel\ExcelController@importXLS');
@@ -54,6 +56,7 @@ Route::group(['prefix' => '/', 'middleware' => 'auth'], function() {
             Route::get('documents/{id}/getAllDocuments', 'Admin\DocumentsController@getAllDocuments');
             Route::get('documents/{id}/remove', 'Admin\DocumentsController@remove');
             Route::get('documents/{id}/getAllConsultingDocuments', 'Admin\DocumentsController@getAllConsultingDocuments');
+            Route::get('documents/{id}/sendEmails', 'Admin\DocumentsController@sendEmails');
         #Statistics
             Route::get('documents/{id}/getAllStatistics', 'Admin\DocumentsController@getAllStatistics');
             Route::get('documents/download/{name}/{id}', 'Admin\DocumentsController@downloadStatistics');
@@ -64,6 +67,8 @@ Route::group(['prefix' => '/', 'middleware' => 'auth'], function() {
         #XLS
             Route::get('arhive/data', 'Admin\ArhiveController@data');
             Route::get('arhive', 'Admin\ArhiveController@index');
+            Route::get('arhive/{id}', 'Admin\ArhiveController@show');
+            Route::resource('arhive', 'Admin\ArhiveController');
 
     # Teacher
     Route::get('teacher/data', 'Admin\TeacherSetGrade@data');

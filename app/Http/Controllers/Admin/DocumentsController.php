@@ -45,6 +45,15 @@ class DocumentsController extends Controller
     }
 
     /**
+     * @param $idFileGrade
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function sendEmails($idFileGrade)
+    {
+
+    }
+
+    /**
      *
      */
     public function getAllStatistics($idFileGrade)
@@ -82,7 +91,7 @@ class DocumentsController extends Controller
 
     public function remove($id){
         FileInfo::destroy($id);
-        return redirect()->back();
+        return redirect('arhive');
     }
 
 

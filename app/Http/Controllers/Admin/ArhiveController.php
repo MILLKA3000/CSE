@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\CacheDepartment;
 use App\CacheSpeciality;
+use App\Grades;
 use App\GradesFiles;
 use App\FileInfo;
 use App\Model\Contingent\Departments;
@@ -61,7 +62,17 @@ class ArhiveController extends Controller
      */
     public function show($id)
     {
-        //
+        $modules = GradesFiles::where('file_info_id',$id)->get();
+        foreach($modules as $module){
+            $module->DepartmentId = CacheDepartment::getDepartment($module->DepartmentId)->name;
+            $module->SpecialityId = CacheSpeciality::getSpeciality($module->SpecialityId)->name;
+            $module->quantityStudents = Grades::where('grade_file_id',$module->id)->get()->count();
+            $module->quantityGroups = Grades::select('group')->where('grade_file_id',$module->id)->distinct()->get()->count();
+        }
+        $modules->path = FileInfo::where('id',$modules[0]->file_info_id)->get()->first()->path;
+        $modules->name = $modules[0]->name;
+        $modules->file_info_id = $modules[0]->file_info_id;
+        return view('admin.archive.docs.view',compact('modules'));
     }
 
     /**
@@ -138,8 +149,12 @@ class ArhiveController extends Controller
         }
 
         return Datatables::of($modules)
+            ->edit_column('created_at', '<?php echo date("Y-m-d", strtotime($created_at)) ?>')
             ->edit_column('disciplines', '<?php $i=0; ?>@foreach($disciplines as $discipline) <span style="border-bottom: 1px solid #64DD8A;width:100%;display: block;">{{++$i}}. {{$discipline["NameDiscipline"]}}({{$discipline["NameModule"]}}), <br></span> @endforeach')
-//            ->remove_column('id')
+            ->add_column('actions', '<a href="{{{ URL::to(\'arhive/\' . $id) }}}" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-pencil"></span> {{ trans("admin/modal.detail") }}</a>')
+            ->remove_column('id')
+            ->remove_column('path')
+            ->remove_column('name')
             ->make();
     }
 

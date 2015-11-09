@@ -12,7 +12,7 @@
 @section('main')
     <div class="page-header">
         <h3>
-            {!! trans("admin/modules/getExcel.loadXMLtitle") !!}
+            {{ trans("admin/modules/getExcel.".$title)}}
             <div class="pull-right">
                 <div class="pull-right">
 
@@ -24,7 +24,7 @@
 
         <div class="panel panel-info">
             <div class="panel-heading" style="color:#000000">
-                {!! trans("admin/modules/getExcel.Change_XML_file") !!}
+                {{ trans("admin/modules/getExcel.".$title)}}
             </div>
             <div class="panel-body">
                 @if(Session::has('success'))
@@ -32,7 +32,7 @@
                         <h2>{!! Session::get('success') !!}</h2>
                     </div>
                 @endif
-                {!! Form::open(array('url'=>'excel/loadXML','method'=>'post', 'files'=>true)) !!}
+                {!! Form::open(array('url'=>(isset($path))?$path:'excel/loadXML','method'=>'post', 'files'=>true)) !!}
 
                         <label class="control-label">Select XML or ZIP File</label>
                     <input id="input-2" type="file"

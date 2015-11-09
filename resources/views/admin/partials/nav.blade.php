@@ -43,7 +43,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="{{url('xml/loadXMLToDeanery')}}">
                                 <i class="glyphicon glyphicon-list"></i> Get XML for Department
                             </a>
                         </li>
