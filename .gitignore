@@ -3,5 +3,6 @@
 .env.php
 .env
 /config/database.php
+/config/mail.php
 /.idea/*
 /node_modules/*

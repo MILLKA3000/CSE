@@ -10,5 +10,5 @@ class GetEmailEachStudent extends Model
 
 //    protected $guarded  = array('DEPARTMENTID');
 //
-//    protected $table = 'GUIDE_DEPARTMENT';
+    protected $table = 'students';
 }

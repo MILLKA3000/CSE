@@ -47,10 +47,10 @@ class XML extends Model
         foreach ($obj->getContent() as $d) {
             $module = GradesFiles::where('ModuleVariantID',$d->modulevariantid)->get()->last();
             foreach ($d->students->student as $student) {
-                $examGrade = Grades::where('id_student','=',$student->id,' and ','grade_file_id','=',$module->ModuleVariantID)->get()->last()->exam_grade;
-                $consultingGrades = ConsultingGrades::where('id_student','=',$student->id,' and ','id_num_plan','=',$module->ModuleVariantID)->get()->last();
+                $examGrade = Grades::where('id_student',$student->id)->where('grade_file_id',$module->id)->get()->last();
+                $consultingGrades = ConsultingGrades::where('id_student',$student->id)->where('id_num_plan',$module->ModuleVariantID)->get()->last();
                 if(isset($examGrade)){
-                    $student->credits_test = $examGrade+(isset($consultingGrades->grade_consulting)?$consultingGrades->grade_consulting:0);
+                    $student->credits_test = $examGrade->exam_grade+(isset($consultingGrades->grade_consulting)?$consultingGrades->grade_consulting:0);
                 }
             }
         }
