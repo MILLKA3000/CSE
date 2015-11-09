@@ -64,6 +64,8 @@ Route::group(['prefix' => '/', 'middleware' => 'auth'], function() {
         #XLS
             Route::get('arhive/data', 'Admin\ArhiveController@data');
             Route::get('arhive', 'Admin\ArhiveController@index');
+            Route::get('arhive/{id}', 'Admin\ArhiveController@show');
+            Route::resource('arhive', 'Admin\ArhiveController');
 
     # Teacher
     Route::get('teacher/data', 'Admin\TeacherSetGrade@data');

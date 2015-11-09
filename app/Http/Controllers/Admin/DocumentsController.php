@@ -82,7 +82,7 @@ class DocumentsController extends Controller
 
     public function remove($id){
         FileInfo::destroy($id);
-        return redirect()->back();
+        return redirect('arhive');
     }
 
 
