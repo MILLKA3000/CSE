@@ -45,6 +45,15 @@ class DocumentsController extends Controller
     }
 
     /**
+     * @param $idFileGrade
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function sendEmails($idFileGrade)
+    {
+
+    }
+
+    /**
      *
      */
     public function getAllStatistics($idFileGrade)

@@ -13,7 +13,7 @@ use App\Helper\XML;
 use App\Helper\File as fileHelp;
 use App\Helper\Excel_;
 use Chumper\Zipper\Facades\Zipper;
-use Storage;
+use Illuminate\Support\Facades\Storage;
 use File;
 use Auth;
 
@@ -72,7 +72,7 @@ class XMLController extends Controller
             $this->saveLog();
             return view('admin.xml.view', ['data' => $this->data, 'files' => $this->saveArchiveXml()]);
         }else{
-            return view('admin.xml.loadxml');
+            return view('admin.xml.loadxml',['title'=>'Change_XML_file']);
         }
 
     }
@@ -121,6 +121,11 @@ class XMLController extends Controller
         $this->url = $file->move($this->path, $file->getClientOriginalName());
     }
 
+
+    private function moveFileToTmpDirectory($file){
+        $this->url = $file->move("tmp" . DIRECTORY_SEPARATOR.'XML', $file->getClientOriginalName());
+    }
+
     /**
      * Save Log
      */
@@ -153,4 +158,41 @@ class XMLController extends Controller
     public function getData(){
         return $this->data;
     }
+
+    public function loadXMLToDeanery(Request $request){
+
+        if ($file = $request->file('xml')) {
+            Storage::deleteDirectory(DIRECTORY_SEPARATOR."tmp");
+            File::makeDirectory(DIRECTORY_SEPARATOR."tmp", 0775, true, true);
+            if (count($file)>1){
+                $files = [];
+                foreach($file as $f){
+                    if ($f->getMimeType() == 'application/xml') {
+                        $this->xml = new XML();
+                        $this->moveFileToTmpDirectory($f);
+                        $this->xml->putGradesInXml($this->xml->parseFromUrl($this->url),$f->getClientOriginalName());
+                    }
+                }
+                $this->foreachFileParce($files);
+            }elseif (!is_null($file[0])) {
+                if ($file[0]->getMimeType() == 'application/xml') {
+                    $this->xml = new XML();
+                    $this->moveFileToTmpDirectory($file[0]);
+                    $this->xml->putGradesInXml($this->xml->parseFromUrl($this->url),$file[0]->getClientOriginalName());
+                }
+            }else {
+                return view('admin.xml.loadxml')->with(['error'=>'You uploaded not this type files.<br> You must upload files of type [xml(single or multiple)]']);
+            }
+            Zipper::make(public_path() . DIRECTORY_SEPARATOR. "tmp" . DIRECTORY_SEPARATOR.'XML.zip')->add(glob(public_path() .DIRECTORY_SEPARATOR. "tmp" . DIRECTORY_SEPARATOR.'XML'));
+            return redirect("/tmp" . DIRECTORY_SEPARATOR.'XML.zip');
+        }else{
+            $path = 'xml/loadXMLToDeanery';
+            $title = 'Change_XML_file_For_Import';
+            return view('admin.xml.loadxml',compact('path','title'));
+        }
+
+
+    }
+
+
 }

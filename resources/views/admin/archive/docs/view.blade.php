@@ -62,6 +62,14 @@
                         <a href="/documents/{{$modules->file_info_id}}/getAllStatistics" class="btn btn-warning btn-sm "> View all Statistics </a>
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        Sending E-mails to each student (SMTP)
+                    </td>
+                    <td>
+                        <a href="/documents/{{$modules->file_info_id}}/sendEmails" class="btn btn-warning btn-sm "> Send E-mails</a>
+                    </td>
+                </tr>
             @endif
             @if(!in_array(Auth::user()->role_id,[2,4,5,6,7]))
                 <tr>
