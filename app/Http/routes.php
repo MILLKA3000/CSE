@@ -2,6 +2,7 @@
 Route::model('language', 'App\Language');
 Route::model('user', 'App\User');
 Route::model('department', 'App\Departments');
+Route::model('userDepartment', 'App\UserToDepartments');
 Route::model('arhive', 'App\GradesFiles');
 Route::model('logs', 'App\Logs');
 Route::model('settings', 'App\Settings');
@@ -55,7 +56,7 @@ Route::group(['prefix' => '/', 'middleware' => 'auth'], function() {
         #Documents
             Route::get('documents/{id}/getAllDocuments', 'Admin\DocumentsController@getAllDocuments');
             Route::get('documents/{id}/remove', 'Admin\DocumentsController@remove');
-            Route::get('documents/{id}/getAllConsultingDocuments', 'Admin\DocumentsController@getAllConsultingDocuments');
+            Route::get('documents/{id}/{check}/getAllConsultingDocuments', 'Admin\DocumentsController@getAllConsultingDocuments');
             Route::get('documents/{id}/sendEmails', 'Admin\DocumentsController@sendEmails');
         #Statistics
             Route::get('documents/{id}/getAllStatistics', 'Admin\DocumentsController@getAllStatistics');

@@ -41,8 +41,8 @@ class DepartmentsController extends Controller
      */
     public function create()
     {
-        $users = User::all();
-        $discipline = GradesFiles::select('DisciplineVariantID','NameDiscipline')->distinct()->get();
+        $users = User::select('users.id as id','users.name as name')->where('role_id',5)->get();
+        $discipline = GradesFiles::select('grades_files.DisciplineVariantID',DB::raw('CONCAT("[", type_exam.name,"] ",NameDiscipline) AS NameDiscipline'))->join('type_exam','type_exam.id','=','grades_files.type_exam_id')->distinct()->get();
         $discipline_allowed = AllowedDiscipline::where('id',0)->get();
         return view('admin.department.create_edit', compact('users','discipline','discipline_allowed'));
     }
@@ -90,7 +90,7 @@ class DepartmentsController extends Controller
      */
     public function edit(Departments $department)
     {
-        $users = User::all();
+        $users = User::select('users.id as id','users.name as name')->where('role_id',5)->get();
         $discipline = GradesFiles::select('grades_files.DisciplineVariantID',DB::raw('CONCAT("[", type_exam.name,"] ",NameDiscipline) AS NameDiscipline'))->join('type_exam','type_exam.id','=','grades_files.type_exam_id')->distinct()->get();
         $discipline_allowed = clone $discipline;
         $array_discipline_allowed = AllowedDiscipline::where('departments_id',$department->id)->get()->first();
@@ -161,14 +161,15 @@ class DepartmentsController extends Controller
         $departments = Departments::all(array('departments.id', 'departments.name', 'departments.active'));
 
         foreach($departments as $department) {
-            $department->user = User::find($department->getUser()->user_id)->name;
+            $user = User::find($department->getUser()->user_id);
+            $department->user = ($user)?$user->name:"---";
         }
 
         return Datatables::of($departments)
             ->edit_column('active', '@if ($active=="1") Active @else Deactive @endif')
             ->add_column('user', '{{$user}}')
             ->add_column('actions', '<a href="{{{ URL::to(\'department/\' . $id . \'/edit\' ) }}}" class="btn btn-success btn-sm " ><span class="glyphicon glyphicon-pencil"></span>  {{ trans("admin/modal.edit") }}</a>
-                    <a href="{{{ URL::to(\'department/\' . $id . \'/delete\' ) }}}" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-trash"></span> {{ trans("admin/modal.delete") }}</a>')
+                    @if(in_array(Auth::user()->role_id,[1,2])) <a href="{{{ URL::to(\'department/\' . $id . \'/delete\' ) }}}" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-trash"></span> {{ trans("admin/modal.delete") }}</a>@endif')
             ->remove_column('id')
             ->make();
     }

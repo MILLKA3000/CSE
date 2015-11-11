@@ -19,6 +19,12 @@
 
         </h3>
     </div>
+    <div class="pull-right">
+        <div class="pull-right">
+            <a href="/documents/{{$about_module->ModuleVariantID}}/true/getAllConsultingDocuments" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-pencil"></span>  Get Docs with grades</a>
+
+        </div>
+    </div>
     <div class="block">
         <h3>
             {!! trans("admin/modules/arhive.nameDiscipline") !!}: {{$about_module->NameDiscipline}} <br>
@@ -26,24 +32,27 @@
         </h3>
     </div>
     <input name="_token" id="_token" type="hidden" value="{{  csrf_token() }}">
-    <table id="table" class="table">
+    <table id="table2" class="table table-striped table-hover ui-datatable"
+           data-paging="true"
+           data-info="true"
+           data-length-change="true"
+           data-page-length="15">
+        <thead>
         <tr>
-            <td>
+            <th data-sortable="true" data-filterable="select">
                 {!! trans("admin/modules/consulting.studentGroup") !!}
-            </td>
-            <td>
+            </th>
+            <th data-sortable="true" data-filterable="text">
                 {!! trans("admin/modules/consulting.studentName") !!}
-            </td>
-            <td>
+            </th>
+            <th>
                 {!! trans("admin/modules/consulting.grade") !!}
-            </td>
-            <td>
-                {!! trans("admin/modules/consulting.examGrade") !!}
-            </td>
-            <td>
+            </th>
+            <th>
                 {!! trans("admin/modules/consulting.consultGrade") !!}
-            </td>
+            </th>
         </tr>
+        </thead>
         @foreach($students as $student)
             <tr id="tr{{$student->id_student}}">
                 <td>
@@ -54,9 +63,6 @@
                 </td>
                 <td>
                     {{$student->grade}}
-                </td>
-                <td>
-                    {{$student->exam_grade}}
                 </td>
                 <td>
                     <div class="block">
@@ -75,7 +81,9 @@
 
 {{-- Scripts --}}
 @section('scripts')
+    <script src="{{ asset('js/dataTablesSelect.js') }}"></script>
     <script>
+        $('#table2').dataTableHelper();
         $('.add').on('click',function(){
             var self = this;
             $.post( "/teacher/saveGrade", {'modnum':{{$about_module->ModuleVariantID}},'_token':$("#_token").val(),'student':$(this).attr('id'),'value':$("#i"+$(this).attr('id')).val()}).done(function(data){
