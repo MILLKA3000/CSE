@@ -40,15 +40,14 @@ class RecheckGradesController extends Controller
 
         $grade = Grades::find($request['id']);
         $originalGrade = $grade->exam_grade;
-        $dataModule = GradesFiles::where('file_info_id',$grade->grade_file_id)->get()->first();
+        $dataModule = GradesFiles::where('id',$grade->grade_file_id)->get()->first();
         $grade->exam_grade = $request['value'];
         if($originalGrade!=$grade->exam_grade){
             if($grade->save()){
                 Logs::_create('Recheck exams '. $dataModule->NameModule.' for student: '.$grade->fio.'. FROM '.$originalGrade.' TO '.$grade->exam_grade);
                 return "true";
             }
-            return "false";
         }
-
+        return "false";
     }
 }
