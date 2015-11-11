@@ -60,8 +60,12 @@
                 </td>
                 <td>
                     <div class="block">
-                        <input type="text" class="put form-control col-xs-6" style="width:50px;margin-right: 10px;" id="i{{$student->id_student}}" value="{{$student->grade_consulting}}">
-                        <a href="#!inline" id="{{$student->id_student}}" class="add btn  btn-success left">Add</a>
+                        @if(!in_array(Auth::user()->role_id,[8]))
+                            <input type="text" class="put form-control col-xs-6" style="width:50px;margin-right: 10px;" id="i{{$student->id_student}}" value="{{$student->grade_consulting}}">
+                            <a href="#!inline" id="{{$student->id_student}}" class="add btn  btn-success left">Add</a>
+                        @else
+                            {{($student->grade_consulting)?$student->grade_consulting:0}}
+                        @endif
                     </div>
                 </td>
             </tr>

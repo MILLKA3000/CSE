@@ -16,7 +16,7 @@ class RecheckGradesController extends Controller
 
     public function __construct()
     {
-        $this->middleware('role:Admin,Self-Admin,Inspektor');
+        $this->middleware('role:Admin,Inspektor');
         view()->share('type', 'recheck');
     }
 

@@ -26,7 +26,7 @@
             <th data-sortable="true" data-filterable="select">{!! trans("admin/modules/arhive.semester") !!}</th>
             <th data-sortable="true" data-filterable="select">{!! trans("admin/modules/arhive.department") !!}</th>
             <th data-sortable="true" data-filterable="select">{!! trans("admin/modules/arhive.speciality") !!}</th>
-            <th data-sortable="true" data-filterable="text">{!! trans("admin/modules/arhive.nameDiscipline") !!}</th>
+            <th data-sortable="true" data-filterable="text" style="width: 25%!important;">{!! trans("admin/modules/arhive.nameDiscipline") !!}</th>
             <th data-sortable="true" data-filterable="select">{!! trans("admin/modules/arhive.typeExam") !!}</th>
             <th data-sortable="true" data-filterable="select">{!! trans("admin/modules/arhive.user") !!}</th>
             <th>Actions</th>

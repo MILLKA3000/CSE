@@ -39,5 +39,9 @@ class role extends Seeder
             'name' => 'Guest',
         ]);
 
+        \App\Role::create([
+            'name' => 'Chief',
+        ]);
+
     }
 }

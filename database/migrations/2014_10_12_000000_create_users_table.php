@@ -31,6 +31,7 @@ class CreateUsersTable extends Migration
             $table->boolean('confirmed')->default(false);
             $table->unsignedInteger('role_id')->nullable();
             $table->foreign('role_id')->references('id')->on('roles')->onDelete('set null');
+            $table->string('lang');
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

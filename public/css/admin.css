@@ -2918,7 +2918,7 @@ select[multiple].input-lg {
   }
   .form-inline .form-control {
     display: inline-block;
-    width: auto;
+    /*width: auto;*/
     vertical-align: middle;
   }
   .form-inline .form-control-static {
@@ -11899,7 +11899,7 @@ fieldset[disabled] .checkbox label {
 }
 .input-sm {
   height: 30px;
-  padding: 5px 10px;
+  padding: 5px 0px;
   font-size: 12px;
   line-height: 1.5;
   border-radius: 3px;
@@ -12113,7 +12113,7 @@ select[multiple].input-lg {
   }
   .form-inline .form-control {
     display: inline-block;
-    width: auto;
+    /*width: auto;*/
     vertical-align: middle;
   }
   .form-inline .form-control-static {
@@ -16250,7 +16250,7 @@ table.dataTable thead > tr > th.sorting_asc, table.dataTable thead > tr > th.sor
 table.dataTable thead > tr > td.sorting_asc,
 table.dataTable thead > tr > td.sorting_desc,
 table.dataTable thead > tr > td.sorting {
-  padding-right: 30px;
+  padding-right: 15px;
 }
 table.dataTable thead > tr > th:active,
 table.dataTable thead > tr > td:active {

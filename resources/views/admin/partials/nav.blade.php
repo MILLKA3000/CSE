@@ -30,7 +30,7 @@
                         <i class="fa fa-dashboard fa-fw"></i> Dashboard
                     </a>
                 </li>
-                @if(!in_array(Auth::user()->role_id,[3,4,5,6,7]))
+                @if(!in_array(Auth::user()->role_id,[3,4,5,6,7,8]))
                 <li>
                     <a href="#">
                         <i class="fa fa-sort-desc"></i> Export
@@ -50,7 +50,7 @@
                     </ul>
                 </li>
                 @endif
-                @if(!in_array(Auth::user()->role_id,[3,4,5,6,7]))
+                @if(!in_array(Auth::user()->role_id,[3,4,5,6,7,8]))
                 <li>
                     <a href="#">
                         <i class="fa fa-sort-desc"></i> Import
@@ -107,7 +107,7 @@
                                 <i class="glyphicon glyphicon-list"></i> Departments
                             </a>
                         </li>
-                        @if(!in_array(Auth::user()->role_id,[3,4]))
+                        @if(!in_array(Auth::user()->role_id,[3,4,8]))
                         <li>
                             <a href="{{url('user')}}">
                                 <i class="glyphicon glyphicon-list"></i> Users
@@ -119,7 +119,7 @@
                             </a>
                         </li>
                         @endif
-                        @if(!in_array(Auth::user()->role_id,[3,4,5,6,7]))
+                        @if(!in_array(Auth::user()->role_id,[3,4,5,6,7,8]))
                             <li>
                                 <a href="{{url('settings')}}">
                                     <i class="fa fa-language"></i> Settings

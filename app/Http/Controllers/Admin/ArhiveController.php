@@ -19,7 +19,7 @@ class ArhiveController extends Controller
 
     public function __construct()
     {
-        $this->middleware('role:Admin,Self-Admin,Inspektor,Dekanat');
+        $this->middleware('role:Admin,Self-Admin,Inspektor,Dekanat,Chief');
         view()->share('type', 'arhive');
     }
 

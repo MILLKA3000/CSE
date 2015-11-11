@@ -13,7 +13,7 @@ class LogsController extends Controller
 {
     function __construct()
     {
-        $this->middleware('role:Admin,Self-Admin');
+        $this->middleware('role:Admin,Self-Admin,Chief');
         view()->share('type', 'logs');
     }
 

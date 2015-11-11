@@ -14,5 +14,6 @@ class type_exam extends Seeder
         \App\TypeExam::create(['name' => 'мк']);
         \App\TypeExam::create(['name' => 'іс']);
         \App\TypeExam::create(['name' => 'дз']);
+        \App\TypeExam::create(['name' => 'зл']);
     }
 }
