@@ -50,6 +50,14 @@
             </div>
         </div>
 
+        <div class="form-group  {{ $errors->has('role') ? 'has-error' : '' }}">
+            {!! Form::label('lang', trans("admin/users.lang"), array('class' => 'control-label')) !!}
+            <div class="controls">
+                {!! Form::select('lang', Config::get('app.locales'), App::getLocale(),array('class' => 'form-control')) !!}
+                <span class="help-block">{{ $errors->first('role', ':message') }}</span>
+            </div>
+        </div>
+
         <div class="form-group  {{ $errors->has('password') ? 'has-error' : '' }}">
             {!! Form::label('password', trans("admin/users.password"), array('class' => 'control-label')) !!}
             <div class="controls">

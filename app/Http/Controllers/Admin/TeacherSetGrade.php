@@ -22,7 +22,7 @@ class TeacherSetGrade extends Controller
 
     function __construct()
     {
-        $this->middleware('role:Admin,Self-Admin,Teacher');
+        $this->middleware('role:Admin,Self-Admin,Teacher,Chief');
         view()->share('type', 'teacher');
     }
 
@@ -71,16 +71,25 @@ class TeacherSetGrade extends Controller
      */
     public function saveGrade(Request $request, ConsultingGrades $cons)
     {
+        if(!is_int($request['value']) && $request['value']>20){
+            return "false";
+        }
+
         $check = $cons->where('id_student',$request['student'])->where('id_num_plan',$request['modnum'])->get()->first();
 
         if ($check) $cons->where('id',$check->id)->delete();
-
-        $cons->create([
-            'id_student'=>$request['student'],
-            'id_num_plan'=>$request['modnum'],
-            'grade_consulting'=>$request['value'],
-            'user_id'=>Auth::user()->id
-        ]);
+        if($request['value']!='') {
+            if ($cons->create([
+                'id_student' => $request['student'],
+                'id_num_plan' => $request['modnum'],
+                'grade_consulting' => $request['value'],
+                'user_id' => Auth::user()->id
+            ])
+            ) {
+                return "true";
+            }
+        }
+        return "false";
     }
 
 

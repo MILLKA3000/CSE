@@ -113,7 +113,7 @@ class Excel extends Model
                         $grades['exam_grade'] = (int)$this->firstSheets[$secondSheets['code']][$module];
                         $this->dataToSave[$module][] = $grades;
                     } else {
-                        $this->messages['error'][] = 'Don\'t find code in First Sheets : ' . $secondSheets['code'];
+                        $this->messages['error'][] = 'Don\'t find code in First Sheets : ' . $secondSheets['code'].' for module '.((int)$module+1);
                     };
                 }else{
                     $grades['exam_grade'] = 0;
@@ -164,7 +164,6 @@ class Excel extends Model
         $data['NameDiscipline']=(string)$fourSheets['namediscipline'];
         $data['NameModule']=(string)$fourSheets['namemodule'];
         $data['type_exam_id']=TypeExam::where('name',VariantDiscipline::getFormReport($data['DisciplineVariantID']))->get()->first()->id;
-
         return GradesFiles::create($data);
     }
 

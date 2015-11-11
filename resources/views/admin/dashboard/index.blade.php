@@ -9,7 +9,7 @@
         {{$title}}
     </h3>
     <div class="row">
-        @if(!in_array(Auth::user()->role_id,[3,4,5,6,7]))
+        @if(!in_array(Auth::user()->role_id,[3,4,5,6,7,8]))
         <div class="col-lg-2 col-md-2">
             <div class="panel panel-info">
                 <a href="{{URL::to('excel/loadXML')}}">
@@ -28,7 +28,7 @@
             </div>
         </div>
         @endif
-        @if(!in_array(Auth::user()->role_id,[3,4,5,6,7]))
+        @if(!in_array(Auth::user()->role_id,[3,4,5,6,7,8]))
         <div class="col-lg-2 col-md-2">
             <div class="panel panel-info">
                 <a href="{{URL::to('excel/importXLS')}}">
@@ -85,7 +85,7 @@
             </div>
         </div>
         @endif
-            @if(!in_array(Auth::user()->role_id,[3,4,5,6,7]))
+            @if(!in_array(Auth::user()->role_id,[3,4,5,6,7,8]))
                 <div class="col-lg-2 col-md-2">
                     <div class="panel panel-info">
                         <a href="{{URL::to('settings')}}">

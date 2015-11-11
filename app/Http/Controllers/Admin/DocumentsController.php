@@ -25,7 +25,7 @@ class DocumentsController extends Controller
 
     public function __construct()
     {
-        $this->middleware('role:Admin,Self-Admin,Inspektor,Teacher');
+        $this->middleware('role:Admin,Self-Admin,Inspektor,Teacher,Chief');
         view()->share('type', 'documents');
     }
 

@@ -45,7 +45,7 @@
                     <a href="/xls/{{$modules->path}}/{{$modules->name}}" class="btn btn-success btn-sm "> Get original xls </a>
                 </td>
             </tr>
-            @if(!in_array(Auth::user()->role_id,[4,5,6,7]))
+            @if(!in_array(Auth::user()->role_id,[5,6,7]))
                 <tr>
                     <td>
                         Generate all documents of format(2.1) where first number it's number of discipline, second it's number of group
@@ -62,16 +62,18 @@
                         <a href="/documents/{{$modules->file_info_id}}/getAllStatistics" class="btn btn-warning btn-sm "> View all Statistics </a>
                     </td>
                 </tr>
-                <tr>
-                    <td>
-                        Sending E-mails to each student (SMTP)
-                    </td>
-                    <td>
-                        <a href="/documents/{{$modules->file_info_id}}/sendEmails" class="btn btn-warning btn-sm "> Send E-mails</a>
-                    </td>
-                </tr>
+                @if(!in_array(Auth::user()->role_id,[4,5,6,7,8]))
+                    <tr>
+                        <td>
+                            Sending E-mails to each student (SMTP)
+                        </td>
+                        <td>
+                            <a href="/documents/{{$modules->file_info_id}}/sendEmails" class="btn btn-warning btn-sm "> Send E-mails</a>
+                        </td>
+                    </tr>
+                @endif
             @endif
-            @if(!in_array(Auth::user()->role_id,[2,4,5,6,7]))
+            @if(!in_array(Auth::user()->role_id,[2,4,5,6,7,8]))
                 <tr>
                     <td>
                         Change exams grade (only available to inspectors and admin)
@@ -81,7 +83,7 @@
                     </td>
                 </tr>
             @endif
-            @if(!in_array(Auth::user()->role_id,[3,4,5,6,7]))
+            @if(!in_array(Auth::user()->role_id,[3,4,5,6,7,8]))
                 <tr>
                     <td>
                         Delete this document!

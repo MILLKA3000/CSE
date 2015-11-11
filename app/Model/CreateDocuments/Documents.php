@@ -46,7 +46,7 @@ class Documents extends Model
         $this->speciality = CacheSpeciality::getSpeciality($this->dataOfFile[0]->SpecialityId)->name;
         $this->department = CacheDepartment::getDepartment($this->dataOfFile[0]->DepartmentId)->name;
 
-        Storage::deleteDirectory($this->DOC_PATH . DIRECTORY_SEPARATOR.'docs');
+        Storage::deleteDirectory($this->DOC_PATH);
 //        Storage::delete($this->DOC_PATH . '\Docs.zip');
     }
 

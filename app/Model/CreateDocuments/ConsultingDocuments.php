@@ -49,7 +49,7 @@ class ConsultingDocuments extends Model
         $this->department = CacheDepartment::getDepartment(Students::getStudentDepartment($this->dataOfFile[0]->id_student))->name;
         $this->dataEachOfFile = GradesFiles::where('ModuleVariantID', $this->dataOfFile[0]->id_num_plan)->get()->first();
 
-        Storage::deleteDirectory($this->DOC_PATH.'docs');
+        Storage::deleteDirectory($this->DOC_PATH);
     }
 
     /**

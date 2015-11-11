@@ -14,5 +14,6 @@ return [
     'roles' => 'Roles',
     'roles_info' => 'Adding the role to user, be assigned all privileges for a given role.',
     'role_id' => 'Role',
+    'lang' => 'Language'
 
 ];

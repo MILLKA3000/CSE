@@ -16,7 +16,7 @@ class RecheckGradesController extends Controller
 
     public function __construct()
     {
-        $this->middleware('role:Admin,Self-Admin,Inspektor');
+        $this->middleware('role:Admin,Inspektor');
         view()->share('type', 'recheck');
     }
 
@@ -34,17 +34,20 @@ class RecheckGradesController extends Controller
 
     public function saveGrade(Request $request)
     {
+        if(!is_int($request['value']) && $request['value']>80){
+            return "false";
+        }
+
         $grade = Grades::find($request['id']);
         $originalGrade = $grade->exam_grade;
-        $dataModule = GradesFiles::where('file_info_id',$grade->grade_file_id)->get()->first();
+        $dataModule = GradesFiles::where('id',$grade->grade_file_id)->get()->first();
         $grade->exam_grade = $request['value'];
         if($originalGrade!=$grade->exam_grade){
             if($grade->save()){
                 Logs::_create('Recheck exams '. $dataModule->NameModule.' for student: '.$grade->fio.'. FROM '.$originalGrade.' TO '.$grade->exam_grade);
                 return "true";
             }
-            return "false";
         }
-
+        return "false";
     }
 }

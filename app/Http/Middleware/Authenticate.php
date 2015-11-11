@@ -4,6 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Support\Facades\DB;
+use PDOException;
 
 class Authenticate
 {
@@ -34,6 +36,12 @@ class Authenticate
      */
     public function handle($request, Closure $next)
     {
+        try {
+            DB::connection('firebird')->getDatabaseName();
+        } catch(PDOException $e){
+            echo "<h1>Don't connect to Contingent DATABASE! Please fix this problem!</h1>";
+            die();
+        }
         if ($this->auth->guest()) {
             if ($request->ajax()) {
                 return response('Unauthorized.', 401);
