@@ -12114,6 +12114,7 @@ select[multiple].input-lg {
   .form-inline .form-control {
     display: inline-block;
     /*width: auto;*/
+      max-width: 300px;
     vertical-align: middle;
   }
   .form-inline .form-control-static {
