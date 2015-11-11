@@ -34,6 +34,10 @@ class RecheckGradesController extends Controller
 
     public function saveGrade(Request $request)
     {
+        if(!is_int($request['value']) && $request['value']>80){
+            return "false";
+        }
+
         $grade = Grades::find($request['id']);
         $originalGrade = $grade->exam_grade;
         $dataModule = GradesFiles::where('file_info_id',$grade->grade_file_id)->get()->first();

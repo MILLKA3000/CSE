@@ -45,7 +45,7 @@
             </td>
         </tr>
         @foreach($students as $student)
-            <tr>
+            <tr id="tr{{$student->id_student}}">
                 <td>
                     {{$student->group}}
                 </td>
@@ -62,7 +62,7 @@
                     <div class="block">
                         @if(!in_array(Auth::user()->role_id,[8]))
                             <input type="text" class="put form-control col-xs-6" style="width:50px;margin-right: 10px;" id="i{{$student->id_student}}" value="{{$student->grade_consulting}}">
-                            <a href="#!inline" id="{{$student->id_student}}" class="add btn  btn-success left">Add</a>
+                            <a href="#!inline" data-student-id="{{$student->id_student}}" id="{{$student->id_student}}" class="add btn  btn-success left">Add</a>
                         @else
                             {{($student->grade_consulting)?$student->grade_consulting:0}}
                         @endif
@@ -77,7 +77,14 @@
 @section('scripts')
     <script>
         $('.add').on('click',function(){
-            $.post( "/teacher/saveGrade", {'modnum':{{$about_module->ModuleVariantID}},'_token':$("#_token").val(),'student':$(this).attr('id'),'value':$("#i"+$(this).attr('id')).val()});
+            var self = this;
+            $.post( "/teacher/saveGrade", {'modnum':{{$about_module->ModuleVariantID}},'_token':$("#_token").val(),'student':$(this).attr('id'),'value':$("#i"+$(this).attr('id')).val()}).done(function(data){
+                if(data=='true'){
+                    $('#tr'+$(self).data('student-id')).css({'backgroundColor': '#C8FFC8', 'color': 'black'});
+                }else if(data=='false'){
+                    $('#tr'+$(self).data('student-id')).css({'backgroundColor': '#FFE3C8', 'color': 'black'});
+                }
+            })
         })
     </script>
 @stop
