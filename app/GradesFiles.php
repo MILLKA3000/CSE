@@ -23,4 +23,8 @@ class GradesFiles extends Model
     public function getConsultingGrades(){
         return $this->hasMany('App\ConsultingGrades','id_num_plan','ModuleVariantID');
     }
+
+    public function getGrades(){
+        return $this->hasMany('App\Grades','grade_file_id','id');
+    }
 }

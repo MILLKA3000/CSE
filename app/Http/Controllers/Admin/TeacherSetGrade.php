@@ -45,7 +45,6 @@ class TeacherSetGrade extends Controller
         'grades.id_student',
         'grades.fio',
         'grades.group',
-        'grades.exam_grade',
         'grades.grade'
             )->
         where('grade_file_id',$this->about_module->id)
@@ -103,30 +102,29 @@ class TeacherSetGrade extends Controller
 //            'grades_files.id',
             'grades_files.EduYear',
             'grades_files.Semester',
-            'grades_files.DepartmentId',
-            'grades_files.SpecialityId',
+            'cache_department.name as nameDep',
+            'cache_speciality.name as nameSpec',
             'grades_files.NameDiscipline',
             'grades_files.NameModule',
             'grades_files.ModuleNum',
             'grades_files.ModuleVariantID',
             'grades_files.DisciplineVariantID',
-        ))->distinct('ModuleVariantID');
-
-        if(in_array(Auth::user()->role_id,[5]) && (isset($allowDiscepline->arrayAllowed))) {
-            $grades->whereIn('DisciplineVariantID',(array)json_decode($allowDiscepline->arrayAllowed));
-        }
-
-        $grades->get();
-        foreach($grades as $grade){
-            $grade->DepartmentId = CacheDepartment::getDepartment($grade->DepartmentId)->name;
-            $grade->SpecialityId = CacheSpeciality::getSpeciality($grade->SpecialityId)->name;
+        ))->distinct('ModuleVariantID')
+            ->join('cache_department','cache_department.id_from','=','grades_files.DepartmentId')
+            ->join('cache_speciality','cache_speciality.id_from','=','grades_files.SpecialityId');
+        if(isset($allowDiscepline->arrayAllowed)) {
+            if (in_array(Auth::user()->role_id, [5]) && (count(json_decode($allowDiscepline->arrayAllowed)) > 0)) {
+                $grades->whereIn('DisciplineVariantID', (array)json_decode($allowDiscepline->arrayAllowed));
+            }
+        }elseif(in_array(Auth::user()->role_id,[5])){
+            $grades->whereIn('DisciplineVariantID',null);
         }
 
         return Datatables::of($grades)
             ->edit_column('EduYear', '{{$EduYear}}/{{$EduYear+1}}')
             ->edit_column('NameModule', '{{$ModuleNum}}. {{$NameModule}}')
             ->add_column('actions','<a href="{{ URL::to(\'teacher/\' . $ModuleVariantID . \'/edit\' )}}" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-pencil"></span>  {{ trans("admin/modal.this") }}</a>')
-            ->add_column('GetDocs','<a href="{{ URL::to(\'documents/\' . $ModuleVariantID . \'/getAllConsultingDocuments\' )}}" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-pencil"></span>  Get Docs</a>')
+            ->add_column('GetDocs','<a href="{{ URL::to(\'documents/\' . $ModuleVariantID . \'/false/getAllConsultingDocuments\' )}}" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-pencil"></span>  Get Empty Docs</a>')
             ->remove_column('ModuleVariantID')
             ->remove_column('DisciplineVariantID')
             ->remove_column('ModuleNum')

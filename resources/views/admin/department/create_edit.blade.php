@@ -63,12 +63,14 @@
 
             <!-- Block Add, Remove Allowed discipline-->
             <div class="col-md-2 text-center" style="position: relative; top:150px; font-size: 150%">
-                <div class="row">
-                    <i class="btn btn-default discipline-add"><span class="glyphicon glyphicon-forward"></span></i>
-                </div>
-                <div class="row">
-                    <i class="btn btn-default discipline-remove"><span class="glyphicon glyphicon-backward"></span></i>
-                </div>
+                @if(!in_array(Auth::user()->role_id,[5,6,7,8]))
+                    <div class="row">
+                        <i class="btn btn-default discipline-add"><span class="glyphicon glyphicon-forward"></span></i>
+                    </div>
+                    <div class="row">
+                        <i class="btn btn-default discipline-remove"><span class="glyphicon glyphicon-backward"></span></i>
+                    </div>
+                @endif
             </div>
 
             <div class="col-md-5">
@@ -97,22 +99,16 @@
         </div>
 
     </div>
-    <div class="form-group">
-        <div class="col-md-12">
-            <button type="reset" class="btn btn-sm btn-default">
-                <span class="glyphicon glyphicon-remove-circle"></span> {{
-				trans("admin/modal.reset") }}
-            </button>
-            <button type="submit" class="btn btn-sm btn-success sace">
-                <span class="glyphicon glyphicon-ok-circle"></span>
-                @if	(isset($user))
-                    {{ trans("admin/modal.edit") }}
-                @else
-                    {{trans("admin/modal.create") }}
-                @endif
-            </button>
+    @if(!in_array(Auth::user()->role_id,[5,6,7,8]))
+        <div class="form-group">
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-sm btn-success sace">
+                    <span class="glyphicon glyphicon-ok-circle"></span>
+                    {{ trans("admin/modal.save") }}
+                </button>
+            </div>
         </div>
-    </div>
+    @endif
 </div>
     {!! Form::close() !!}
     @stop

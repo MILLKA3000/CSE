@@ -13,7 +13,7 @@ class UserToDepartment extends Seeder
     {
         \App\UserToDepartments::create([
             'departments_id' => '1',
-            'user_id' => '1',
+            'user_id' => '3',
         ]);
 
         \App\UserToDepartments::create([

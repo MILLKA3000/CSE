@@ -11,4 +11,9 @@ class UserToDepartments extends Model
     protected $table = 'user_to_departament';
 
     public $timestamps = false;
+
+    public function getNameDepartment(){
+        return $this->hasOne('App\Department','id')->get()->first();
+    }
+
 }

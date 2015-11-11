@@ -2,15 +2,18 @@
 
 namespace App\Model\CreateDocuments;
 
+use App\AllowedDiscipline;
 use App\CacheSpeciality;
 use App\ConsultingGrades;
 use App\Grades;
 use App\GradesFiles;
 use App\Model\Contingent\Students;
+use App\UserToDepartments;
 use Chumper\Zipper\Facades\Zipper;
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Contingent\Students as ContStudent;
 use File;
+use Illuminate\Support\Facades\Auth;
 use Storage;
 use App\CacheDepartment;
 
@@ -37,8 +40,11 @@ class ConsultingDocuments extends Model
 
     private $numModule = 1;
 
-    public function __construct($idFileGrade)
+    private $gradePrint = 1;
+
+    public function __construct($idFileGrade,$gradePrint = false)
     {
+        $this->gradePrint = $gradePrint;
         $this->dataOfFile = ConsultingGrades::where('id_num_plan',$idFileGrade)->get();
 
         /**
@@ -60,8 +66,11 @@ class ConsultingDocuments extends Model
         /**
          * find each student and sort of groupNum
          */
-        foreach ($this->dataOfFile as $student) {
-                $this->studentsOfGroup[Students::getStudentGroup($student['id_student'])][] = $student;
+        $students = Grades::where('grade_file_id',$this->dataEachOfFile->id)->get();
+        foreach ($students as $student) {
+            $student->grade_consulting = ConsultingGrades::where('id_student',$student['id_student'])->get()->first();
+            (isset($student->grade_consulting))?$student->grade_consulting = $student->grade_consulting->grade_consulting:$student->grade_consulting='';
+            $this->studentsOfGroup[Students::getStudentGroup($student['id_student'])][] = $student;
         }
         $this->formHtml();
         Zipper::make(public_path() . $this->DOC_PATH . DIRECTORY_SEPARATOR.'Docs.zip')->add(glob(public_path() . $this->DOC_PATH . DIRECTORY_SEPARATOR.'docs'));
@@ -77,7 +86,7 @@ class ConsultingDocuments extends Model
             $this->createHeaderShablon($group);
             $num = 1;
             foreach($students as $student) {
-                $this->shablon .= "<tr><td width=10%>" . ($num++) . "</td><td width=50%>" . Students::getStudentFIO($student->id_student) . "</td><td width=15%>" . ContStudent::getStudentBookNum($student->id_student) . "</td><td width=10%>" . $student->grade_consulting . "</td></tr>";
+                $this->shablon .= "<tr><td width=10%>" . ($num++) . "</td><td width=50%>" . Students::getStudentFIO($student->id_student) . "</td><td width=15%>" . ContStudent::getStudentBookNum($student->id_student) . "</td><td width=10%>".(($this->gradePrint=="true")?$student->grade_consulting:'')."</td><td></td></tr>";
             }
             $this->createFooterShablon();
             File::makeDirectory(public_path() . $this->DOC_PATH . DIRECTORY_SEPARATOR.'docs', 0775, true, true);
@@ -133,6 +142,9 @@ class ConsultingDocuments extends Model
                 <td width=10%>
                     <b>Кількість балів</b>
                 </td>
+                <td width=10%>
+                    <b>Підпис викладача</b>
+                </td>
             </tr>
         ";
     }
@@ -142,7 +154,11 @@ class ConsultingDocuments extends Model
      */
     private function createFooterShablon()
     {
-        $this->shablon .= "</table><br />";
+        $name = UserToDepartments::select('name')->where('user_id',Auth::user()->id)->join('departments','departments.id','=','user_to_departament.departments_id')->get()->first();
+        $this->shablon .= "</table><br />
+        Завідувач кафедри (".(($name)?$name->name:'___________________________________________________________________________________________________').")
+        <br>_______________________________________________________________ <br>
+        (вчені звання, прізвище та ініціали)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(підпис)<br />";
     }
 
 
