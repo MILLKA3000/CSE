@@ -1,10 +1,10 @@
 <?php
 
 return [
-    'roles' => 'Roles',
-    'adminrole' => 'Admin roles',
-    'userrole'  =>  'User roles',
-    'choose_role' =>   'Choose permissions',
-    'name'  => 'Name',
+    'roles' => 'Ролі',
+    'adminrole' => 'Роль адміністратора',
+    'userrole'  =>  'Роль користувача',
+    'choose_role' =>   'Вибрати права',
+    'name'  => 'Ім\'я',
 
 ];
