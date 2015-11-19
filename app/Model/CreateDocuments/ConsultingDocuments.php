@@ -45,15 +45,12 @@ class ConsultingDocuments extends Model
     public function __construct($idFileGrade,$gradePrint = false)
     {
         $this->gradePrint = $gradePrint;
-        $this->dataOfFile = ConsultingGrades::where('id_num_plan',$idFileGrade)->get();
 
         /**
          * get data from bd about module (generals data for each docs)
          */
         $this->DOC_PATH = DIRECTORY_SEPARATOR.'consultingDocuments'.DIRECTORY_SEPARATOR;
-        $this->speciality = CacheSpeciality::getSpeciality(Students::getStudentSpeciality($this->dataOfFile[0]->id_student))->name;
-        $this->department = CacheDepartment::getDepartment(Students::getStudentDepartment($this->dataOfFile[0]->id_student))->name;
-        $this->dataEachOfFile = GradesFiles::where('ModuleVariantID', $this->dataOfFile[0]->id_num_plan)->get()->first();
+        $this->dataEachOfFile = GradesFiles::where('ModuleVariantID', $idFileGrade)->get()->first();
 
         Storage::deleteDirectory($this->DOC_PATH);
     }
@@ -67,6 +64,8 @@ class ConsultingDocuments extends Model
          * find each student and sort of groupNum
          */
         $students = Grades::where('grade_file_id',$this->dataEachOfFile->id)->get();
+        $this->speciality = CacheSpeciality::getSpeciality(Students::getStudentSpeciality($students[0]->id_student))->name;
+        $this->department = CacheDepartment::getDepartment(Students::getStudentDepartment($students[0]->id_student))->name;
         foreach ($students as $student) {
             $student->grade_consulting = ConsultingGrades::where('id_student',$student['id_student'])->get()->first();
             (isset($student->grade_consulting))?$student->grade_consulting = $student->grade_consulting->grade_consulting:$student->grade_consulting='';

@@ -1,11 +1,12 @@
 <?php
 
 return [
-    'title' => 'View all grades',
-    'studentGroup' => 'Group',
-    'studentName' => 'F.I.O.',
-    'grade' => 'Grade',
-    'examGrade' => 'Exams Grade',
-    'consultGrade' => 'Consult Grade',
-
+    'title' => 'Оцінки за співбесіду',
+    'studentGroup' => 'Группа',
+    'studentName' => 'ФІО',
+    'grade' => 'Поточна',
+    'examGrade' => 'Екзаменаційна',
+    'consultGrade' => 'Оцінка за співбесіду',
+    'addGrade' => 'Добавити',
+    'clearGrade' => 'Очистити'
 ];

@@ -68,7 +68,8 @@
                     <div class="block">
                         @if(!in_array(Auth::user()->role_id,[8]))
                             <input type="text" class="put form-control col-xs-6" style="width:50px;margin-right: 10px;" id="i{{$student->id_student}}" value="{{$student->grade_consulting}}">
-                            <a href="#!inline" data-student-id="{{$student->id_student}}" id="{{$student->id_student}}" class="add btn  btn-success left">Add</a>
+                            <a href="#!inline" data-student-id="{{$student->id_student}}" id="{{$student->id_student}}" class="add btn  btn-success left">{!! trans("admin/modules/consulting.addGrade") !!}</a>
+                            <a href="#!inline" data-student-id="{{$student->id_student}}" id="{{$student->id_student}}" class="add btn  btn-success left">{!! trans("admin/modules/consulting.clearGrade") !!}</a>
                         @else
                             {{($student->grade_consulting)?$student->grade_consulting:0}}
                         @endif

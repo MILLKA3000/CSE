@@ -7,5 +7,6 @@ return [
     'grade' => 'Grade',
     'examGrade' => 'Exams Grade',
     'consultGrade' => 'Consult Grade',
-
+    'addGrade' => 'Add',
+    'clearGrade' => 'Clear'
 ];

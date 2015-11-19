@@ -106,11 +106,13 @@ class TeacherSetGrade extends Controller
             'cache_speciality.name as nameSpec',
             'grades_files.NameDiscipline',
             'grades_files.NameModule',
+            'type_exam.name as typeExamName',
             'grades_files.ModuleNum',
             'grades_files.ModuleVariantID',
             'grades_files.DisciplineVariantID',
         ))->distinct('ModuleVariantID')
             ->join('cache_department','cache_department.id_from','=','grades_files.DepartmentId')
+            ->join('type_exam','grades_files.type_exam_id', '=', 'type_exam.id')
             ->join('cache_speciality','cache_speciality.id_from','=','grades_files.SpecialityId');
         if(isset($allowDiscepline->arrayAllowed)) {
             if (in_array(Auth::user()->role_id, [5]) && (count(json_decode($allowDiscepline->arrayAllowed)) > 0)) {
