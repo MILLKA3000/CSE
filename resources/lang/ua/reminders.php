@@ -13,14 +13,14 @@ return [
 	|
 	*/
 
-	"password" => "Passwords must be at least six characters and match the confirmation.",
+	"password" => "Пароль повинен бути не коротшим шести символів і співпадати з пітвердженням.",
 
-	"user" => "We can't find a user with that e-mail address.",
+	"user" => "Користувач з таким email не знайдено.",
 
-	"token" => "This password reset token is invalid.",
+	"token" => "Код для скидання паролю не дійсний.",
 
-	"sent" => "Password reminder sent!",
+	"sent" => "Password reminder sent! reminders(22)",
 
-	"reset" => "Password has been reset!",
+	"reset" => "Ваш пароль скинутий!",
 
 ];

@@ -1,16 +1,16 @@
 <?php
 
 return [
-	'settings' => 'Settings',
-	'homepage' => 'View Homepage',
-	'home' => 'Home',
-	'welcome' => 'Welcome',
-    'action' => 'Actions',
-    'back' => 'Back',
-    'created_at' => 'Created at',
-    'language' => 'Language',
-    'yes'       => 'Yes',
-    'no'        =>  'No',
-    'view_detail' => 'View Details',
-    'users' => 'Users',
+	'settings' => 'Налаштування',
+	'homepage' => 'На головну',
+	'home' => 'Головна',
+	'welcome' => 'Ласкаво просимо',
+    'action' => 'Дія',
+    'back' => 'Назад',
+    'created_at' => 'Створено',
+    'language' => 'Мова',
+    'yes'       => 'Так',
+    'no'        =>  'Ні',
+    'view_detail' => 'Переглянути деталі',
+    'users' => 'Користувачі',
 	];

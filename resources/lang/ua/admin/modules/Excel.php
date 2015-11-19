@@ -1,11 +1,11 @@
 <?php
 
 return [
-    'loadXLStitle' => 'Excel Import',
-    'Change_XLS_file' => 'Change XLS file!',
-    'dataInFile' => 'Data In File',
-    'exam_grades' => 'Exam Grades',
-    'table_decode' => 'Table Decode',
-    'grades' => 'Grades',
+    'loadXLStitle' => 'Excel імпорт',
+    'Change_XLS_file' => 'Хмінити файл Excel!',
+    'dataInFile' => 'Дані в файлі',
+    'exam_grades' => 'Екзаменаційні оцінки',
+    'table_decode' => 'Деколування таблиці',
+    'grades' => 'Оцінки',
 
 ];

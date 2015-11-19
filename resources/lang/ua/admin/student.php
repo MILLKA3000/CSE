@@ -2,9 +2,6 @@
 
 return [
     'id' => 'ID',
-    'fio' => 'FIO',
-    'credits_cur' => 'Credits',
-    'group' => 'Group',
-    'grade' => 'Grade',
-    'code' => 'Code',
+    'fio' => 'П.І.Б.',
+    'credits_cur' => 'Автори'
     ];
