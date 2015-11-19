@@ -1,17 +1,14 @@
 <?php
 
 return [
-    'title' => 'Оцінки за співбесіду',
-    'studentGroup' => 'Группа',
-    'studentName' => 'ФІО',
-    'grade' => 'Поточна',
-    'examGrade' => 'Екзаменаційна',
-    'consultGrade' => 'Оцінка за співбесіду',
-    'addGrade' => 'Добавити',
+    'title' => 'Всі оцінки',
+    'studentGroup' => 'Group',
+    'studentName' => 'П.І.Б.',
+    'grade' => 'Оцінка',
+    'examGrade' => 'Екзаменаційна оцінка',
+    'consultGrade' => 'Оцінка за консультацію',
+    'addGrade' => 'Додати',
     'clearGrade' => 'Очистити',
-    'getEmptyDoc' => 'Отримати відомість',
-    'getDocsWithGrades' => 'Отримати відомість з оцінками',
-    'valueMoreThen20' => 'Значення повинне бути менше ніж 20',
-    'ok' => 'Оцінку змінено',
-    'error' => 'Помилка. Зверніться до адміністратора',
+    'getEmptyDoc' => 'Отримати пусті докуиенти',
+    'getDocsWithGrades' => 'Отримати документи з оцінками'
 ];

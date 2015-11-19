@@ -1,21 +1,22 @@
 <?php
 
 return [
-    'title' => 'Îòðèìàòè Excel',
-    'loadXMLtitle' => 'Çàâàíòàæèòè XML ôàéë ç Contingent',
-    'selectDepartment' => 'Çì³í³òü ôàêóëüòåò',
-    'selectSpeciality' => 'Çì³í³òü ñïåö³àëüí³ñòü',
-    'selectSemester' => 'Çì³í³òü ñåìåñòð',
-    'xmlGetTitle' => 'Îòðèìàòè ìàêåò Excel',
-    'detailed' => 'Äåòàë³',
+    'title' => 'ÐžÑ‚Ñ€Ð¸Ð¼Ð°Ñ‚Ð¸ Excel',
+    'loadXMLtitle' => 'Ð—Ð°Ð²Ð°Ð½Ñ‚Ð°Ð¶Ð¸Ñ‚Ð¸ XML Ñ„Ð°Ð¹Ð» Ð· Contingent',
+    'selectDepartment' => 'Ð—Ð¼Ñ–Ð½Ñ–Ñ‚ÑŒ Ñ„Ð°ÐºÑƒÐ»ÑŒÑ‚ÐµÑ‚',
+    'selectSpeciality' => 'Ð—Ð¼Ñ–Ð½Ñ–Ñ‚ÑŒ ÑÐ¿ÐµÑ†Ñ–Ð°Ð»ÑŒÐ½Ñ–ÑÑ‚ÑŒ',
+    'selectSemester' => 'Ð—Ð¼Ñ–Ð½Ñ–Ñ‚ÑŒ ÑÐµÐ¼ÐµÑÑ‚Ñ€',
+    'xmlGetTitle' => 'ÐžÑ‚Ñ€Ð¸Ð¼Ð°Ñ‚Ð¸ Ð¼Ð°ÐºÐµÑ‚ Excel',
+    'detailed' => 'Ð”ÐµÑ‚Ð°Ð»Ñ–',
 
-    'name_discipline' =>'Íàçâà äèñöèïë³íè',
-    'name_moduletheme' =>'Íàçâà ìîäóëÿ',
-    'num_moduletheme' =>'Íîìåð ìîäóëÿ',
-    'count_group' =>'Ãðóï ó ôàéë³',
-    'dataInFile' => 'Äàíèõ ó ôàéë³',
-    'count_student'=>'Ñòóäåíò³â ó ôàéë³',
-    'Change_XML_file' => 'Çì³íèòè XML ôàéë.',
-    'downloadXls' => 'Çàâàíòàæèòè ìàêåò XLS'
-
+    'name_discipline' =>'ÐÐ°Ð·Ð²Ð° Ð´Ð¸ÑÑ†Ð¸Ð¿Ð»Ñ–Ð½Ð¸',
+    'name_moduletheme' =>'ÐÐ°Ð·Ð²Ð° Ð¼Ð¾Ð´ÑƒÐ»Ñ',
+    'num_moduletheme' =>'ÐÐ¾Ð¼ÐµÑ€ Ð¼Ð¾Ð´ÑƒÐ»Ñ',
+    'count_group' =>'Ð“Ñ€ÑƒÐ¿ Ñƒ Ñ„Ð°Ð¹Ð»Ñ–',
+    'dataInFile' => 'Ð”Ð°Ð½Ð¸Ñ… Ñƒ Ñ„Ð°Ð¹Ð»Ñ–',
+    'count_student'=>'Ð¡Ñ‚ÑƒÐ´ÐµÐ½Ñ‚Ñ–Ð² Ñƒ Ñ„Ð°Ð¹Ð»Ñ–',
+    'Change_XML_file' => 'Ð—Ð¼Ñ–Ð½Ð¸Ñ‚Ð¸ XML Ñ„Ð°Ð¹Ð».',
+    'Change_XML_file_For_Import' => 'Ð”Ð¾Ð´Ð°Ñ‚Ð¸ Ð¾Ñ†Ñ–Ð½ÐºÐ¸ Ð² XLS',
+    'downloadXls' => 'Ð—Ð°Ð²Ð°Ð½Ñ‚Ð°Ð¶Ð¸Ñ‚Ð¸ Ð¼Ð°ÐºÐµÑ‚ XLS',
+    'type_exam' => 'Ð¢Ð¸Ð¿ Ð·Ð´Ð°Ñ‡Ñ–'
 ];
