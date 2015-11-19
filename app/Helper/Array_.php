@@ -29,24 +29,21 @@ class Array_ extends Model
     /**
      * Get data from XML and form array for XLS
      *
-     * @param $obj
+     * @param $datas
      * @return array
      */
     static public function formXLSArrayGrade($datas)
     {
         $data = [];
-        $moduleNum = 0;
+        $moduleNum = 2;
         foreach($datas as $d){
             foreach ($d['data']->getContent() as $module) {
                 foreach ($module->students->student as $student) {
-                    if ($moduleNum==0) {
-                        $data[(string)$student->id] = [(string)$student->id, (string)$student->fio, (string)$student->credits_cur];
-                    }else{
                         foreach($module->students->student as $findRepeate){
+                            if(!isset($data[(string)$student->id])) $data[(string)$student->id] = [(string)$student->id, (string)$student->fio,(string)$findRepeate->credits_cur];
                             if($findRepeate->id == $student->id){
-                                $data[(string)$student->id][$moduleNum] = (string)$findRepeate->credits_cur;
+                               $data[(string)$student->id][$moduleNum] = (string)$findRepeate->credits_cur;
                             }
-                        }
                     }
                 }
             }
