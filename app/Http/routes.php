@@ -75,6 +75,7 @@ Route::group(['prefix' => '/', 'middleware' => 'auth'], function() {
     Route::get('teacher/data', 'Admin\TeacherSetGrade@data');
     Route::get('/teacher/{moduleVariant}/edit', 'Admin\TeacherSetGrade@edit');
     Route::post('teacher/saveGrade', 'Admin\TeacherSetGrade@saveGrade');
+    Route::post('teacher/clearGrade', 'Admin\TeacherSetGrade@clearGrade');
     Route::resource('teacher', 'Admin\TeacherSetGrade');
 
     # subject of students

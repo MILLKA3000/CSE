@@ -70,11 +70,11 @@ class TeacherSetGrade extends Controller
      */
     public function saveGrade(Request $request, ConsultingGrades $cons)
     {
-        if(!is_int($request['value']) && $request['value']>20){
-            return "false";
-        }
-
         $check = $cons->where('id_student',$request['student'])->where('id_num_plan',$request['modnum'])->get()->first();
+
+        if(!is_int($request['value']) && $request['value']>20){
+            return json_encode(['status'=>'false','message'=>trans("admin/modules/consulting.valueMoreThen20"),'grade'=>(isset($check->id))?$check->grade_consulting:'']);
+        }
 
         if ($check) $cons->where('id',$check->id)->delete();
         if($request['value']!='') {
@@ -85,10 +85,20 @@ class TeacherSetGrade extends Controller
                 'user_id' => Auth::user()->id
             ])
             ) {
-                return "true";
+                return json_encode(['status'=>'true','message'=>trans("admin/modules/consulting.ok")]);
             }
         }
-        return "false";
+        return json_encode(['status'=>'false','message'=>trans("admin/modules/consulting.error")]);
+    }
+
+    public function clearGrade(Request $request, ConsultingGrades $cons)
+    {
+        $check = $cons->where('id_student',$request['student'])->where('id_num_plan',$request['modnum'])->get()->first();
+        if ($check) {
+            $cons->where('id',$check->id)->delete();
+            return json_encode(['status'=>'true','message'=>trans("admin/modules/consulting.ok")]);
+        }
+        return json_encode(['status'=>'false','message'=>trans("admin/modules/consulting.error")]);
     }
 
 
@@ -106,11 +116,13 @@ class TeacherSetGrade extends Controller
             'cache_speciality.name as nameSpec',
             'grades_files.NameDiscipline',
             'grades_files.NameModule',
+            'type_exam.name as typeExamName',
             'grades_files.ModuleNum',
             'grades_files.ModuleVariantID',
             'grades_files.DisciplineVariantID',
         ))->distinct('ModuleVariantID')
             ->join('cache_department','cache_department.id_from','=','grades_files.DepartmentId')
+            ->join('type_exam','grades_files.type_exam_id', '=', 'type_exam.id')
             ->join('cache_speciality','cache_speciality.id_from','=','grades_files.SpecialityId');
         if(isset($allowDiscepline->arrayAllowed)) {
             if (in_array(Auth::user()->role_id, [5]) && (count(json_decode($allowDiscepline->arrayAllowed)) > 0)) {
@@ -124,7 +136,7 @@ class TeacherSetGrade extends Controller
             ->edit_column('EduYear', '{{$EduYear}}/{{$EduYear+1}}')
             ->edit_column('NameModule', '{{$ModuleNum}}. {{$NameModule}}')
             ->add_column('actions','<a href="{{ URL::to(\'teacher/\' . $ModuleVariantID . \'/edit\' )}}" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-pencil"></span>  {{ trans("admin/modal.this") }}</a>')
-            ->add_column('GetDocs','<a href="{{ URL::to(\'documents/\' . $ModuleVariantID . \'/false/getAllConsultingDocuments\' )}}" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-pencil"></span>  Get Empty Docs</a>')
+            ->add_column('GetDocs','<a href="{{ URL::to(\'documents/\' . $ModuleVariantID . \'/false/getAllConsultingDocuments\' )}}" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-pencil"></span>  {{ trans("admin/modules/consulting.getEmptyDoc") }}</a>')
             ->remove_column('ModuleVariantID')
             ->remove_column('DisciplineVariantID')
             ->remove_column('ModuleNum')

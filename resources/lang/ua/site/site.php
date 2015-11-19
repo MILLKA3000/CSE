@@ -1,12 +1,12 @@
 <?php
 
 return [
-	'home' => 'Home',
-	'login' => 'Login',
-	'sign_up' => 'Sign up',
-	'admin_panel' => 'Admin Panel',
-	'logout' => 'Logout',
-	'login_as' => 'Logged in as',
+	'home' => 'Головна',
+	'login' => 'Увійти',
+	'sign_up' => 'Реєстрація',
+	'admin_panel' => 'Адмінка',
+	'logout' => 'Вийти',
+	'login_as' => 'Увійти як',
 	
 
 ];

@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'title' => 'Statistics of generally',
+    'title' => 'Загальна статистика',
 ];

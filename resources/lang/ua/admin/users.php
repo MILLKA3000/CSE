@@ -1,18 +1,18 @@
 <?php
 
 return [
-    'users' => 'Р®Р·РµСЂ',
-    'name' =>   'Р†Рј\'СЏ',
-    'username' =>   'Р›РѕРіС–РЅ',
-    'email' =>   'Р•-РјРµР№Р»',
-    'password' =>  'РџР°СЂРѕР»СЊ',
-    'password_confirmation' => 'РџРѕРІС‚РѕСЂ РїР°СЂРѕР»СЏ',
-    'activate_user' => 'РђРєС‚РёРІСѓРІР°С‚Рё СЋР·РµСЂР°',
-    'active_user' => 'РђРєС‚РёРІРЅРёР№ СЋР·РµСЂ',
-    'yes' => 'РўР°Рє',
-    'no' => 'РќС–',
-    'roles' => 'Р РѕР»С–',
-    'roles_info' => 'Adding the role to user, be assigned all privileges for a given role.',
-    'role_id' => 'Р РѕР»СЊ',
-    'lang' => 'РњРѕРІР°'
+    'users' => 'Користувачі',
+    'name' =>   'Ім\'я',
+    'username' =>   'Ім\'я користувача',
+    'email' =>   'Email',
+    'password' =>  'Пароль',
+    'password_confirmation' => 'Підвтвердження паролю',
+    'activate_user' => 'Активувати користувача',
+    'active_user' => 'Активний користувач',
+    'yes' => 'Так',
+    'no' => 'Ні',
+    'roles' => 'Ролі',
+    'roles_info' => 'При додаванні ролі користувачу, присвоюються всі права ролі.',
+    'role_id' => 'Роль',
+
 ];
