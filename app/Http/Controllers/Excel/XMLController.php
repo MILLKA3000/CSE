@@ -32,7 +32,7 @@ class XMLController extends Controller
 
     public function __construct()
     {
-        $this->middleware('role:Admin');
+        $this->middleware('role:Admin,Self-Admin');
         view()->share('type', 'work');
 
         $this->path = 'xml'.DIRECTORY_SEPARATOR.fileHelp::_get_path();

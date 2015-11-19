@@ -70,11 +70,11 @@ class TeacherSetGrade extends Controller
      */
     public function saveGrade(Request $request, ConsultingGrades $cons)
     {
-        if(!is_int($request['value']) && $request['value']>20){
-            return "false";
-        }
-
         $check = $cons->where('id_student',$request['student'])->where('id_num_plan',$request['modnum'])->get()->first();
+
+        if(!is_int($request['value']) && $request['value']>20){
+            return json_encode(['status'=>'false','message'=>trans("admin/modules/consulting.valueMoreThen20"),'grade'=>(isset($check->id))?$check->grade_consulting:'']);
+        }
 
         if ($check) $cons->where('id',$check->id)->delete();
         if($request['value']!='') {
@@ -85,10 +85,20 @@ class TeacherSetGrade extends Controller
                 'user_id' => Auth::user()->id
             ])
             ) {
-                return "true";
+                return json_encode(['status'=>'true','message'=>trans("admin/modules/consulting.ok")]);
             }
         }
-        return "false";
+        return json_encode(['status'=>'false','message'=>trans("admin/modules/consulting.error")]);
+    }
+
+    public function clearGrade(Request $request, ConsultingGrades $cons)
+    {
+        $check = $cons->where('id_student',$request['student'])->where('id_num_plan',$request['modnum'])->get()->first();
+        if ($check) {
+            $cons->where('id',$check->id)->delete();
+            return json_encode(['status'=>'true','message'=>trans("admin/modules/consulting.ok")]);
+        }
+        return json_encode(['status'=>'false','message'=>trans("admin/modules/consulting.error")]);
     }
 
 
