@@ -8,5 +8,7 @@ return [
     'examGrade' => 'Exams Grade',
     'consultGrade' => 'Consult Grade',
     'addGrade' => 'Add',
-    'clearGrade' => 'Clear'
+    'clearGrade' => 'Clear',
+    'getEmptyDoc' => 'Get Empty Docs',
+    'getDocsWithGrades' => 'Get Docs with grades'
 ];

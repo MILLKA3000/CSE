@@ -21,7 +21,7 @@
     </div>
     <div class="pull-right">
         <div class="pull-right">
-            <a href="/documents/{{$about_module->ModuleVariantID}}/true/getAllConsultingDocuments" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-pencil"></span>  Get Docs with grades</a>
+            <a href="/documents/{{$about_module->ModuleVariantID}}/true/getAllConsultingDocuments" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-pencil"></span>  {!! trans("admin/modules/consulting.getDocsWithGrades") !!}</a>
 
         </div>
     </div>
@@ -69,7 +69,7 @@
                         @if(!in_array(Auth::user()->role_id,[8]))
                             <input type="text" class="put form-control col-xs-6" style="width:50px;margin-right: 10px;" id="i{{$student->id_student}}" value="{{$student->grade_consulting}}">
                             <a href="#!inline" data-student-id="{{$student->id_student}}" id="{{$student->id_student}}" class="add btn  btn-success left">{!! trans("admin/modules/consulting.addGrade") !!}</a>
-                            <a href="#!inline" data-student-id="{{$student->id_student}}" id="{{$student->id_student}}" class="add btn  btn-success left">{!! trans("admin/modules/consulting.clearGrade") !!}</a>
+                            <a href="#!inline" data-student-id="{{$student->id_student}}" id="{{$student->id_student}}" class="clear btn  btn-success left">{!! trans("admin/modules/consulting.clearGrade") !!}</a>
                         @else
                             {{($student->grade_consulting)?$student->grade_consulting:0}}
                         @endif
@@ -88,6 +88,17 @@
         $('.add').on('click',function(){
             var self = this;
             $.post( "/teacher/saveGrade", {'modnum':{{$about_module->ModuleVariantID}},'_token':$("#_token").val(),'student':$(this).attr('id'),'value':$("#i"+$(this).attr('id')).val()}).done(function(data){
+                if(data=='true'){
+                    $('#tr'+$(self).data('student-id')).css({'backgroundColor': '#C8FFC8', 'color': 'black'});
+                }else if(data=='false'){
+                    $('#tr'+$(self).data('student-id')).css({'backgroundColor': '#FFE3C8', 'color': 'black'});
+                }
+            })
+        })
+
+        $('.clear').on('click',function(){
+            var self = this;
+            $.post( "/teacher/clearGrade", {'modnum':{{$about_module->ModuleVariantID}},'_token':$("#_token").val(),'student':$(this).attr('id'),'value':$("#i"+$(this).attr('id')).val()}).done(function(data){
                 if(data=='true'){
                     $('#tr'+$(self).data('student-id')).css({'backgroundColor': '#C8FFC8', 'color': 'black'});
                 }else if(data=='false'){

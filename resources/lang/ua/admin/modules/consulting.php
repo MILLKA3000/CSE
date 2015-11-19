@@ -8,5 +8,7 @@ return [
     'examGrade' => 'Екзаменаційна',
     'consultGrade' => 'Оцінка за співбесіду',
     'addGrade' => 'Добавити',
-    'clearGrade' => 'Очистити'
+    'clearGrade' => 'Очистити',
+    'getEmptyDoc' => 'Отримати відомість',
+    'getDocsWithGrades' => 'Отримати відомість з оцінками'
 ];
