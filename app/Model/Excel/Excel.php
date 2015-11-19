@@ -45,6 +45,8 @@ class Excel extends Model
 
     private $threeSheets = [];
 
+    private $fourSheets = [];
+
     /**
      * Construct for init data
      * Original data this is data from xls
@@ -55,8 +57,9 @@ class Excel extends Model
      */
     public function __construct($OriginalData,$data)
     {
-       $this->OriginalData = $OriginalData;
-       $this->data = $data;
+        $this->OriginalData = $OriginalData;
+        $this->firstSheetsOriginal = $this->OriginalData->get()[0];
+        $this->data = $data;
     }
 
 
@@ -81,6 +84,7 @@ class Excel extends Model
      * This func has all functions of validate
      */
     private function validateTables(){
+        $this->concatAnotherPage();
         $checkError = true;
         $this->rebuildDataInFirstSheets(); // for find student code in index array
         $this->rebuildDataInSecondSheets();
@@ -91,6 +95,29 @@ class Excel extends Model
             $checkError = false;
         }
         return $checkError;
+    }
+
+    private function concatAnotherPage(){
+        foreach($this->firstSheetsOriginal as $key=>$firstSheets) { // iteration in first sheet
+            $data = $this->convertCellFromFirstSheet($firstSheets);
+            if($data['page'] == 2){
+                if($this->findFirstPage($data))unset( $this->firstSheetsOriginal[$key]);
+            }
+        }
+    }
+
+    private function findFirstPage($dataSecondPage){
+        foreach($this->firstSheetsOriginal as $key => $firstSheets) { // iteration in first sheet
+            $data = $this->convertCellFromFirstSheet($firstSheets);
+            if($data['code'] == $dataSecondPage['code'] && $data['page'] == 1){
+                for($i=0;$i < count($dataSecondPage['exam_grade']);$i++){
+                    $firstSheets["concat_from_2_page_".$i] = $dataSecondPage['exam_grade'][$i];
+                }
+                $this->firstSheetsOriginal[$key] = $firstSheets;
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -173,6 +200,7 @@ class Excel extends Model
      */
     private function convertCellFromFirstSheet($arr){
         $tmp = array_values(array_values((array)$arr)[1]);
+        $data['page'] = $tmp[0];
         $data['code'] = $tmp[2];
         for($i=3;$i<count($tmp);$i++){
             $data['exam_grade'][] = $tmp[$i];
@@ -195,7 +223,7 @@ class Excel extends Model
 
 
     private function rebuildDataInFirstSheets(){
-        foreach($this->OriginalData->get()[0] as $key=>$secondSheets) { // iteration in first sheet
+        foreach($this->firstSheetsOriginal as $key=>$secondSheets) { // iteration in first sheet
             $afterGet = $this->convertCellFromFirstSheet($secondSheets);
             if (isset($this->firstSheets[$afterGet['code']])){
                 $this->messages['error'][] = 'In first sheet duplicate code: '.$afterGet['code'];
