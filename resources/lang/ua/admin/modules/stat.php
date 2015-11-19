@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'title' => 'View Statistics',
-    'download' => 'Download',
+    'title' => 'Переглянути статистику',
+    'download' => 'Завантажити',
 
 ];

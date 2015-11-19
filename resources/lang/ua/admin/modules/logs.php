@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'title' => 'View all logs',
-    'titleAction' => 'Action',
-    'date' => 'Date and Time',
+    'title' => 'Всі логи',
+    'titleAction' => 'Дія',
+    'date' => 'Дата і час',
 ];

@@ -1,11 +1,11 @@
 <?php
 
 return [
-    'loadXLStitle' => 'Excel ≥ÏÔÓÚ',
-    'Change_XLS_file' => '’Ï≥ÌËÚË Ù‡ÈÎ Excel!',
-    'dataInFile' => 'ƒ‡Ì≥ ‚ Ù‡ÈÎ≥',
-    'exam_grades' => '≈ÍÁ‡ÏÂÌ‡ˆ≥ÈÌ≥ Óˆ≥ÌÍË',
-    'table_decode' => 'ƒÂÍÓÎÛ‚‡ÌÌˇ Ú‡·ÎËˆ≥',
-    'grades' => 'Œˆ≥ÌÍË',
+    'loadXLStitle' => 'Excel —ñ–º–ø–æ—Ä—Ç',
+    'Change_XLS_file' => '–•–º—ñ–Ω–∏—Ç–∏ —Ñ–∞–π–ª Excel!',
+    'dataInFile' => '–î–∞–Ω—ñ –≤ —Ñ–∞–π–ª—ñ',
+    'exam_grades' => '–ï–∫–∑–∞–º–µ–Ω–∞—Ü—ñ–π–Ω—ñ –æ—Ü—ñ–Ω–∫–∏',
+    'table_decode' => '–î–µ–∫–æ–ª—É–≤–∞–Ω–Ω—è —Ç–∞–±–ª–∏—Ü—ñ',
+    'grades' => '–û—Ü—ñ–Ω–∫–∏',
 
 ];
