@@ -20,7 +20,7 @@
                         </div>
                         <div class="col-xs-9 text-right">
                             <div class="huge"></div>
-                            <div>{{ trans("admin/modules/getExcel.xmlGetTitle") }}!</div>
+                            <div>{!! trans("admin/modules/getExcel.xmlGetTitle") !!}!</div>
                         </div>
                     </div>
                 </div>
@@ -77,7 +77,7 @@
                             </div>
                             <div class="col-xs-9 text-right">
                                 <div class="huge"></div>
-                                <div>Add consulting!</div>
+                                <div>{{ trans("admin/menu.addConsulting") }}!</div>
                             </div>
                         </div>
                     </div>
@@ -96,7 +96,7 @@
                                     </div>
                                     <div class="col-xs-9 text-right">
                                         <div class="huge"></div>
-                                        <div>Settings</div>
+                                        <div>{!! trans("admin/menu.settings") !!}</div>
                                     </div>
                                 </div>
                             </div>
@@ -116,7 +116,7 @@
                                     </div>
                                     <div class="col-xs-9 text-right">
                                         <div class="huge"></div>
-                                        <div>View Logs</div>
+                                        <div>{!! trans("admin/menu.viewLogs") !!}</div>
                                     </div>
                                 </div>
                             </div>

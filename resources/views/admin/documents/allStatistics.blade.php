@@ -22,7 +22,7 @@
                 <h4 class="panel-title row">
                     <div class="col-xs-10">
                         <a data-toggle="collapse" data-parent="#accordion" class="btn btn-sm btn-danger" href="#{{$key}}">
-                           View - {{$d['title']}}
+                            {!! trans("admin/modules/stat.view") !!} - {{$d['title']}}
                         </a>
                     </div>
                     <div class="col-xs-2">

@@ -1,17 +1,12 @@
 <?php namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\AdminController;
-use App\Article;
-use App\ArticleCategory;
-use App\User;
-use App\Photo;
-use App\PhotoAlbum;
+use App\Http\Controllers\Controller;
 
-class DashboardController extends AdminController {
+class DashboardController extends Controller {
 
     public function __construct()
     {
-        parent::__construct();
+        $this->middleware('role:Admin,Self-Admin,Inspektor,Dekanat,Chief,Teacher');
         view()->share('type', '');
     }
 

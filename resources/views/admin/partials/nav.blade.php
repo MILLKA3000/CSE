@@ -27,24 +27,24 @@
             <ul class="nav" id="side-menu">
                 <li>
                     <a href="{{url('/')}}">
-                        <i class="fa fa-dashboard fa-fw"></i> Dashboard
+                        <i class="fa fa-dashboard fa-fw"></i> {!! trans("admin/menu.dashboard") !!}
                     </a>
                 </li>
                 @if(!in_array(Auth::user()->role_id,[3,4,5,6,7,8]))
                 <li>
                     <a href="#">
-                        <i class="fa fa-sort-desc"></i> Export
+                        <i class="fa fa-sort-desc"></i> {!! trans("admin/menu.export") !!}
                         <span class="fa arrow"></span>
                     </a>
                     <ul class="nav collapse">
                         <li>
                             <a href="{{url('excel/loadXML')}}">
-                                <i class="glyphicon glyphicon-list"></i>  Get XLS Mockup
+                                <i class="glyphicon glyphicon-list"></i>  {!! trans("admin/menu.getXLS") !!}
                             </a>
                         </li>
                         <li>
                             <a href="{{url('xml/loadXMLToDeanery')}}">
-                                <i class="glyphicon glyphicon-list"></i> Get XML for Department
+                                <i class="glyphicon glyphicon-list"></i> {!! trans("admin/menu.getXMLforDep") !!}
                             </a>
                         </li>
                     </ul>
@@ -53,13 +53,13 @@
                 @if(!in_array(Auth::user()->role_id,[3,4,5,6,7,8]))
                 <li>
                     <a href="#">
-                        <i class="fa fa-sort-desc"></i> Import
+                        <i class="fa fa-sort-desc"></i> {!! trans("admin/menu.import") !!}
                         <span class="fa arrow"></span>
                     </a>
                     <ul class="nav collapse">
                         <li>
                             <a href="{{url('excel/importXLS')}}">
-                                <i class="glyphicon glyphicon-list"></i>  Import XLS
+                                <i class="glyphicon glyphicon-list"></i>  {!! trans("admin/menu.importXLS") !!}
                             </a>
                         </li>
                     </ul>
@@ -68,13 +68,13 @@
                 @if(!in_array(Auth::user()->role_id,[5,6,7]))
                 <li>
                     <a href="#">
-                        <i class="fa fa-sort-desc"></i> Arhive
+                        <i class="fa fa-sort-desc"></i> {!! trans("admin/menu.arhive") !!}
                         <span class="fa arrow"></span>
                     </a>
                     <ul class="nav collapse">
                         <li>
                             <a href="{{url('arhive')}}">
-                                <i class="glyphicon glyphicon-list"></i> Archive Exam
+                                <i class="glyphicon glyphicon-list"></i> {!! trans("admin/menu.arhiveExam") !!}
                             </a>
                         </li>
                     </ul>
@@ -83,13 +83,13 @@
                 @if(!in_array(Auth::user()->role_id,[3,4,6,7]))
                 <li>
                     <a href="#">
-                        <i class="fa fa-sort-desc"></i> Consulting
+                        <i class="fa fa-sort-desc"></i> {!! trans("admin/menu.Consulting") !!}
                         <span class="fa arrow"></span>
                     </a>
                     <ul class="nav collapse">
                         <li>
                             <a href="{{url('teacher')}}">
-                                <i class="glyphicon glyphicon-list"></i> Add Consulting
+                                <i class="glyphicon glyphicon-list"></i> {!! trans("admin/menu.addConsulting") !!}
                             </a>
                         </li>
                     </ul>
@@ -98,38 +98,38 @@
                 @if(!in_array(Auth::user()->role_id,[5,6,7]))
                 <li>
                     <a href="#">
-                        <i class="fa fa-sort-desc"></i> Setting
+                        <i class="fa fa-sort-desc"></i> {!! trans("admin/menu.setting") !!}
                         <span class="fa arrow"></span>
                     </a>
                     <ul class="nav collapse">
                         <li>
                             <a href="{{url('department')}}">
-                                <i class="glyphicon glyphicon-list"></i> Departments
+                                <i class="glyphicon glyphicon-list"></i> {!! trans("admin/menu.departments") !!}
                             </a>
                         </li>
                         @if(!in_array(Auth::user()->role_id,[3,4,8]))
                         <li>
                             <a href="{{url('user')}}">
-                                <i class="glyphicon glyphicon-list"></i> Users
+                                <i class="glyphicon glyphicon-list"></i> {!! trans("admin/menu.users") !!}
                             </a>
                         </li>
                         <li>
                             <a href="{{url('language')}}">
-                                <i class="fa fa-language"></i> Language
+                                <i class="fa fa-language"></i> {!! trans("admin/menu.language") !!}
                             </a>
                         </li>
                         @endif
                         @if(!in_array(Auth::user()->role_id,[3,4,5,6,7,8]))
                             <li>
                                 <a href="{{url('settings')}}">
-                                    <i class="fa fa-language"></i> Settings
+                                    <i class="fa fa-language"></i> {!! trans("admin/menu.settings") !!}
                                 </a>
                             </li>
                         @endif
                         @if(!in_array(Auth::user()->role_id,[3,4,5,6,7]))
                             <li>
                                 <a href="{{url('logs')}}">
-                                    <i class="fa fa-language"></i> View Logs
+                                    <i class="fa fa-language"></i> {!! trans("admin/menu.viewLogs") !!}
                                 </a>
                             </li>
                         @endif
