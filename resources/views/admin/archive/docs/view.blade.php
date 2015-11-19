@@ -15,60 +15,60 @@
     </div>
 
     <div class="col-md-6">
-        <div class="block"><h3>Detailed data of file</h3></div>
+        <div class="block"><h3>{!! trans("admin/modules/arhive.detailOfFile") !!}</h3></div>
         <table id="table2" class="table table-hover ui-datatable"
-        <tr><td style="width:60%">Department</td><td>{{$modules[0]->DepartmentId}}</td></tr>
-        <tr><td>Speciality</td><td>{{$modules[0]->SpecialityId}}</td></tr>
-        <tr><td>Semester</td><td>{{$modules[0]->Semester}}</td></tr>
-        <tr><td><h4>Disciplines</h5></td><td></td></tr>
+        <tr><td style="width:60%">{!! trans("admin/modules/arhive.department") !!}</td><td>{{$modules[0]->DepartmentId}}</td></tr>
+        <tr><td>{!! trans("admin/modules/arhive.speciality") !!}</td><td>{{$modules[0]->SpecialityId}}</td></tr>
+        <tr><td>{!! trans("admin/modules/arhive.semester") !!}</td><td>{{$modules[0]->Semester}}</td></tr>
+        <tr><td><h4>{!! trans("admin/modules/arhive.nameDiscipline") !!}</h5></td><td></td></tr>
         @foreach($modules as $module)
             <tr><td>
                     {{$module->NameDiscipline}}<br/>
                     {{$module->ModuleNum}}. {{$module->NameModule}}
                 </td>
                 <td>
-                    Quantity Students: {{$module->quantityStudents}}<br/>
-                    Quantity Groups: {{$module->quantityGroups}}<br/>
+                    {!! trans("admin/modules/arhive.Qstudents") !!}: {{$module->quantityStudents}}<br/>
+                    {!! trans("admin/modules/arhive.Qgroups") !!}: {{$module->quantityGroups}}<br/>
                 </td>
             </tr>
         @endforeach
         </table>
     </div>
     <div class="col-md-6">
-        <div class="block"><h3>Actions on the file</h3></div>
+        <div class="block"><h3>{!! trans("admin/modules/arhive.actionOfFile") !!}</h3></div>
         <table id="table2" class="table table-hover ui-datatable"
             <tr>
                 <td>
-                    Download original file.
+                    {!! trans("admin/modules/arhive.titleDownload") !!}.
                 </td>
                 <td>
-                    <a href="/xls/{{$modules->path}}/{{$modules->name}}" class="btn btn-success btn-sm "> Get original xls </a>
+                    <a href="/xls/{{$modules->path}}/{{$modules->name}}" class="btn btn-success btn-sm "> {!! trans("admin/modules/arhive.getOriginalFile") !!} </a>
                 </td>
             </tr>
             @if(!in_array(Auth::user()->role_id,[5,6,7]))
                 <tr>
                     <td>
-                        Generate all documents of format(2.1) where first number it's number of discipline, second it's number of group
+                        {!! trans("admin/modules/arhive.titleGetDoc") !!}
                     </td>
                     <td>
-                        <a href="/documents/{{$modules->file_info_id}}/getAllDocuments" class="btn btn-warning btn-sm "> Get all Documents </a>
+                        <a href="/documents/{{$modules->file_info_id}}/getAllDocuments" class="btn btn-warning btn-sm "> {!! trans("admin/modules/arhive.getDoc") !!} </a>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        Generate statistics (alpha ver)
+                        {!! trans("admin/modules/arhive.titleGenStat") !!}
                     </td>
                     <td>
-                        <a href="/documents/{{$modules->file_info_id}}/getAllStatistics" class="btn btn-warning btn-sm "> View all Statistics </a>
+                        <a href="/documents/{{$modules->file_info_id}}/getAllStatistics" class="btn btn-warning btn-sm "> {!! trans("admin/modules/arhive.getstat") !!}</a>
                     </td>
                 </tr>
                 @if(!in_array(Auth::user()->role_id,[4,5,6,7,8]))
                     <tr>
                         <td>
-                            Sending E-mails to each student (SMTP)
+                            {!! trans("admin/modules/arhive.titleSendEmail") !!}
                         </td>
                         <td>
-                            <a href="/documents/{{$modules->file_info_id}}/sendEmails" class="btn btn-warning btn-sm "> Send E-mails</a>
+                            <a href="/documents/{{$modules->file_info_id}}/sendEmails" class="btn btn-warning btn-sm "> {!! trans("admin/modules/arhive.sendEmail") !!}</a>
                         </td>
                     </tr>
                 @endif
@@ -76,20 +76,20 @@
             @if(!in_array(Auth::user()->role_id,[2,4,5,6,7,8]))
                 <tr>
                     <td>
-                        Change exams grade (only available to inspectors and admin)
+                        {!! trans("admin/modules/arhive.titleChangeGrade") !!}
                     </td>
                     <td>
-                        <a href="/recheck/{{$modules->file_info_id}}/examGrade" class="btn btn-danger btn-sm "> Change Exam Grade </a>
+                        <a href="/recheck/{{$modules->file_info_id}}/examGrade" class="btn btn-danger btn-sm "> {!! trans("admin/modules/arhive.changeGrade") !!}</a>
                     </td>
                 </tr>
             @endif
             @if(!in_array(Auth::user()->role_id,[3,4,5,6,7,8]))
                 <tr>
                     <td>
-                        Delete this document!
+                        {!! trans("admin/modules/arhive.titleDelDoc") !!}
                     </td>
                     <td>
-                        <a href="/documents/{{$modules->file_info_id}}/remove" class="btn btn-primary btn-sm"> Delete this datas </a>
+                        <a href="/documents/{{$modules->file_info_id}}/remove" class="btn btn-primary btn-sm"> {!! trans("admin/modules/arhive.deldoc") !!} </a>
                     </td>
                 </tr>
             @endif

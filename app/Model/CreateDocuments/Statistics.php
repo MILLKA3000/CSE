@@ -51,7 +51,7 @@ class Statistics extends Model
     public function formGeneralStat()
     {
         $this->shablons['body'] = '';
-        $this->shablons['title'] = 'General statistic';
+        $this->shablons['title'] = trans("admin/modules/stat.gStat");
         $this->shablons['body'] .= $this->formHeader();
         $this->shablons['body'] .= '<tr><td>№</td><td>Курс</td><td> Назва модулю (дисципліни)</td><td>Загальна кількість студентів</td><td>Кількість студентів , що склали модуль на \'незадовіль-но\' (відсоток)';
         $this->shablons['body'] .= '</td><td>Кількість студентів , що склали модуль на \'задовільно\' (відсоток)</td><td>Кількість студентів , що склали модуль на \'добре\' (відсоток)</td><td>Кількість студентів , що склали модуль на \'відмінно\' (відсоток)';
@@ -79,7 +79,7 @@ class Statistics extends Model
     {
         $this->EDUBASISID = Students::getSumContractOrButjetStudent(Grades::select('id_student')->where('grade_file_id', $this->dataOfFile[0]->id)->get()->toArray());
         $this->shablons['body'] = '';
-        $this->shablons['title'] = 'General statistic of contract and butjet students';
+        $this->shablons['title'] = trans("admin/modules/stat.gBCStat");
         $this->shablons['body'] .= $this->formHeader('Кількість контрактних студентів: ' . $this->EDUBASISID["C"] . '<br>Кількість державних студентів: ' . $this->EDUBASISID["B"]);
         $this->shablons['body'] .= '<tr><td>№</td><td>Курс</td><td> Назва модулю (дисципліни)</td><td>Загальна кількість студентів</td><td>Кількість студентів , що склали модуль на \'незадовіль-но\' (відсоток)';
         $this->shablons['body'] .= '</td><td>Кількість студентів , що склали модуль на \'задовільно\' (відсоток)</td><td>Кількість студентів , що склали модуль на \'добре\' (відсоток)</td><td>Кількість студентів , що склали модуль на \'відмінно\' (відсоток)';
@@ -103,7 +103,7 @@ class Statistics extends Model
     public function formDetailedStat()
     {
         $this->shablons['body'] = '';
-        $this->shablons['title'] = 'Detailed statistic';
+        $this->shablons['title'] = trans("admin/modules/stat.detailStat");
         $this->shablons['body'] .= $this->formHeader();
         $this->shablons['body'] .= '<tr><td>Група</td><td>П.І.Б</td>';
         foreach ($this->dataOfFile as $this->dataEachOfFile) {
