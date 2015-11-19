@@ -9,6 +9,7 @@ use App\GradesFiles;
 use App\FileInfo;
 use App\Model\Contingent\Departments;
 use App\Model\Contingent\Speciality;
+use App\TypeExam;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -123,7 +124,7 @@ class ArhiveController extends Controller
             'grades_files.DepartmentId',
             'grades_files.SpecialityId',
             'users.id as disciplines',
-            'type_exam.name as typeExamName',
+            'users.id as typeExamName',
             'users.name as userName',
             'xls_file_info.id',
             'xls_file_info.path',
@@ -131,7 +132,7 @@ class ArhiveController extends Controller
         ))
             ->join('grades_files','grades_files.file_info_id', '=', 'xls_file_info.id')
             ->join('users', 'users.id', '=', 'xls_file_info.user_id')
-            ->join('type_exam','grades_files.type_exam_id', '=', 'type_exam.id')
+
             ->distinct()
             ->get();
 
@@ -141,9 +142,14 @@ class ArhiveController extends Controller
                 'grades_files.NameModule',
             ))->where('file_info_id',$module['id'])
                 ->get();
-        }
 
-        foreach($modules as $module){
+            $module['typeExamName'] =  GradesFiles::select(array(
+                'type_exam.name',
+            ))->where('file_info_id',$module['id'])
+                ->join('type_exam','grades_files.type_exam_id', '=', 'type_exam.id')
+                ->distinct()
+                ->get();
+
             $module->DepartmentId = CacheDepartment::getDepartment($module->DepartmentId)->name;
             $module->SpecialityId = CacheSpeciality::getSpeciality($module->SpecialityId)->name;
         }
@@ -151,6 +157,7 @@ class ArhiveController extends Controller
         return Datatables::of($modules)
             ->edit_column('created_at', '<?php echo date("Y-m-d", strtotime($created_at)) ?>')
             ->edit_column('disciplines', '<?php $i=0; ?>@foreach($disciplines as $discipline) <span style="border-bottom: 1px solid #64DD8A;width:100%;display: block;">{{++$i}}. {{$discipline["NameDiscipline"]}}({{$discipline["NameModule"]}}), <br></span> @endforeach')
+            ->edit_column('typeExamName', '@foreach($typeExamName as $typeName){{$typeName["name"]}} @endforeach')
             ->add_column('actions', '<a href="{{{ URL::to(\'arhive/\' . $id) }}}" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-pencil"></span> {{ trans("admin/modal.detail") }}</a>')
             ->remove_column('id')
             ->remove_column('path')

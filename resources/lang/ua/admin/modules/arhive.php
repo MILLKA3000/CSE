@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'title' => 'Аохів',
+    'title' => 'Архів',
     'id' => 'ID',
     'EduYear' => 'Рік навчання',
     'semester' => 'Семестр',
