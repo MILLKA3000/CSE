@@ -1,13 +1,14 @@
 <?php namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Controller;
 use App\Role;
 use App\User;
 use App\Http\Requests\Admin\UserRequest;
 use Datatables;
 use App\Logs;
 
-class UserController extends AdminController
+class UserController extends Controller
 {
 
 

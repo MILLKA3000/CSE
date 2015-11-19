@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use App\Language;
 use App\Http\Requests\Admin\LanguageRequest;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Datatables;
 use App\Logs;
 
-class LanguageController extends AdminController {
+class LanguageController extends Controller {
 
     public function __construct()
     {
