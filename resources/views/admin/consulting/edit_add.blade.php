@@ -67,7 +67,11 @@
                 <td>
                     <div class="block">
                         @if(!in_array(Auth::user()->role_id,[8]))
-                            <input type="text" class="put form-control col-xs-6" style="width:50px;margin-right: 10px;" id="i{{$student->id_student}}" value="{{$student->grade_consulting}}">
+                             <div class="form-group">
+                                <div class="controls">
+                                    {!! Form::select('role_id', ['0'=>'0(не склав)','12'=>12,'13'=>13,'14'=>14,'15'=>15,'16'=>16,'18'=>18,'20'=>20], (isset($student->grade_consulting))?$student->grade_consulting:'',array('id'=>"i$student->id_student",'class' => 'form-control')) !!}
+                                </div>
+                            </div>
                             <a href="#!inline" data-student-id="{{$student->id_student}}" id="{{$student->id_student}}" class="add btn  btn-success left">{!! trans("admin/modules/consulting.addGrade") !!}</a>
                             <a href="#!inline" data-student-id="{{$student->id_student}}" id="{{$student->id_student}}" class="clear btn  btn-success left">{!! trans("admin/modules/consulting.clearGrade") !!}</a>
                         @else
@@ -102,13 +106,8 @@
         $('.clear').on('click',function(){
             var self = this;
             $.post( "/teacher/clearGrade", {'modnum':{{$about_module->ModuleVariantID}},'_token':$("#_token").val(),'student':$(this).attr('id'),'value':$("#i"+$(this).attr('id')).val()}).done(function(data){
-                if(data=='true'){
-                    $('#tr'+$(self).data('student-id')).css({'backgroundColor': '#C8FFC8', 'color': 'black'});
-                    $('#i'+$(self).data('student-id')).val('');
-                }else if(data=='false'){
-                    alert(data.message);
-                    $('#i'+$(self).data('student-id')).css({'backgroundColor': '#FFE3C8', 'color': 'black'});
-                }
+                data = JSON.parse(data);
+                $('#i'+$(self).data('student-id')).val('');
             })
         })
     </script>
