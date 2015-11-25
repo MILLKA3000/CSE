@@ -67,7 +67,7 @@ class XMLController extends Controller
                     $this->_parceZIP($file[0]);
                 }
             }else {
-                    return view('admin.xml.loadxml')->with(['error'=>'You uploaded not this type files.<br> You must upload files of type [xml(single or multiple)]']);
+                    return view('admin.xml.loadxml',['title'=>'Change_XML_file'])->with(['error'=>'You uploaded not this type files.<br> You must upload files of type [xml(single or multiple)]']);
             }
             $this->saveLog();
             return view('admin.xml.view', ['data' => $this->data, 'files' => $this->saveArchiveXml()]);
@@ -160,7 +160,8 @@ class XMLController extends Controller
     }
 
     public function loadXMLToDeanery(Request $request){
-
+        $path = 'xml/loadXMLToDeanery';
+        $title = 'Change_XML_file_For_Import';
         if ($file = $request->file('xml')) {
             Storage::deleteDirectory(DIRECTORY_SEPARATOR."tmp");
             File::makeDirectory(DIRECTORY_SEPARATOR."tmp", 0775, true, true);
@@ -181,13 +182,11 @@ class XMLController extends Controller
                     $this->xml->putGradesInXml($this->xml->parseFromUrl($this->url),$file[0]->getClientOriginalName());
                 }
             }else {
-                return view('admin.xml.loadxml')->with(['error'=>'You uploaded not this type files.<br> You must upload files of type [xml(single or multiple)]']);
+                return view('admin.xml.loadxml',compact('path','title'))->with(['error'=>'You uploaded not this type files.<br> You must upload files of type [xml(single or multiple)]']);
             }
             Zipper::make(public_path() . DIRECTORY_SEPARATOR. "tmp" . DIRECTORY_SEPARATOR.'XML.zip')->add(glob(public_path() .DIRECTORY_SEPARATOR. "tmp" . DIRECTORY_SEPARATOR.'XML'));
             return redirect("/tmp" . DIRECTORY_SEPARATOR.'XML.zip');
         }else{
-            $path = 'xml/loadXMLToDeanery';
-            $title = 'Change_XML_file_For_Import';
             return view('admin.xml.loadxml',compact('path','title'));
         }
 
