@@ -74,7 +74,7 @@ class DocumentsController extends Controller
         foreach($this->student as $key=>$student) {
             Mail::send('emails.grades', ['data'=>$student], function ($message) use ($student,$key) {
                 $message->sender(GetEmailEachStudent::where('student_id',$key)->get()->first()->user_name.'@tdmu.edu.ua', $name = 'You grades');
-                $message->bcc('examination@tdmu.edu.ua', 'Name')->subject('You grades');
+                $message->bcc(GetEmailEachStudent::where('student_id',$key)->get()->first()->user_name.'@tdmu.edu.ua', $name = 'You grades', 'Name')->subject('You grades');
             });
         }
 
