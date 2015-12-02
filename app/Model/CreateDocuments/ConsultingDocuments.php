@@ -38,6 +38,8 @@ class ConsultingDocuments extends Model
 
     protected $shablon;
 
+    private $numStud;
+
     private $numModule = 1;
 
     private $gradePrint = 1;
@@ -85,8 +87,9 @@ class ConsultingDocuments extends Model
             $this->createHeaderShablon($group);
             $num = 1;
             foreach($students as $student) {
-                $this->shablon .= "<tr><td width=10%>" . ($num++) . "</td><td width=50%>" . Students::getStudentFIO($student->id_student) . "</td><td width=15%>" . ContStudent::getStudentBookNum($student->id_student) . "</td><td width=10%>".(($this->gradePrint=="true")?$student->grade_consulting:'')."</td><td></td></tr>";
+                $this->shablon .= "<tr><td width=10% align=center>" . ($num++) . "</td><td width=50%>" . Students::getStudentFIO($student->id_student) . "</td><td width=15%>" . ContStudent::getStudentBookNum($student->id_student) . "</td><td width=10%>".(($this->gradePrint=="true")?($student->grade_consulting>0)?$student->grade_consulting:'0(не склав)':'')."</td><td></td></tr>";
             }
+            $this->numStud = $num-1;
             $this->createFooterShablon();
             File::makeDirectory(public_path() . $this->DOC_PATH . DIRECTORY_SEPARATOR.'docs', 0775, true, true);
             File::put(public_path() . $this->DOC_PATH . DIRECTORY_SEPARATOR.'docs'.DIRECTORY_SEPARATOR . $this->numModule . '.' . $group . '.doc', $this->shablon);
@@ -117,34 +120,55 @@ class ConsultingDocuments extends Model
         </head>
         <body>
         <p align=center>МІНІСТЕРСТВО ОХОРОНИ ЗДОРОВЯ УКРАЇНИ </p>
-        <p align=center><b><u>Тернопільський державний медичний університет імені І.Я. Горбачевського</u></b></p>
-        <span align=left> Факультет <u>" . $this->department . "</u></span><br>
-        <span align=left> Спеціальність <u>" . $this->speciality . "</u></span>
-        <span align=right>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Група_<u>" . $group . "</u>___</span>
-        &nbsp;&nbsp;&nbsp;&nbsp;" . $this->dataEachOfFile->EduYear . "/" . ($this->dataEachOfFile->EduYear + 1) . " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Курс _<u>" . $this->findSemester() . "</u>___<br />
-        <p align=center>ВІДОМІСТЬ №____ </p>
-        <p>З <u>" . $this->dataEachOfFile->ModuleNum . ". " . $this->dataEachOfFile->NameDiscipline . "</u> - <u>" . $this->dataEachOfFile->NameModule . "</u></p>
-        <p>За _<u>" . $this->dataEachOfFile->Semester . "</u>___ навчальний семестр, екзамен <u>_" . date('d.m.Y') . "___</u></p>
-        <table class=guestbook width=600 align=center cellspacing=0 cellpadding=3 border=1>
+        <p align=center><b><u>ДВНЗ «Тернопільський державний медичний університет імені І.Я. Горбачевського МОЗ України</u></b></p>
+        <table class=guestbook width=625 align=center cellspacing=0 cellpadding=3 border=0>
             <tr>
-                <td width=10%>
-                    <b>№ п/п</b>
+                <td width=80%> Факультет <u>" . $this->department . "</u></td><td>Група_<u>" . $group . "</u>___</td>
+            </tr>
+            <tr>
+                <td width=80%> <u>" . $this->dataEachOfFile->EduYear . "/" . ($this->dataEachOfFile->EduYear + 1) . "</u> навчальний рік</td><td>Курс _<u>" . $this->findSemester() . "</u>___</td>
+            </tr>
+            <tr>
+                <td width=80%>  Спеціальність <u>" . $this->speciality . "</u></td><td></td>
+            </tr>
+        </table>
+        <p align=center> ЕКЗАМЕНАЦІЙНА ВІДОМІСТЬ УСНОЇ СПІВБЕСІДИ №__________ </p>
+        <p>З <u>" . $this->dataEachOfFile->ModuleNum . ". " . $this->dataEachOfFile->NameDiscipline . "</u> - <u>" . $this->dataEachOfFile->NameModule . "</u></p>
+        <table class=guestbook width=625 align=center cellspacing=0 cellpadding=3 border=0>
+            <tr>
+                <td width=30%>За _<u>" . $this->dataEachOfFile->Semester . "</u>___ навчальний семестр,</td><td width=20%><u>_" . date('d.m.Y') . "___</u></td><td width=50%></td>
+            </tr>
+            <tr>
+                <td width=30%></td><td width=20% style='font-size: 60%'>(дата усної співбесіди)</td><td width=50%></td>
+            </tr>
+        </table>
+        <table class=guestbook width=625 align=center cellspacing=0 cellpadding=3 border=0>
+            <tr>
+                <td width=57%> Викладач(і), який(і) проводить(ять) усну співбесіду </td><td width=43%>_________________________________________</td>
+            </tr>
+            <tr>
+                <td width=60%></td><td width=40% style='font-size: 60%'>(вчене звання, прізвище та ініціали)</td>
+            </tr>
+        </table>
+        <table class=guestbook width=620 align=center cellspacing=0 cellpadding=3 border=1>
+            <tr>
+                <td width=5% align=center>
+                    <b>№ <br />п/п</b>
                 </td>
                 <td width=50%>
                     <b>Прізвище, ім'я по-батькові</b>
                 </td>
-                <td width=10%>
+                <td width=10% align=center>
                     <b>№ індиві-дуального навч. плану</b>
                 </td>
-                <td width=10%>
-                    <b>Кількість балів</b>
+                <td width=15% align=center>
+                    <b>Оцінка за співбесіду</b>
                 </td>
                 <td width=10%>
-                    <b>Підпис викладача</b>
+                    <b>Підпис екзаме-натора(рів)</b>
                 </td>
             </tr>
+
         ";
     }
 
@@ -154,10 +178,35 @@ class ConsultingDocuments extends Model
     private function createFooterShablon()
     {
         $name = UserToDepartments::select('name')->where('user_id',Auth::user()->id)->join('departments','departments.id','=','user_to_departament.departments_id')->get()->first();
-        $this->shablon .= "</table><br />
-        Завідувач кафедри (".(($name)?$name->name:'___________________________________________________________________________________________________').")
-        <br>_______________________________________________________________ <br>
-        (вчені звання, прізвище та ініціали)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(підпис)<br />";
+        $this->shablon .= "
+
+        </table>
+        <br />
+        <table class=guestbook width=625 align=center cellspacing=0 cellpadding=3 border=0>
+            <tr>
+                <td width=25%>Студентів у групі</td><td width=10%>___<u>".$this->numStud."</u>___</td><td width=20%></td><td width=12%>Екзаменатор(и)</td><td width=13%>________________</td>
+            </tr>
+            <tr>
+                <td width=25%>Не допущено</td><td width=10%>________</td><td width=20%></td><td width=12%></td><td width=13% ><span align=center style='font-size: 60%'>(підпис) </span></td>
+            </tr>
+            <tr>
+                <td width=25%>Не з’явилось</td><td width=10%>________</td><td width=20%></td><td width=12%>Зав. кафедри</td><td width=13%>________________</td>
+            </tr>
+            <tr>
+                <td width=25%>Декан факультету</td><td width=20%>________________________</td><td width=10%></td><td width=12%></td><td width=13% ><span align=center style='font-size: 60%'>(підпис) </span></td>
+            </tr>
+            <tr>
+                <td width=25%></td><td width=10%><span align=center style='font-size: 60%'>(прізвище та ініціали) </span></td>
+            </tr>
+            <tr>
+                <td width=25%></td><td width=10%>________</td>
+            </tr>
+            <tr>
+                <td width=25%></td><td width=10%><span align=center style='font-size: 60%'>(підпис)</span></td>
+            </tr>
+        </table><br />
+        1.       Проти прізвища студента, який не з’явився на підсумковий контроль, екзаменатор вказує – „не з’явився”.<br />
+        2.       Відомість подається в деканат в день проведення усної співбесіди.";
     }
 
 
