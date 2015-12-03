@@ -180,6 +180,7 @@ class Excel extends Model
      */
     private function setGradeFile($fourSheets){
         $data['name']=$this->data['urlOriginalName'];
+        $data['qty_questions']=$this->data['qtyQuestions'];
         $data['file_info_id']=$this->id_file->id;
         $data['EduYear']=(string)$fourSheets['eduyear'];
         $data['Semester']=(string)$fourSheets['semester'];

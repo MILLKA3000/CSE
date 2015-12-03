@@ -18,5 +18,5 @@ return [
     'Change_XML_file' => 'Змінити XML файл.',
     'Change_XML_file_For_Import' => 'Додати оцінки в XLS',
     'downloadXls' => 'Завантажити макет XLS',
-    'type_exam' => 'Тип здачі'
+    'type_exam' => 'Кількість питань на предмет'
 ];

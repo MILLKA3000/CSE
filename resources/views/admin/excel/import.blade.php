@@ -27,16 +27,18 @@
                 {!! trans("admin/modules/Excel.Change_XLS_file") !!}
             </div>
             <div class="panel-body">
-
+                @if(isset($error))
+                    <p class="alert alert-danger">{!! $error !!}</p>
+                @endif
                 {!! Form::open(array('url'=>'excel/importXLS','method'=>'post', 'files'=>true)) !!}
 
-                    {{--<div class="form-group col-xs-3 {{ $errors->has('type_exam') ? 'has-error' : '' }}">--}}
-                        {{--{!! Form::label('type_exam', trans("admin/modules/getExcel.type_exam"), array('class' => 'control-label')) !!}--}}
-                        {{--<div class="controls">--}}
-                            {{--{!! Form::select('type_exam', $type_exam->lists('name', 'id'), '',array('class' => 'form-control')) !!}--}}
-                            {{--<span class="help-block">{{ $errors->first('type_exam', ':message') }}</span>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
+                    <div class="form-group col-xs-3 {{ $errors->has('qtyQuestions') ? 'has-error' : '' }}">
+                        {!! Form::label('qtyQuestions', trans("admin/modules/getExcel.type_exam"), array('class' => 'control-label')) !!}
+                        <div class="controls">
+                            {!! Form::select('qtyQuestions', ['0'=>'Виберіть зі списку (обовязково)','24'=>'24','48'=>'48'], '',array('id'=>"qtyQuestions",'class' => 'form-control')) !!}
+                            <span class="help-block">{{ $errors->first('qtyQuestions', ':message') }}</span>
+                        </div>
+                    </div>
 
                 <div class="control-group">
                     <div class="controls">
@@ -51,15 +53,15 @@
                                data-show-caption="true"
                                data-allowed-file-extensions='["xls", "xlsx"]'>
                         <p class="errors">{!!$errors->first('xls')!!}</p>
-                        @if(isset($error))
-                            <p class="text-danger">{!! $error !!}</p>
-                        @endif
+
                     </div>
                 </div>
                 <div id="success"> </div>
                 {!! Form::submit('Upload', array('class'=>'btn btn-success btn-sm cboxElement')) !!}
                 {!! Form::close() !!}
+
             </div>
+
 
         </div>
 

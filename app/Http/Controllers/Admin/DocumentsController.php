@@ -14,12 +14,17 @@ use App\Model\Gaps\GetEmailEachStudent;
 use App\XmlAgregate;
 use File;
 use App\Model\CreateDocuments\Statistics;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Response;
 
 
+
 class DocumentsController extends Controller
 {
+
+
+
 
     protected $student;
 
