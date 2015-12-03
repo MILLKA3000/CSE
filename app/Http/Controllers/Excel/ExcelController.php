@@ -31,14 +31,14 @@ class ExcelController extends Controller
      * parce xls
      */
     public function importXLS(Request $request){
-
         if ($file = $request->file('xls')) {
+            if ($request->get('qtyQuestions')==0){return view('admin.excel.import',['type_exam'=>TypeExam::all()])->with(['error'=>'Виберіть кількість питань на предмет']);}
             if (array_keys([
                 'application/vnd.ms-office',
                 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],$file->getMimeType())) {
                 $this->otherData['path'] = $file->move('xls'.DIRECTORY_SEPARATOR.file::_get_path(), $file->getClientOriginalName());
                 $this->otherData['urlOriginalName'] = $file->getClientOriginalName();
-                $this->otherData['type_exam'] = $request->get('type_exam');
+                $this->otherData['qtyQuestions'] = $request->get('qtyQuestions');
                 $this->data = Excel_::_loadXls($this->otherData['path']);
                 $Model_Excel = new Model_Excel($this->data,$this->otherData);
                 $message = $Model_Excel->SaveData();

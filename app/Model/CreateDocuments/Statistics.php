@@ -2,6 +2,7 @@
 
 namespace App\Model\CreateDocuments;
 
+use App\AllowedDiscipline;
 use App\CacheDepartment;
 use App\CacheSpeciality;
 use App\GradesFiles;
@@ -9,6 +10,7 @@ use App\Model\Contingent\Students;
 use Chumper\Zipper\Facades\Zipper;
 use Illuminate\Database\Eloquent\Model;
 use App\Grades;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 
 class Statistics extends Model
@@ -17,6 +19,8 @@ class Statistics extends Model
     protected $DOC_PATH; // for puts files
 
     protected $studentsOfGroup; // Students of group
+
+    protected $studentOfModule;
 
     protected $dataGradesOfStudentsGroups; // for find all groups
 
@@ -32,12 +36,19 @@ class Statistics extends Model
 
     protected $shablons = [];
 
+    private $sumGrades = [];
+
+    private $countOfAll2 = [];
+
+    private $conver = [];
+
     private $EDUBASISID = [];
 
     public function __construct($idFileGrade)
     {
+        $this->conver = Config::get('grade-proportional');
         $this->dataOfFile = GradesFiles::where('file_info_id', $idFileGrade)->get();
-
+        $this->EDUBASISID = Students::getSumContractOrButjetStudent(Grades::select('id_student')->where('grade_file_id', $this->dataOfFile[0]->id)->get()->toArray());
         /**
          * get data from bd about module (generals data for each docs)
          */
@@ -50,24 +61,33 @@ class Statistics extends Model
      */
     public function formGeneralStat()
     {
+        $table = '';
+        $i = 1;
+        foreach ($this->dataOfFile as $this->dataEachOfFile) {
+            $this->studentOfModule = Grades::where('grade_file_id', $this->dataEachOfFile->id)->get();
+            $this->sumGrades = $this->getSumGradesFromEachStudent();
+            $table .= '<tr><td>' . $i . '</td><td>' . $this->findSemester() . '</td>';
+            $table .= '<td>' . $this->dataEachOfFile->NameDiscipline . ' - ' . $this->dataEachOfFile->ModuleNum . '. ' . $this->dataEachOfFile->NameModule . '</td>';
+            $table .= '<td>' . count($this->studentOfModule) . '</td>
+                    <td>'.$this->sumGrades['gradeOfFiveTypes']['stat']['2'].' ('.number_format($this->sumGrades['gradeOfFiveTypes']['stat']['2'] / count($this->studentOfModule)*100, 2).'%)</td>
+                    <td>'.$this->sumGrades['gradeOfFiveTypes']['stat']['3'].' ('.number_format($this->sumGrades['gradeOfFiveTypes']['stat']['3'] / count($this->studentOfModule)*100, 2).'%)</td>
+                    <td>'.$this->sumGrades['gradeOfFiveTypes']['stat']['4'].' ('.number_format($this->sumGrades['gradeOfFiveTypes']['stat']['4'] / count($this->studentOfModule)*100, 2).'%)</td>
+                    <td>'.$this->sumGrades['gradeOfFiveTypes']['stat']['5'].' ('.number_format($this->sumGrades['gradeOfFiveTypes']['stat']['5'] / count($this->studentOfModule)*100, 2).'%)</td>
+                    ';
+            $table .= '<td>' . number_format($this->sumGrades['examGrade'] / count($this->studentOfModule), 2) . '</td>';
+            $table .= '<td>' . number_format($this->sumGrades['grade'] / count($this->studentOfModule), 2) . '</td>';
+            $table .= '</td><td></td><td></td><td></tr>';
+            $i++;
+        }
+
         $this->shablons['body'] = '';
         $this->shablons['title'] = trans("admin/modules/stat.gStat");
         $this->shablons['body'] .= $this->formHeader();
-        $this->shablons['body'] .= '<tr><td>№</td><td>Курс</td><td> Назва модулю (дисципліни)</td><td>Загальна кількість студентів</td><td>Кількість студентів , що склали модуль на \'незадовіль-но\' (відсоток)';
+        $this->shablons['body'] .= '<tr><td>№</td><td>Курс</td><td> Назва дисципліни</td><td>Загальна кількість студентів</td><td>Кількість студентів , що склали модуль на \'незадовіль-но\' (відсоток)';
         $this->shablons['body'] .= '</td><td>Кількість студентів , що склали модуль на \'задовільно\' (відсоток)</td><td>Кількість студентів , що склали модуль на \'добре\' (відсоток)</td><td>Кількість студентів , що склали модуль на \'відмінно\' (відсоток)';
         $this->shablons['body'] .= '</td><td>Cередній бал </td> <td>Середній бал поточної успішності</td><td>Важкі</td><td>Легкі</td><td>Середній показник</td></tr>';
-        $i = 1;
-        foreach ($this->dataOfFile as $this->dataEachOfFile) {
-            $studentOfModule = Grades::where('grade_file_id', $this->dataEachOfFile->id)->get();
-            $sumGrades = $this->getSumGradesFromEachStudent();
-            $this->shablons['body'] .= '<tr><td>' . $i . '</td><td>' . $this->findSemester() . '</td>';
-            $this->shablons['body'] .= '<td>' . $this->dataEachOfFile->NameDiscipline . ' - ' . $this->dataEachOfFile->ModuleNum . '. ' . $this->dataEachOfFile->NameModule . '</td>';
-            $this->shablons['body'] .= '<td>' . count($studentOfModule) . '</td><td></td><td></td><td></td><td></td>';
-            $this->shablons['body'] .= '<td>' . number_format($sumGrades['examGrade'] / count($studentOfModule), 2) . '</td>';
-            $this->shablons['body'] .= '<td>' . number_format($sumGrades['grade'] / count($studentOfModule), 2) . '</td>';
-            $this->shablons['body'] .= '</td><td></td><td></td><td></tr>';
-            $i++;
-        }
+
+        $this->shablons['body'] .= $table;
         $this->shablons['body'] .= $this->formFooter();
         return $this->shablons;
     }
@@ -77,25 +97,26 @@ class Statistics extends Model
      */
     public function formGeneralBKStat()
     {
-        $this->EDUBASISID = Students::getSumContractOrButjetStudent(Grades::select('id_student')->where('grade_file_id', $this->dataOfFile[0]->id)->get()->toArray());
+        $table = '';
+        $i = 1;
+        foreach ($this->dataOfFile as $this->dataEachOfFile) {
+            $this->studentOfModule = Grades::where('grade_file_id', $this->dataEachOfFile->id)->get();
+            $this->sumGrades = $this->getSumGradesFromEachStudent();
+            $table .= '<tr><td>' . $i . '</td><td>' . $this->findSemester() . '</td>';
+            $table .= '<td>' . $this->dataEachOfFile->NameDiscipline . ' - ' . $this->dataEachOfFile->ModuleNum . '. ' . $this->dataEachOfFile->NameModule . '</td>';
+            $table .= '<td>' . count($this->studentOfModule) . '</td><td></td><td></td><td></td><td></td>';
+            $table .= '<td>' . number_format($this->sumGrades['examGrade'] / count($this->studentOfModule), 2) . '</td>';
+            $table .= '<td>' . number_format($this->sumGrades['grade'] / count($this->studentOfModule), 2) . '</td>';
+            $table .= '</td><td></td><td></td><td></tr>';
+            $i++;
+        }
         $this->shablons['body'] = '';
         $this->shablons['title'] = trans("admin/modules/stat.gBCStat");
         $this->shablons['body'] .= $this->formHeader('Кількість контрактних студентів: ' . $this->EDUBASISID["C"] . '<br>Кількість державних студентів: ' . $this->EDUBASISID["B"]);
         $this->shablons['body'] .= '<tr><td>№</td><td>Курс</td><td> Назва модулю (дисципліни)</td><td>Загальна кількість студентів</td><td>Кількість студентів , що склали модуль на \'незадовіль-но\' (відсоток)';
         $this->shablons['body'] .= '</td><td>Кількість студентів , що склали модуль на \'задовільно\' (відсоток)</td><td>Кількість студентів , що склали модуль на \'добре\' (відсоток)</td><td>Кількість студентів , що склали модуль на \'відмінно\' (відсоток)';
         $this->shablons['body'] .= '</td><td>Cередній бал </td> <td>Середній бал поточної успішності</td><td>Важкі</td><td>Легкі</td><td>Середній показник</td></tr>';
-        $i = 1;
-        foreach ($this->dataOfFile as $this->dataEachOfFile) {
-            $studentOfModule = Grades::where('grade_file_id', $this->dataEachOfFile->id)->get();
-            $sumGrades = $this->getSumGradesFromEachStudent();
-            $this->shablons['body'] .= '<tr><td>' . $i . '</td><td>' . $this->findSemester() . '</td>';
-            $this->shablons['body'] .= '<td>' . $this->dataEachOfFile->NameDiscipline . ' - ' . $this->dataEachOfFile->ModuleNum . '. ' . $this->dataEachOfFile->NameModule . '</td>';
-            $this->shablons['body'] .= '<td>' . count($studentOfModule) . '</td><td></td><td></td><td></td><td></td>';
-            $this->shablons['body'] .= '<td>' . number_format($sumGrades['examGrade'] / count($studentOfModule), 2) . '</td>';
-            $this->shablons['body'] .= '<td>' . number_format($sumGrades['grade'] / count($studentOfModule), 2) . '</td>';
-            $this->shablons['body'] .= '</td><td></td><td></td><td></tr>';
-            $i++;
-        }
+        $this->shablons['body'] .= $table;
         $this->shablons['body'] .= $this->formFooter();
         return $this->shablons;
     }
@@ -107,8 +128,8 @@ class Statistics extends Model
         $this->shablons['body'] .= $this->formHeader();
         $this->shablons['body'] .= '<tr><td>Група</td><td>П.І.Б</td>';
         foreach ($this->dataOfFile as $this->dataEachOfFile) {
-            $studentOfModule = Grades::where('grade_file_id', $this->dataEachOfFile->id)->get()->sortBy('group');
-                foreach ($studentOfModule as $student) {
+            $this->studentOfModule = Grades::where('grade_file_id', $this->dataEachOfFile->id)->get()->sortBy('group');
+                foreach ($this->studentOfModule as $student) {
                     $studentForForm[$student->group][$student->id_student][$this->dataEachOfFile->id]['grade'] = $student->grade;
                     $studentForForm[$student->group][$student->id_student][$this->dataEachOfFile->id]['examGrade'] = $student->exam_grade;
                     $studentForForm[$student->group][$student->id_student]['fio'] = $student->fio;
@@ -130,7 +151,6 @@ class Statistics extends Model
                     $this->shablons['body'] .= '</tr>';
                 }
             }
-//        dd($studentForForm);
         $this->shablons['body'] .= $this->formFooter();
         return $this->shablons;
     }
@@ -138,16 +158,20 @@ class Statistics extends Model
     public function formHeader($beforeTable = '')
     {
         $text = '';
-
-        $text .= $beforeTable . '<table class="table table-hover " border="1">';
+        $text .= '<br /><p align=center>
+        '. $this->department.'
+        , курс - '.$this->findSemester().'
+        ,'.(($this->sumGrades['gradeOfFiveTypes']['type']=='exam')?' Іспит ':' диф.залік ').'
+        ,'. date('d.m.Y') .'
+        </p><br />
+        '.$beforeTable.'<br /><table class="table table-hover " border="1">';
         return $text;
     }
 
     public function formFooter()
     {
         $text = '';
-
-        $text .= '</table>';
+        $text .= '</table>Загальні дані <br> Не склало – '.count($this->countOfAll2).' ('.number_format(count($this->countOfAll2) / count($this->studentOfModule)*100, 2).'%)';
 
         return $text;
     }
@@ -163,9 +187,35 @@ class Statistics extends Model
 
     private function getSumGradesFromEachStudent()
     {
+
         $sum['examGrade'] = Grades::select('exam_grade')->where('grade_file_id', $this->dataEachOfFile->id)->sum('exam_grade');
         $sum['grade'] = Grades::select('grade')->where('grade_file_id', $this->dataEachOfFile->id)->sum('grade');
+        $sum['gradeOfFiveTypes'] = $this->convertGrades();
         return $sum;
+    }
+
+    private function convertGrades(){
+        $qty = ($this->dataEachOfFile->qty_questions)?$this->dataEachOfFile->qty_questions:24; /*small bag fix because , because , because )))) ahahaha*/
+        $type = ($this->dataEachOfFile->type_exam_id==2)?'exam':($this->dataEachOfFile->type_exam_id==1)?(AllowedDiscipline::where('arrayAllowed', 'like', '%'.$this->dataEachOfFile->DisciplineVariantID.'%')->get()->first())?'exam':'dz':'dz';
+        $fromConfigArray = $this->conver[$type][$qty];
+
+        $data = ['stat'=>['2'=>0,'3'=>0, '4'=>0, '5'=>0], 'type'=>$type];
+
+        foreach ($this->studentOfModule as $student) {
+            if($student->exam_grade==0) {
+                $data['stat']['2']++;
+                $this->countOfAll2[$student->id_student]=true;
+            }
+            foreach($fromConfigArray as $keyGrade=>$convert){
+                if($convert['from']<=$student->exam_grade && $convert['to']>=$student->exam_grade){
+                    $data['stat'][$keyGrade]++;
+//                    $data['stat'][$keyGrade][Students::getStudentEDUBASISID($student->id_student)]++;
+                }
+            }
+
+        }
+        
+        return $data;
     }
 
 }

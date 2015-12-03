@@ -59,10 +59,14 @@ class Students extends Model
         return Recoding::winToUtf(self::getStudentFromOtherDB($id)->FIO);
     }
 
+    static public function getStudentEDUBASISID($id){
+        return (Recoding::winToUtf(self::getStudentFromOtherDB($id)->EDUBASISID)=='К')?'C':'B';
+    }
+
     static public function getSumContractOrButjetStudent($students){
         $basisid = ['C'=>0,'B'=>0];
         foreach($students as $student){
-        $getEduBasisisStudent = (iconv("Windows-1251", "UTF-8",self::getStudentFromOtherDB($student['id_student'])->EDUBASISID)=='К')?'C':'B';
+        $getEduBasisisStudent = self::getStudentEDUBASISID($student['id_student']);
             $basisid[$getEduBasisisStudent]++;
         }
         return $basisid;

@@ -30,6 +30,7 @@ class TableGradesFile extends Migration
             $table->foreign('file_info_id')->references('id')->on('xls_file_info')->onDelete('cascade');
             $table->unsignedInteger('type_exam_id')->nullable();
             $table->foreign('type_exam_id')->references('id')->on('type_exam')->onDelete('set null');
+            $table->integer('qty_questions');
             $table->timestamps();
         });
     }
