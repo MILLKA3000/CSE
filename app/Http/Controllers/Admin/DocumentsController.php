@@ -106,18 +106,18 @@ class DocumentsController extends Controller
      */
     public function downloadStatistics($name,$idFileGrade){
         $doc = new Statistics($idFileGrade);
-        File::makeDirectory(public_path() . '\tmp', 0775, true, true);
+        File::makeDirectory(public_path() .DIRECTORY_SEPARATOR . 'tmp', 0775, true, true);
         switch($name){
             case "general":
-                File::put(public_path().'\tmp\formGeneralStat.doc', $doc->formGeneralStat()['body']);
+                File::put(public_path().DIRECTORY_SEPARATOR .'tmp'.DIRECTORY_SEPARATOR .'formGeneralStat.doc', $doc->formGeneralStat()['body']);
                 return '\tmp\formGeneralStat.doc';
                 break;
             case "bk":
-                File::put(public_path().'\tmp\formGeneralBKStat.doc', $doc->formGeneralBKStat()['body']);
+                File::put(public_path().DIRECTORY_SEPARATOR .'tmp'.DIRECTORY_SEPARATOR .'formGeneralBKStat.doc', $doc->formGeneralBKStat()['body']);
                 return '\tmp\formGeneralBKStat.doc';
                 break;
             case "detailed":
-                File::put(public_path().'\tmp\formDetailedStat.doc', $doc->formDetailedStat()['body']);
+                File::put(public_path().DIRECTORY_SEPARATOR .'tmp'.DIRECTORY_SEPARATOR .'formDetailedStat.doc', $doc->formDetailedStat()['body']);
                 return '\tmp\formDetailedStat.doc';
                 break;
         }
