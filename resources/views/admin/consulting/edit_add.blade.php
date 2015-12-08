@@ -66,7 +66,7 @@
                 </td>
                 <td>
                     <div class="block">
-                        @if(!in_array(Auth::user()->role_id,[8]))
+                        @if(!in_array(Auth::user()->role_id,[8,2]))
                              <div class="form-group">
                                 <div class="controls">
                                     {!! Form::select('role_id', ['0'=>'0(не склав)','12'=>12,'13'=>13,'14'=>14,'15'=>15,'16'=>16,'18'=>18,'20'=>20], (isset($student->grade_consulting))?$student->grade_consulting:'',array('id'=>"i$student->id_student",'class' => 'form-control')) !!}
