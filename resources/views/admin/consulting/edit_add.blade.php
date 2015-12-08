@@ -21,7 +21,7 @@
     </div>
     <div class="pull-right">
         <div class="pull-right">
-            <a href="/documents/{{$about_module->ModuleVariantID}}/true/getAllConsultingDocuments" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-pencil"></span>  {!! trans("admin/modules/consulting.getDocsWithGrades") !!}</a>
+            <a href="/documents/{{$about_module->DepartmentId}}/{{$about_module->ModuleVariantID}}/true/getAllConsultingDocuments" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-pencil"></span>  {!! trans("admin/modules/consulting.getDocsWithGrades") !!}</a>
 
         </div>
     </div>
@@ -83,7 +83,6 @@
         @endforeach
     </table>
 @stop
-
 {{-- Scripts --}}
 @section('scripts')
     <script src="{{ asset('js/dataTablesSelect.js') }}"></script>
@@ -91,9 +90,9 @@
         $('#table2').dataTableHelper();
             $('.add').on('click', function () {
                 var self = this;
-                {{--console.log({'modnum':{{$about_module->ModuleVariantID}},'_token':$("#_token").val(),'student':$(this).attr('id'),'value':$("#i"+$(this).attr('id')).val()});--}}
                 $.post("/teacher/saveGrade", {
                     'modnum':{{$about_module->ModuleVariantID}},
+                    'depId':{{$about_module->DepartmentId}},
                     '_token': $("#_token").val(),
                     'student': $(this).attr('id'),
                     'value': $("#i" + $(this).attr('id')).val()
@@ -113,6 +112,7 @@
                 var self = this;
                 $.post("/teacher/clearGrade", {
                     'modnum':{{$about_module->ModuleVariantID}},
+                    'depId':{{$about_module->DepartmentId}},
                     '_token': $("#_token").val(),
                     'student': $(this).attr('id'),
                     'value': $("#i" + $(this).attr('id')).val()
@@ -127,6 +127,7 @@
                 {{--console.log({'modnum':{{$about_module->ModuleVariantID}},'_token':$("#_token").val(),'student':$(this).attr('id'),'value':$("#i"+$(this).attr('id')).val()});--}}
                 $.post("/teacher/saveGrade", {
                     'modnum':{{$about_module->ModuleVariantID}},
+                    'depId':{{$about_module->DepartmentId}},
                     '_token': $("#_token").val(),
                     'student': $(this).attr('id'),
                     'value': $("#i" + $(this).attr('id')).val()
@@ -145,6 +146,7 @@
                 var self = this;
                 $.post("/teacher/clearGrade", {
                     'modnum':{{$about_module->ModuleVariantID}},
+                    'depId':{{$about_module->DepartmentId}},
                     '_token': $("#_token").val(),
                     'student': $(this).attr('id'),
                     'value': $("#i" + $(this).attr('id')).val()

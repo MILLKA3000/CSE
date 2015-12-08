@@ -56,7 +56,7 @@ Route::group(['prefix' => '/', 'middleware' => 'auth'], function() {
         #Documents
             Route::get('documents/{id}/getAllDocuments', 'Admin\DocumentsController@getAllDocuments');
             Route::get('documents/{id}/remove', 'Admin\DocumentsController@remove');
-            Route::get('documents/{id}/{check}/getAllConsultingDocuments', 'Admin\DocumentsController@getAllConsultingDocuments');
+            Route::get('documents/{depId}/{id}/{check}/getAllConsultingDocuments', 'Admin\DocumentsController@getAllConsultingDocuments');
             Route::get('documents/{id}/sendEmails', 'Admin\DocumentsController@sendEmails');
         #Statistics
             Route::get('documents/{id}/getAllStatistics', 'Admin\DocumentsController@getAllStatistics');
@@ -73,7 +73,7 @@ Route::group(['prefix' => '/', 'middleware' => 'auth'], function() {
 
     # Teacher
     Route::get('teacher/data', 'Admin\TeacherSetGrade@data');
-    Route::get('/teacher/{moduleVariant}/edit', 'Admin\TeacherSetGrade@edit');
+    Route::get('/teacher/{depId}/{moduleVariant}/edit', 'Admin\TeacherSetGrade@edit');
     Route::post('teacher/saveGrade', 'Admin\TeacherSetGrade@saveGrade');
     Route::post('teacher/clearGrade', 'Admin\TeacherSetGrade@clearGrade');
     Route::resource('teacher', 'Admin\TeacherSetGrade');

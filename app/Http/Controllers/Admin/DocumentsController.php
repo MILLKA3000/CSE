@@ -48,9 +48,9 @@ class DocumentsController extends Controller
      * @param $numPlan
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function getAllConsultingDocuments($numPlan,$check)
+    public function getAllConsultingDocuments($depId,$numPlan,$check)
     {
-        $doc = new ConsultingDocuments($numPlan,$check);
+        $doc = new ConsultingDocuments($depId,$numPlan,$check);
         return redirect($doc->formDocuments());
     }
 

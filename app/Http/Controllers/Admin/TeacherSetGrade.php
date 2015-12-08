@@ -37,9 +37,9 @@ class TeacherSetGrade extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($moduleVariant)
+    public function edit($depId,$moduleVariant)
     {
-        $this->about_module = GradesFiles::where('ModuleVariantID',$moduleVariant)->get()->first();
+        $this->about_module = GradesFiles::where('ModuleVariantID',$moduleVariant)->where('DepartmentId', $depId)->get()->first();
         $students = Grades::select('consulting_grades.id_student as stud_consult_grade',
         'consulting_grades.grade_consulting',
         'grades.id_student',
@@ -82,7 +82,8 @@ class TeacherSetGrade extends Controller
                 'id_student' => $request['student'],
                 'id_num_plan' => $request['modnum'],
                 'grade_consulting' => $request['value'],
-                'user_id' => Auth::user()->id
+                'user_id' => Auth::user()->id,
+                'department_id' => $request['depId']
             ])
             ) {
                 return json_encode(['status'=>'true','message'=>trans("admin/modules/consulting.ok")]);
@@ -120,6 +121,7 @@ class TeacherSetGrade extends Controller
             'grades_files.ModuleNum',
             'grades_files.ModuleVariantID',
             'grades_files.DisciplineVariantID',
+            'grades_files.DepartmentId as DepartmentId',
         ))->distinct('ModuleVariantID')
             ->join('cache_department','cache_department.id_from','=','grades_files.DepartmentId')
             ->join('type_exam','grades_files.type_exam_id', '=', 'type_exam.id')
@@ -135,11 +137,12 @@ class TeacherSetGrade extends Controller
         return Datatables::of($grades)
             ->edit_column('EduYear', '{{$EduYear}}/{{$EduYear+1}}')
             ->edit_column('NameModule', '{{$ModuleNum}}. {{$NameModule}}')
-            ->add_column('actions','<a href="{{ URL::to(\'teacher/\' . $ModuleVariantID . \'/edit\' )}}" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-pencil"></span>  {{ trans("admin/modal.this") }}</a>')
-            ->add_column('GetDocs','<a href="{{ URL::to(\'documents/\' . $ModuleVariantID . \'/false/getAllConsultingDocuments\' )}}" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-pencil"></span>  {{ trans("admin/modules/consulting.getEmptyDoc") }}</a>')
+            ->add_column('actions','<a href="{{ URL::to(\'teacher/\'.$DepartmentId.\'/\' . $ModuleVariantID . \'/edit\' )}}" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-pencil"></span>  {{ trans("admin/modal.this") }}</a>')
+            ->add_column('GetDocs','<a href="{{ URL::to(\'documents/\'.$DepartmentId.\'/\' . $ModuleVariantID . \'/false/getAllConsultingDocuments\' )}}" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-pencil"></span>  {{ trans("admin/modules/consulting.getEmptyDoc") }}</a>')
             ->remove_column('ModuleVariantID')
             ->remove_column('DisciplineVariantID')
             ->remove_column('ModuleNum')
+            ->remove_column('DepartmentId')
             ->make();
     }
 }
