@@ -95,6 +95,20 @@
                    }
                 });
             })
+
+            $('.pagination li a').on('click', function () {
+                $("body").delegate(".add", "click", function(e) {
+                    var self = this;
+                    $.post( "/recheck/saveGrade", {'id':$(this).data('student-id'),'_token':$("#_token").val(),'value':$("#i"+$(this).data('student-id')).val()}).done(function(data){
+                        if(data=='true')
+                        {
+                            $('#tr'+$(self).data('student-id')).css({'backgroundColor': '#C8FFC8', 'color': 'black'});
+                        }else if(data=='false'){
+                            $('#tr'+$(self).data('student-id')).css({'backgroundColor': '#FFE3C8', 'color': 'black'});
+                        }
+                    });
+                });
+            });
         })
 
     </script>
