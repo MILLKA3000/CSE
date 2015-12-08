@@ -14,7 +14,7 @@ class File extends Model
      */
     static function _get_path(){
         $date = new DateTime();
-        return  Auth::user()->roles->name.DIRECTORY_SEPARATOR.Auth::user()->name.DIRECTORY_SEPARATOR.$date->getTimestamp();
+        return  Auth::user()->getNameRole->name.DIRECTORY_SEPARATOR.Auth::user()->name.DIRECTORY_SEPARATOR.$date->getTimestamp();
     }
 
     /**

@@ -62,7 +62,7 @@
                         <a href="/documents/{{$modules->file_info_id}}/getAllStatistics" class="btn btn-warning btn-sm "> {!! trans("admin/modules/arhive.getstat") !!}</a>
                     </td>
                 </tr>
-                @if(!in_array(Auth::user()->role_id,[4,5,6,7,8]))
+                @if(!in_array(Auth::user()->role_id,[5,6,7,8]))
                     <tr>
                         <td>
                             {!! trans("admin/modules/arhive.titleSendEmail") !!}
