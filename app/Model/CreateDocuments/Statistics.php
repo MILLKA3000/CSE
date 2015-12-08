@@ -70,9 +70,9 @@ class Statistics extends Model
             $table .= '<td>' . $this->dataEachOfFile->NameDiscipline . ' - ' . $this->dataEachOfFile->ModuleNum . '. ' . $this->dataEachOfFile->NameModule . '</td>';
             $table .= '<td>' . count($this->studentOfModule) . '</td>
                     <td>'.$this->sumGrades['gradeOfFiveTypes']['stat']['2'].' ('.number_format($this->sumGrades['gradeOfFiveTypes']['stat']['2'] / count($this->studentOfModule)*100, 2).'%)</td>
-                    <td>'.$this->sumGrades['gradeOfFiveTypes']['stat']['3'].' ('.number_format($this->sumGrades['gradeOfFiveTypes']['stat']['3'] / count($this->studentOfModule)*100, 2).'%)</td>
-                    <td>'.$this->sumGrades['gradeOfFiveTypes']['stat']['4'].' ('.number_format($this->sumGrades['gradeOfFiveTypes']['stat']['4'] / count($this->studentOfModule)*100, 2).'%)</td>
-                    <td>'.$this->sumGrades['gradeOfFiveTypes']['stat']['5'].' ('.number_format($this->sumGrades['gradeOfFiveTypes']['stat']['5'] / count($this->studentOfModule)*100, 2).'%)</td>
+                    <td>'.($this->sumGrades['gradeOfFiveTypes']['stat']['B']['3']+$this->sumGrades['gradeOfFiveTypes']['stat']['C']['3']).' ('.number_format(($this->sumGrades['gradeOfFiveTypes']['stat']['C']['3']+$this->sumGrades['gradeOfFiveTypes']['stat']['B']['3']) / count($this->studentOfModule)*100, 2).'%)</td>
+                    <td>'.($this->sumGrades['gradeOfFiveTypes']['stat']['B']['4']+$this->sumGrades['gradeOfFiveTypes']['stat']['C']['4']).' ('.number_format(($this->sumGrades['gradeOfFiveTypes']['stat']['C']['4']+$this->sumGrades['gradeOfFiveTypes']['stat']['B']['4']) / count($this->studentOfModule)*100, 2).'%)</td>
+                    <td>'.($this->sumGrades['gradeOfFiveTypes']['stat']['B']['5']+$this->sumGrades['gradeOfFiveTypes']['stat']['C']['5']).' ('.number_format(($this->sumGrades['gradeOfFiveTypes']['stat']['C']['5']+$this->sumGrades['gradeOfFiveTypes']['stat']['B']['5']) / count($this->studentOfModule)*100, 2).'%)</td>
                     ';
             $table .= '<td>' . number_format($this->sumGrades['examGrade'] / count($this->studentOfModule), 2) . '</td>';
             $table .= '<td>' . number_format($this->sumGrades['grade'] / count($this->studentOfModule), 2) . '</td>';
@@ -104,7 +104,16 @@ class Statistics extends Model
             $this->sumGrades = $this->getSumGradesFromEachStudent();
             $table .= '<tr><td>' . $i . '</td><td>' . $this->findSemester() . '</td>';
             $table .= '<td>' . $this->dataEachOfFile->NameDiscipline . ' - ' . $this->dataEachOfFile->ModuleNum . '. ' . $this->dataEachOfFile->NameModule . '</td>';
-            $table .= '<td>' . count($this->studentOfModule) . '</td><td></td><td></td><td></td><td></td>';
+            $table .= '<td>' . count($this->studentOfModule) . '</td>
+                    <td>'.$this->sumGrades['gradeOfFiveTypes']['stat']['C']['2'].' ('.number_format($this->sumGrades['gradeOfFiveTypes']['stat']['C']['2'] / count($this->studentOfModule)*100, 2).'%)</td>
+                    <td>'.$this->sumGrades['gradeOfFiveTypes']['stat']['B']['2'].' ('.number_format($this->sumGrades['gradeOfFiveTypes']['stat']['B']['2'] / count($this->studentOfModule)*100, 2).'%)</td>
+                    <td>'.$this->sumGrades['gradeOfFiveTypes']['stat']['C']['3'].' ('.number_format($this->sumGrades['gradeOfFiveTypes']['stat']['C']['3'] / count($this->studentOfModule)*100, 2).'%)</td>
+                    <td>'.$this->sumGrades['gradeOfFiveTypes']['stat']['B']['3'].' ('.number_format($this->sumGrades['gradeOfFiveTypes']['stat']['B']['3'] / count($this->studentOfModule)*100, 2).'%)</td>
+                    <td>'.$this->sumGrades['gradeOfFiveTypes']['stat']['C']['4'].' ('.number_format($this->sumGrades['gradeOfFiveTypes']['stat']['C']['4'] / count($this->studentOfModule)*100, 2).'%)</td>
+                    <td>'.$this->sumGrades['gradeOfFiveTypes']['stat']['B']['4'].' ('.number_format($this->sumGrades['gradeOfFiveTypes']['stat']['B']['4'] / count($this->studentOfModule)*100, 2).'%)</td>
+                    <td>'.$this->sumGrades['gradeOfFiveTypes']['stat']['C']['5'].' ('.number_format($this->sumGrades['gradeOfFiveTypes']['stat']['C']['5'] / count($this->studentOfModule)*100, 2).'%)</td>
+                    <td>'.$this->sumGrades['gradeOfFiveTypes']['stat']['B']['5'].' ('.number_format($this->sumGrades['gradeOfFiveTypes']['stat']['B']['5'] / count($this->studentOfModule)*100, 2).'%)</td>
+                    ';
             $table .= '<td>' . number_format($this->sumGrades['examGrade'] / count($this->studentOfModule), 2) . '</td>';
             $table .= '<td>' . number_format($this->sumGrades['grade'] / count($this->studentOfModule), 2) . '</td>';
             $table .= '</td><td></td><td></td><td></tr>';
@@ -113,8 +122,8 @@ class Statistics extends Model
         $this->shablons['body'] = '';
         $this->shablons['title'] = trans("admin/modules/stat.gBCStat");
         $this->shablons['body'] .= $this->formHeader('Кількість контрактних студентів: ' . $this->EDUBASISID["C"] . '<br>Кількість державних студентів: ' . $this->EDUBASISID["B"]);
-        $this->shablons['body'] .= '<tr><td>№</td><td>Курс</td><td> Назва модулю (дисципліни)</td><td>Загальна кількість студентів</td><td>Кількість студентів , що склали модуль на \'незадовіль-но\' (відсоток)';
-        $this->shablons['body'] .= '</td><td>Кількість студентів , що склали модуль на \'задовільно\' (відсоток)</td><td>Кількість студентів , що склали модуль на \'добре\' (відсоток)</td><td>Кількість студентів , що склали модуль на \'відмінно\' (відсоток)';
+        $this->shablons['body'] .= '<tr><td>№</td><td>Курс</td><td> Назва модулю (дисципліни)</td><td>Загальна кількість студентів</td><td>Кількість контрактних студентів , що склали модуль на \'незадовіль-но\' (відсоток)</td><td>Кількість державних студентів , що склали модуль на \'незадовіль-но\' (відсоток)';
+        $this->shablons['body'] .= '</td><td>Кількість контрактних студентів , що склали модуль на \'задовільно\' (відсоток)</td><td>Кількість державних студентів , що склали модуль на \'задовільно\' (відсоток)</td><td>Кількість контрактних студентів , що склали модуль на \'добре\' (відсоток)</td><td>Кількість державних студентів , що склали модуль на \'добре\' (відсоток)</td><td>Кількість контрактних студентів , що склали модуль на \'відмінно\' (відсоток)</td><td>Кількість державних студентів , що склали модуль на \'відмінно\' (відсоток)';
         $this->shablons['body'] .= '</td><td>Cередній бал </td> <td>Середній бал поточної успішності</td><td>Важкі</td><td>Легкі</td><td>Середній показник</td></tr>';
         $this->shablons['body'] .= $table;
         $this->shablons['body'] .= $this->formFooter();
@@ -199,17 +208,22 @@ class Statistics extends Model
         $type = ($this->dataEachOfFile->type_exam_id==2)?'exam':($this->dataEachOfFile->type_exam_id==1)?(AllowedDiscipline::where('arrayAllowed', 'like', '%'.$this->dataEachOfFile->DisciplineVariantID.'%')->get()->first())?'exam':'dz':'dz';
         $fromConfigArray = $this->conver[$type][$qty];
 
-        $data = ['stat'=>['2'=>0,'3'=>0, '4'=>0, '5'=>0], 'type'=>$type];
+        $data = ['stat'=>[
+            'B'=>['2'=>0,'3'=>0, '4'=>0, '5'=>0],
+            'C'=>['2'=>0,'3'=>0, '4'=>0, '5'=>0],
+            '2'=>0],
+            'type'=>$type];
 
         foreach ($this->studentOfModule as $student) {
             if($student->exam_grade==0) {
+                $data['stat'][Students::getStudentEDUBASISID($student->id_student)]['2']++;
                 $data['stat']['2']++;
                 $this->countOfAll2[$student->id_student]=true;
             }
             foreach($fromConfigArray as $keyGrade=>$convert){
                 if($convert['from']<=$student->exam_grade && $convert['to']>=$student->exam_grade){
-                    $data['stat'][$keyGrade]++;
-//                    $data['stat'][$keyGrade][Students::getStudentEDUBASISID($student->id_student)]++;
+                    $data['stat'][Students::getStudentEDUBASISID($student->id_student)][$keyGrade]++;
+                }if($student->exam_grade==0){
                 }
             }
 

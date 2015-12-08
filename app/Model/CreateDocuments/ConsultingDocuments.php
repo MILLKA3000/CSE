@@ -44,7 +44,7 @@ class ConsultingDocuments extends Model
 
     private $gradePrint = 1;
 
-    public function __construct($idFileGrade,$gradePrint = false)
+    public function __construct($depId,$idFileGrade,$gradePrint = false)
     {
         $this->gradePrint = $gradePrint;
 
@@ -52,7 +52,7 @@ class ConsultingDocuments extends Model
          * get data from bd about module (generals data for each docs)
          */
         $this->DOC_PATH = DIRECTORY_SEPARATOR.'consultingDocuments'.DIRECTORY_SEPARATOR;
-        $this->dataEachOfFile = GradesFiles::where('ModuleVariantID', $idFileGrade)->get()->first();
+        $this->dataEachOfFile = GradesFiles::where('ModuleVariantID', $idFileGrade)->where('DepartmentId', $depId)->get()->first();
 
         Storage::deleteDirectory($this->DOC_PATH);
     }
