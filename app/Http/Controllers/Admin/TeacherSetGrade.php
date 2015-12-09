@@ -39,7 +39,8 @@ class TeacherSetGrade extends Controller
      */
     public function edit($depId,$moduleVariant)
     {
-        $this->about_module = GradesFiles::where('ModuleVariantID',$moduleVariant)->where('DepartmentId', $depId)->get()->first();
+        $this->about_module = GradesFiles::where('ModuleVariantID',$moduleVariant)->where('DepartmentId', $depId)->get();
+
         $students = Grades::select('consulting_grades.id_student as stud_consult_grade',
         'consulting_grades.grade_consulting',
         'grades.id_student',
@@ -47,18 +48,19 @@ class TeacherSetGrade extends Controller
         'grades.group',
         'grades.grade'
             )->
-        where('grade_file_id',$this->about_module->id)
+//        where('grade_file_id',$this->about_module->id)
+            whereIn('grade_file_id', (array)$this->about_module->lists('id')->toArray())
             ->leftjoin('consulting_grades', function($join)
             {
                 $join->on('consulting_grades.id_student', '=', 'grades.id_student')
-                    ->where('consulting_grades.id_num_plan','=',$this->about_module->ModuleVariantID);
+                    ->where('consulting_grades.id_num_plan','=',$this->about_module->first()->ModuleVariantID);
             })
 
             ->orderBy('group', 'asc')
             ->orderBy('fio', 'asc')
             ->distinct()
             ->get();
-        $about_module = $this->about_module;
+        $about_module = $this->about_module->first();
         return view('admin.consulting.edit_add', compact('about_module','students'));
     }
 
