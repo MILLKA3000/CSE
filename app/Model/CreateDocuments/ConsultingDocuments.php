@@ -52,7 +52,7 @@ class ConsultingDocuments extends Model
          * get data from bd about module (generals data for each docs)
          */
         $this->DOC_PATH = DIRECTORY_SEPARATOR.'consultingDocuments'.DIRECTORY_SEPARATOR;
-        $this->dataEachOfFile = GradesFiles::where('ModuleVariantID', $idFileGrade)->where('DepartmentId', $depId)->get()->first();
+        $this->dataEachOfFile = GradesFiles::where('ModuleVariantID', $idFileGrade)->where('DepartmentId', $depId)->get();
 
         Storage::deleteDirectory($this->DOC_PATH);
     }
@@ -65,7 +65,7 @@ class ConsultingDocuments extends Model
         /**
          * find each student and sort of groupNum
          */
-        $students = Grades::where('grade_file_id',$this->dataEachOfFile->id)->get();
+        $students = Grades::whereIn('grade_file_id', (array) $this->dataEachOfFile->lists('id')->toArray())->get();
         $this->speciality = CacheSpeciality::getSpeciality(Students::getStudentSpeciality($students[0]->id_student))->name;
         $this->department = CacheDepartment::getDepartment(Students::getStudentDepartment($students[0]->id_student))->name;
         foreach ($students as $student) {
@@ -102,7 +102,7 @@ class ConsultingDocuments extends Model
      */
     private function findSemester()
     {
-        return ($this->dataEachOfFile->Semester & 1) ? ($this->dataEachOfFile->Semester + 1) / 2 : $this->dataEachOfFile->Semester / 2;
+        return ($this->dataEachOfFile->first()->Semester & 1) ? ($this->dataEachOfFile->first()->Semester + 1) / 2 : $this->dataEachOfFile->first()->Semester / 2;
     }
 
     /**
@@ -126,17 +126,17 @@ class ConsultingDocuments extends Model
                 <td width=80%> Факультет <u>" . $this->department . "</u></td><td>Група_<u>" . $group . "</u>___</td>
             </tr>
             <tr>
-                <td width=80%> <u>" . $this->dataEachOfFile->EduYear . "/" . ($this->dataEachOfFile->EduYear + 1) . "</u> навчальний рік</td><td>Курс _<u>" . $this->findSemester() . "</u>___</td>
+                <td width=80%> <u>" . $this->dataEachOfFile->first()->EduYear . "/" . ($this->dataEachOfFile->first()->EduYear + 1) . "</u> навчальний рік</td><td>Курс _<u>" . $this->findSemester() . "</u>___</td>
             </tr>
             <tr>
                 <td width=80%>  Спеціальність <u>" . $this->speciality . "</u></td><td></td>
             </tr>
         </table>
         <p align=center> ЕКЗАМЕНАЦІЙНА ВІДОМІСТЬ УСНОЇ СПІВБЕСІДИ №__________ </p>
-        <p>З <u>" . $this->dataEachOfFile->ModuleNum . ". " . $this->dataEachOfFile->NameDiscipline . "</u> - <u>" . $this->dataEachOfFile->NameModule . "</u></p>
+        <p>З <u>" . $this->dataEachOfFile->first()->ModuleNum . ". " . $this->dataEachOfFile->first()->NameDiscipline . "</u> - <u>" . $this->dataEachOfFile->first()->NameModule . "</u></p>
         <table class=guestbook width=625 align=center cellspacing=0 cellpadding=3 border=0>
             <tr>
-                <td width=30%>За _<u>" . $this->dataEachOfFile->Semester . "</u>___ навчальний семестр,</td><td width=20%><u>_" . date('d.m.Y') . "___</u></td><td width=50%></td>
+                <td width=30%>За _<u>" . $this->dataEachOfFile->first()->Semester . "</u>___ навчальний семестр,</td><td width=20%><u>_" . date('d.m.Y') . "___</u></td><td width=50%></td>
             </tr>
             <tr>
                 <td width=30%></td><td width=20% style='font-size: 60%'>(дата усної співбесіди)</td><td width=50%></td>
