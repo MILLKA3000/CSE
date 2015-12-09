@@ -121,7 +121,7 @@
                     $('#i' + $(self).data('student-id')).val('');
                 })
             });
-        $('.pagination li a').on('click', function () {
+        $('.pagination li a, select, input').on('click', function () {
             $("body").delegate(".add", "click", function(e) {
                 var self = this;
                 {{--console.log({'modnum':{{$about_module->ModuleVariantID}},'_token':$("#_token").val(),'student':$(this).attr('id'),'value':$("#i"+$(this).attr('id')).val()});--}}

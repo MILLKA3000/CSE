@@ -56,6 +56,7 @@ class TeacherSetGrade extends Controller
 
             ->orderBy('group', 'asc')
             ->orderBy('fio', 'asc')
+            ->distinct()
             ->get();
         $about_module = $this->about_module;
         return view('admin.consulting.edit_add', compact('about_module','students'));
