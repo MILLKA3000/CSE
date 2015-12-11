@@ -47,6 +47,10 @@ class Excel extends Model
 
     private $fourSheets = [];
 
+    private $fiveSheets = [];
+
+    private  $checkEachStudent = false;
+
     /**
      * Construct for init data
      * Original data this is data from xls
@@ -89,6 +93,10 @@ class Excel extends Model
         $this->rebuildDataInFirstSheets(); // for find student code in index array
         $this->rebuildDataInSecondSheets();
         $this->rebuildDataInThreeSheets();
+        if(isset($this->OriginalData->get()[4])){
+            $this->rebuildDataInFiveSheets();
+            $this->checkEachStudent = true;
+        }
 
         $this->validationCodeAndGrades();
         if(isset($this->messages['error'])){
@@ -135,16 +143,19 @@ class Excel extends Model
                 $grades['fio'] = $secondSheets['fio'];
                 $grades['group'] = (int)$secondSheets['group'];
                 $grades['grade'] = (int)$this->threeSheets[(string)$secondSheets['id']][$module];
-                if (($secondSheets['code']!=999) && ($secondSheets['code']!=0)) {
-                    if (isset($this->firstSheets[$secondSheets['code']])) {
-                        $grades['exam_grade'] = (int)$this->firstSheets[$secondSheets['code']][$module];
-                        $this->dataToSave[$module][] = $grades;
+                if($this->checkEachStudent===false){$this->fiveSheets[$grades['id_student']][$module]=true;}
+                if($this->fiveSheets[$grades['id_student']][$module]) {
+                    if (($secondSheets['code'] != 999) && ($secondSheets['code'] != 0)) {
+                        if (isset($this->firstSheets[$secondSheets['code']])) {
+                            $grades['exam_grade'] = (int)$this->firstSheets[$secondSheets['code']][$module];
+                            $this->dataToSave[$module][] = $grades;
+                        } else {
+                            $this->messages['error'][] = 'Don\'t find code in First Sheets : ' . $secondSheets['code'] . ' for module ' . ((int)$module + 1);
+                        };
                     } else {
-                        $this->messages['error'][] = 'Don\'t find code in First Sheets : ' . $secondSheets['code'].' for module '.((int)$module+1);
-                    };
-                }else{
-                    $grades['exam_grade'] = 0;
-                    $this->dataToSave[$module][] = $grades;
+                        $grades['exam_grade'] = 0;
+                        $this->dataToSave[$module][] = $grades;
+                    }
                 }
             }
             $module++;
@@ -222,6 +233,23 @@ class Excel extends Model
         return $data;
     }
 
+    /**
+     * @param $arr
+     * @return mixed
+     */
+    private function convertCellFromFiveSheet($arr){
+        $tmp = array_values(array_values((array)$arr)[1]);
+        $data['studentId'] = $tmp[0];
+        for($i=2;$i<count($tmp);$i++){
+            if (isset($tmp[$i])){
+                $data['check'][] = true;
+            }else{
+                $data['check'][] = false;
+            }
+
+        }
+        return $data;
+    }
 
     private function rebuildDataInFirstSheets(){
         foreach($this->firstSheetsOriginal as $key=>$secondSheets) { // iteration in first sheet
@@ -234,7 +262,7 @@ class Excel extends Model
     }
 
     private function rebuildDataInSecondSheets(){
-        foreach($this->OriginalData->get()[1] as $key=>$secondSheets) { // iteration in first sheet
+        foreach($this->OriginalData->get()[1] as $key=>$secondSheets) { // iteration in second sheet
             $afterGet = $this->convertCellFromFirstSheet($secondSheets);
             if (isset($this->secondSheets[$afterGet['code']]) && $afterGet['code']!=999 && $afterGet['code']!=0){
                 $this->messages['error'][] = 'In second sheet duplicate code: '.$afterGet['code'];
@@ -244,9 +272,16 @@ class Excel extends Model
     }
 
     private function rebuildDataInThreeSheets(){
-        foreach($this->OriginalData->get()[2] as $key=>$secondSheets) { // iteration in first sheet
+        foreach($this->OriginalData->get()[2] as $key=>$secondSheets) { // iteration in three sheet
             $afterGet = $this->convertCellFromThreeSheet($secondSheets);
             $this->threeSheets[(string)$afterGet['studentId']] = $afterGet['grade'];
+        }
+    }
+
+    private function rebuildDataInFiveSheets(){
+        foreach($this->OriginalData->get()[4] as $key=>$secondSheets) { // iteration in five sheet
+            $afterGet = $this->convertCellFromFiveSheet($secondSheets);
+            $this->fiveSheets[(string)$afterGet['studentId']] = $afterGet['check'];
         }
     }
 

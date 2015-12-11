@@ -124,7 +124,6 @@
         $('.pagination li a, select, input').on('click', function () {
             $("body").delegate(".add", "click", function(e) {
                 var self = this;
-                {{--console.log({'modnum':{{$about_module->ModuleVariantID}},'_token':$("#_token").val(),'student':$(this).attr('id'),'value':$("#i"+$(this).attr('id')).val()});--}}
                 $.post("/teacher/saveGrade", {
                     'modnum':{{$about_module->ModuleVariantID}},
                     'depId':{{$about_module->DepartmentId}},

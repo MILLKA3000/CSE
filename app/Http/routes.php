@@ -94,6 +94,7 @@ Route::group(['prefix' => '/', 'middleware' => 'auth'], function() {
 
     # Settings
     Route::get('settings/clearCache', 'Admin\Settings@clearCache');
+    Route::get('settings/toSessionDate', 'Admin\Settings@toSessionDate');
     Route::resource('settings', 'Admin\Settings');
 
 });

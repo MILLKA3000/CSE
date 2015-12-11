@@ -6,6 +6,7 @@
 
 {{-- Content --}}
 @section('main')
+    <link href="{{ asset('css/datePicker/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
     <div class="page-header">
         <h3>
             {!! trans("admin/modules/Excel.loadXLStitle") !!}
@@ -32,8 +33,18 @@
     @endif
 
     @if(isset($message['success']))
-        <a href="/documents/{{$id_file}}/getAllDocuments" id="vid" class="btn btn-warning btn-sm "> Get all Documents </a>
-        <a href="/documents/{{$id_file}}/getAllStatistics" id="stat" class="btn btn-warning btn-sm "> Get all Statistics </a>
+        <div class="form-group col-xs-4">
+            <div class='input-group date' id='datetimepicker1'>
+                <input type='text' class="form-control" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+            </div>
+        </div>
+        <div class="form-group col-xs-4">
+            <a href="/documents/{{$id_file}}/getAllDocuments" id="vid" class="btn btn-warning btn-sm "> Get all Documents </a>
+            <a href="/documents/{{$id_file}}/getAllStatistics" id="stat" class="btn btn-warning btn-sm "> Get all Statistics </a>
+        </div>
     @endif
 
     <div class="row ">
@@ -93,7 +104,19 @@
 
 {{-- Scripts --}}
 @section('scripts')
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
+    <script src="{{ asset('js/datePicker/bootstrap-datetimepicker.min.js') }}"></script>
     <script>
+        $(function () {
+            dp = $('#datetimepicker1').datetimepicker({
+                format: 'DD.MM.YYYY',
+                defaultDate: 'moment'
+            }).on('dp.change', function (e) {
+                $.get("/settings/toSessionDate", {
+                    'date':moment(e.date).format("DD.MM.YYYY")
+                });
+            });
+        });
         $('#tablet2').DataTable();
         $('#tablet3').DataTable();
         $('#tablet4').DataTable();

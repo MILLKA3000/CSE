@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Helper\File as file;
 use App\Helper\Excel_;
 use App\Model\Excel\Excel as Model_Excel;
+use Illuminate\Support\Facades\Session;
 
 
 class ExcelController extends Controller
@@ -36,6 +37,7 @@ class ExcelController extends Controller
             if (array_keys([
                 'application/vnd.ms-office',
                 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],$file->getMimeType())) {
+                Session::forget('date');
                 $this->otherData['path'] = $file->move('xls'.DIRECTORY_SEPARATOR.file::_get_path(), $file->getClientOriginalName());
                 $this->otherData['urlOriginalName'] = $file->getClientOriginalName();
                 $this->otherData['qtyQuestions'] = $request->get('qtyQuestions');
