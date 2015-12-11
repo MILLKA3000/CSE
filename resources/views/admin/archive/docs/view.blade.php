@@ -38,7 +38,8 @@
         <div class="block"><h3>{!! trans("admin/modules/arhive.actionOfFile") !!}</h3></div>
         <table id="table2" class="table table-hover ui-datatable"
             <tr>
-                <td>
+                <td width="70%">
+
                     {!! trans("admin/modules/arhive.titleDownload") !!}.
                 </td>
                 <td>
@@ -49,6 +50,12 @@
                 <tr>
                     <td>
                         {!! trans("admin/modules/arhive.titleGetDoc") !!}
+                        <div class='input-group date' id='datetimepicker1'>
+                            <input type='text' class="form-control" />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                        </div>
                     </td>
                     <td>
                         <a href="/documents/{{$modules->file_info_id}}/getAllDocuments" class="btn btn-warning btn-sm "> {!! trans("admin/modules/arhive.getDoc") !!} </a>
@@ -101,6 +108,17 @@
 @section('scripts')
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
     <script src="{{ asset('js/datePicker/bootstrap-datetimepicker.min.js') }}"></script>
-
+    <script>
+        $(function () {
+            dp = $('#datetimepicker1').datetimepicker({
+                format: 'DD.MM.YYYY',
+                defaultDate: 'moment'
+            }).on('dp.change', function (e) {
+                $.get("/settings/toSessionDate", {
+                    'date':moment(e.date).format("DD.MM.YYYY")
+                });
+            });
+        });
+    </script>
     <script src="{{ asset('js/dataTablesSelect.js') }}"></script>
 @stop

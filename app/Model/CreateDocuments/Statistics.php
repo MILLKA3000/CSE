@@ -115,8 +115,10 @@ class Statistics extends Model
                     <td>'.$this->sumGrades['gradeOfFiveTypes']['stat']['B']['5'].' ('.number_format($this->sumGrades['gradeOfFiveTypes']['stat']['B']['5'] / count($this->studentOfModule)*100, 2).'%)</td>
                     ';
             $table .= '<td>' . number_format($this->sumGrades['examGrade'] / count($this->studentOfModule), 2) . '</td>';
+            $table .= '<td>' . number_format($this->sumGrades['examGrade'] / count($this->studentOfModule), 2) . '</td>';
             $table .= '<td>' . number_format($this->sumGrades['grade'] / count($this->studentOfModule), 2) . '</td>';
-            $table .= '</td><td></td><td></td><td></tr>';
+            $table .= '<td>' . number_format($this->sumGrades['grade'] / count($this->studentOfModule), 2) . '</td>';
+            $table .= '</td></tr>';
             $i++;
         }
         $this->shablons['body'] = '';
@@ -124,7 +126,7 @@ class Statistics extends Model
         $this->shablons['body'] .= $this->formHeader('Кількість контрактних студентів: ' . $this->EDUBASISID["C"] . '<br>Кількість державних студентів: ' . $this->EDUBASISID["B"]);
         $this->shablons['body'] .= '<tr><td>№</td><td>Курс</td><td> Назва модулю (дисципліни)</td><td>Загальна кількість студентів</td><td>Кількість контрактних студентів , що склали модуль на \'незадовіль-но\' (відсоток)</td><td>Кількість державних студентів , що склали модуль на \'незадовіль-но\' (відсоток)';
         $this->shablons['body'] .= '</td><td>Кількість контрактних студентів , що склали модуль на \'задовільно\' (відсоток)</td><td>Кількість державних студентів , що склали модуль на \'задовільно\' (відсоток)</td><td>Кількість контрактних студентів , що склали модуль на \'добре\' (відсоток)</td><td>Кількість державних студентів , що склали модуль на \'добре\' (відсоток)</td><td>Кількість контрактних студентів , що склали модуль на \'відмінно\' (відсоток)</td><td>Кількість державних студентів , що склали модуль на \'відмінно\' (відсоток)';
-        $this->shablons['body'] .= '</td><td>Cередній бал </td> <td>Середній бал поточної успішності</td><td>Важкі</td><td>Легкі</td><td>Середній показник</td></tr>';
+        $this->shablons['body'] .= '</td><td>Cередній бал контрактних студентів</td><td>Cередній бал державних студентів </td> <td>Середній бал поточної успішності контрактних студентів</td><td>Середній бал поточної успішності державних студентів</td></tr>';
         $this->shablons['body'] .= $table;
         $this->shablons['body'] .= $this->formFooter();
         return $this->shablons;
@@ -215,14 +217,16 @@ class Statistics extends Model
             'type'=>$type];
 
         foreach ($this->studentOfModule as $student) {
+            $eduBasisid = Students::getStudentEDUBASISID($student->id_student);
             if($student->exam_grade==0) {
-                $data['stat'][Students::getStudentEDUBASISID($student->id_student)]['2']++;
+                dd();
+                $data['stat'][$eduBasisid]['2']++;
                 $data['stat']['2']++;
                 $this->countOfAll2[$student->id_student]=true;
             }
             foreach($fromConfigArray as $keyGrade=>$convert){
                 if($convert['from']<=$student->exam_grade && $convert['to']>=$student->exam_grade){
-                    $data['stat'][Students::getStudentEDUBASISID($student->id_student)][$keyGrade]++;
+                    $data['stat'][$eduBasisid][$keyGrade]++;
                 }if($student->exam_grade==0){
                 }
             }

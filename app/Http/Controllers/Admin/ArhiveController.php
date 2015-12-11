@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Datatables;
+use Illuminate\Support\Facades\Session;
 
 class ArhiveController extends Controller
 {
@@ -63,6 +64,7 @@ class ArhiveController extends Controller
      */
     public function show($id)
     {
+        Session::forget('date');
         $modules = GradesFiles::where('file_info_id',$id)->get();
         foreach($modules as $module){
             $module->DepartmentId = CacheDepartment::getDepartment($module->DepartmentId)->name;

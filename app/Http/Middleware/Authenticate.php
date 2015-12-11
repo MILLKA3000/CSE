@@ -39,8 +39,7 @@ class Authenticate
         try {
             DB::connection('firebird')->getDatabaseName();
         } catch(PDOException $e){
-            echo "<h1>Don't connect to Contingent DATABASE! Please fix this problem!</h1>";
-            die();
+            return view('errors.503');
         }
         if ($this->auth->guest()) {
             if ($request->ajax()) {

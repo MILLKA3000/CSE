@@ -71,6 +71,13 @@ class Excel_ extends Model
                 ));
                 $sheet->setAutoSize(false);
             });
+
+            $excel->sheet('Table for accuracy', function($sheet) {
+                $sheet->row(1, array(
+                    'ID', 'FIO','Discipline-1'
+                ));
+            });
+
         })->export('xlsx');
     }
 

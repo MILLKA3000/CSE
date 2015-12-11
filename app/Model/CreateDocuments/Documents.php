@@ -9,8 +9,11 @@ use Chumper\Zipper\Facades\Zipper;
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Contingent\Students as ContStudent;
 use File;
+use Illuminate\Support\Facades\Session;
 use Storage;
 use App\CacheDepartment;
+use Illuminate\Http\Request;
+use App\Http\Requests;
 
 
 class Documents extends Model
@@ -120,7 +123,7 @@ class Documents extends Model
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Курс _<u>" . $this->findSemester() . "</u>___<br />
         <p align=center>ЕКЗАМЕНАЦІЙНА ВІДОМІСТЬ №____ </p>
         <p>З <u>" . $this->dataEachOfFile->ModuleNum . ". " . $this->dataEachOfFile->NameDiscipline . "</u> - <u>" . $this->dataEachOfFile->NameModule . "</u></p>
-        <p>За _<u>" . $this->dataEachOfFile->Semester . "</u>___ навчальний семестр, екзамен <u>_" . date('d.m.Y') . "___</u></p>
+        <p>За _<u>" . $this->dataEachOfFile->Semester . "</u>___ навчальний семестр, екзамен <u>_" . ((Session::has('date')) ? Session::get('date') : date('d.m.Y')) . "___</u></p>
         <table class=guestbook width=600 align=center cellspacing=0 cellpadding=3 border=1>
             <tr>
                 <td width=10%>

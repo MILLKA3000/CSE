@@ -13,7 +13,7 @@ class Settings extends Controller
 {
     public function __construct()
     {
-        $this->middleware('role:Admin,Self-Admin');
+        $this->middleware('role:Admin,Self-Admin,Inspektor');
         view()->share('type', 'settings');
     }
 
@@ -47,6 +47,11 @@ class Settings extends Controller
     {
         Cache::flush();
         return redirect('/settings')->with('success','Cache cleared...');
+    }
+
+
+    public function toSessionDate(Request $request){
+        $request->session()->put('date', $request['date']);
     }
 
 }
