@@ -30,7 +30,7 @@ class DocumentsController extends Controller
 
     public function __construct()
     {
-        $this->middleware('role:Admin,Self-Admin,Inspektor,Teacher,Chief');
+        $this->middleware('role:Admin,Self-Admin,Dekanat,Inspektor,Teacher,Chief');
         view()->share('type', 'documents');
     }
 

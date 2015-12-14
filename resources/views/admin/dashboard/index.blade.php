@@ -66,7 +66,7 @@
             </div>
         </div>
         @endif
-        @if(!in_array(Auth::user()->role_id,[3,4,6,7]))
+        @if(!in_array(Auth::user()->role_id,[3,6,7]))
         <div class="col-lg-2 col-md-2">
             <div class="panel panel-info">
                 <a href="{{URL::to('teacher')}}">
