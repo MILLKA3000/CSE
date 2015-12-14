@@ -80,7 +80,7 @@
                     </ul>
                 </li>
                 @endif
-                @if(!in_array(Auth::user()->role_id,[3,4,6,7]))
+                @if(!in_array(Auth::user()->role_id,[3,6,7]))
                 <li>
                     <a href="#">
                         <i class="fa fa-sort-desc"></i> {!! trans("admin/menu.Consulting") !!}

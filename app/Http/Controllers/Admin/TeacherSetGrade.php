@@ -22,7 +22,7 @@ class TeacherSetGrade extends Controller
 
     function __construct()
     {
-        $this->middleware('role:Admin,Self-Admin,Teacher,Chief');
+        $this->middleware('role:Admin,Self-Admin,Dekanat,Teacher,Chief');
         view()->share('type', 'teacher');
     }
 
