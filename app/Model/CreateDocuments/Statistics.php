@@ -219,7 +219,6 @@ class Statistics extends Model
         foreach ($this->studentOfModule as $student) {
             $eduBasisid = Students::getStudentEDUBASISID($student->id_student);
             if($student->exam_grade==0) {
-                dd();
                 $data['stat'][$eduBasisid]['2']++;
                 $data['stat']['2']++;
                 $this->countOfAll2[$student->id_student]=true;
