@@ -48,12 +48,17 @@ class Statistics extends Model
     {
         $this->conver = Config::get('grade-proportional');
         $this->dataOfFile = GradesFiles::where('file_info_id', $idFileGrade)->get();
-        $this->EDUBASISID = Students::getSumContractOrButjetStudent(Grades::select('id_student')->where('grade_file_id', $this->dataOfFile[0]->id)->get()->toArray());
+//        $this->dataOfFile = GradesFiles::select('Semester','DepartmentId','SpecialityId','DisciplineVariantID','ModuleVariantID','ModuleNum','NameDiscipline','NameModule','xml_file_id','file_info_id')
+//            ->where('ModuleVariantID',$this->dataOfFile->ModuleVariantID)
+//            ->where('DepartmentId', $this->dataOfFile->DepartmentId)
+//            ->distinct('DepartmentId')
+//            ->get();
+        $this->EDUBASISID = Students::getSumContractOrButjetStudent(Grades::select('id_student')->where('grade_file_id', $this->dataOfFile->first()->id)->get()->toArray());
         /**
          * get data from bd about module (generals data for each docs)
          */
-        $this->speciality = CacheSpeciality::getSpeciality($this->dataOfFile[0]->SpecialityId)->name;
-        $this->department = CacheDepartment::getDepartment($this->dataOfFile[0]->DepartmentId)->name;
+        $this->speciality = CacheSpeciality::getSpeciality($this->dataOfFile->first()->SpecialityId)->name;
+        $this->department = CacheDepartment::getDepartment($this->dataOfFile->first()->DepartmentId)->name;
     }
 
     /**

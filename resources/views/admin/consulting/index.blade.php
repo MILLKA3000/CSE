@@ -6,8 +6,11 @@
 @section('styles')
     <style>
         table.dataTable thead > tr > th {
-             padding-left: 0px;
+            padding-left: 0px;
             padding-right: 0px;
+        }
+        table.dataTable tr td:nth-child(9) {
+            display: flex;
         }
     </style>
 @stop
@@ -35,8 +38,9 @@
             <th data-sortable="true" data-filterable="text">{!! trans("admin/modules/arhive.nameDiscipline") !!}</th>
             <th data-sortable="true" data-filterable="text">{!! trans("admin/modules/arhive.nameModule") !!}</th>
             <th data-sortable="true" data-filterable="select">{!! trans("admin/modules/arhive.typeExam") !!}</th>
+            <th data-sortable="true">{!! trans("admin/modules/consulting.percent") !!}</th>
             <th>{!! trans("admin/admin.action") !!}</th>
-            <th>Get Docs</th>
+
         </tr>
         </thead>
         <tbody></tbody>

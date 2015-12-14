@@ -9,6 +9,8 @@ return [
     'consultGrade' => 'Оцінка за консультацію',
     'addGrade' => 'Додати',
     'clearGrade' => 'Очистити',
-    'getEmptyDoc' => 'Отримати пусті докуиенти',
-    'getDocsWithGrades' => 'Отримати документи з оцінками'
+    'getEmptyDoc' => 'Отримати відоміть',
+    'getDocsWithGrades' => 'Отримати відомість з оцінками',
+    'grades' => 'Оцінки',
+    'percent' => '% заповнення'
 ];

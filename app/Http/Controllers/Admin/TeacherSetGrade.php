@@ -48,7 +48,6 @@ class TeacherSetGrade extends Controller
         'grades.group',
         'grades.grade'
             )->
-//        where('grade_file_id',$this->about_module->id)
             whereIn('grade_file_id', (array)$this->about_module->lists('id')->toArray())
             ->leftjoin('consulting_grades', function($join)
             {
@@ -111,7 +110,6 @@ class TeacherSetGrade extends Controller
 
         $allowDiscepline = UserToDepartments::where('user_id',Auth::user()->id)->join('allowed_discipline','allowed_discipline.departments_id','=','user_to_departament.departments_id')->get()->first();
 
-
         $grades = GradesFiles::select(array(
 //            'grades_files.id',
             'grades_files.EduYear',
@@ -136,12 +134,20 @@ class TeacherSetGrade extends Controller
         }elseif(in_array(Auth::user()->role_id,[5])){
             $grades->whereIn('DisciplineVariantID',null);
         }
+        $grades = $grades->get();
+
+        foreach($grades as $key=>$grade) {
+            $this->about_module = GradesFiles::where('ModuleVariantID',$grade->ModuleVariantID)->where('DepartmentId', $grade->DepartmentId)->get();
+            $gradesEachStud = Grades::select('id_student')->distinct('id_student')->whereIn('grade_file_id', (array)$this->about_module->lists('id')->toArray())->get()->count();
+            $consultGradeEachStud = ConsultingGrades::select('id_student')->distinct('id_student')->where('id_num_plan',$grade->ModuleVariantID)->where('department_id', $grade->DepartmentId)->get()->count();
+            $grade->percent = number_format($consultGradeEachStud/$gradesEachStud*100,2).'%';
+        }
 
         return Datatables::of($grades)
             ->edit_column('EduYear', '{{$EduYear}}/{{$EduYear+1}}')
             ->edit_column('NameModule', '{{$ModuleNum}}. {{$NameModule}}')
-            ->add_column('actions','<a href="{{ URL::to(\'teacher/\'.$DepartmentId.\'/\' . $ModuleVariantID . \'/edit\' )}}" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-pencil"></span>  {{ trans("admin/modal.this") }}</a>')
-            ->add_column('GetDocs','<a href="{{ URL::to(\'documents/\'.$DepartmentId.\'/\' . $ModuleVariantID . \'/false/getAllConsultingDocuments\' )}}" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-pencil"></span>  {{ trans("admin/modules/consulting.getEmptyDoc") }}</a>')
+            ->add_column('percent','{{$percent}}')
+            ->add_column('actions','<a href="{{ URL::to(\'teacher/\'.$DepartmentId.\'/\' . $ModuleVariantID . \'/edit\' )}}" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-pencil"></span>  {{ trans("admin/modules/consulting.grades") }}</a><a href="{{ URL::to(\'documents/\'.$DepartmentId.\'/\' . $ModuleVariantID . \'/false/getAllConsultingDocuments\' )}}" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-pencil"></span>  {{ trans("admin/modules/consulting.getEmptyDoc") }}</a>')
             ->remove_column('ModuleVariantID')
             ->remove_column('DisciplineVariantID')
             ->remove_column('ModuleNum')

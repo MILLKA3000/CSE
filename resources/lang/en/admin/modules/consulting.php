@@ -14,4 +14,6 @@ return [
     'valueMoreThen20' => 'Value must will be less than 20',
     'ok' => 'Save',
     'error' => 'Error. Something is wrong',
+    'grades' => 'Grades',
+    'percent' => '%'
 ];
