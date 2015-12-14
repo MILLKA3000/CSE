@@ -87,7 +87,7 @@ class ConsultingDocuments extends Model
             $this->createHeaderShablon($group);
             $num = 1;
             foreach($students as $student) {
-                $this->shablon .= "<tr><td width=10% align=center>" . ($num++) . "</td><td width=50%>" . Students::getStudentFIO($student->id_student) . "</td><td width=15%>" . ContStudent::getStudentBookNum($student->id_student) . "</td><td width=10%>".(($this->gradePrint=="true")?($student->grade_consulting>0)?$student->grade_consulting:'0(не склав)':'')."</td><td></td></tr>";
+                $this->shablon .= "<tr><td width=10% align=center>" . ($num++) . "</td><td width=50%>" . Students::getStudentFIO($student->id_student) . "</td><td width=15%>" . ContStudent::getStudentBookNum($student->id_student) . "</td><td width=10%>".(($this->gradePrint=="true")?(isset($student->grade_consulting))?($student->grade_consulting=='0')?'0(не склав)':$student->grade_consulting:'':'')."</td><td></td></tr>";
             }
             $this->numStud = $num-1;
             $this->createFooterShablon();

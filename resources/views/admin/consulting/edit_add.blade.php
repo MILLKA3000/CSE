@@ -69,13 +69,13 @@
                         @if(!in_array(Auth::user()->role_id,[8,2,4]))
                              <div class="form-group">
                                 <div class="controls">
-                                    {!! Form::select('role_id', ['0'=>'0(не склав)','12'=>12,'13'=>13,'14'=>14,'15'=>15,'16'=>16,'18'=>18,'20'=>20], (isset($student->grade_consulting))?$student->grade_consulting:'',array('id'=>"i$student->id_student",'class' => 'form-control')) !!}
+                                    {!! Form::select('role_id', [''=>'Не вибрано','0'=>'0(не склав)','12'=>12,'13'=>13,'14'=>14,'15'=>15,'16'=>16,'18'=>18,'20'=>20], (isset($student->grade_consulting))?$student->grade_consulting:'',array('id'=>"i$student->id_student",'class' => 'form-control')) !!}
                                 </div>
                             </div>
                             <a href="#!inline" data-student-id="{{$student->id_student}}" id="{{$student->id_student}}" class="add btn  btn-success left">{!! trans("admin/modules/consulting.addGrade") !!}</a>
                             <a href="#!inline" data-student-id="{{$student->id_student}}" id="{{$student->id_student}}" class="clear btn  btn-success left">{!! trans("admin/modules/consulting.clearGrade") !!}</a>
                         @else
-                            {{($student->grade_consulting)?$student->grade_consulting:0}}
+                            {{(isset($student->grade_consulting))?$student->grade_consulting:'не виставлена'}}
                         @endif
                     </div>
                 </td>
