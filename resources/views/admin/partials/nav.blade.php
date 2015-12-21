@@ -83,13 +83,13 @@
                 @if(!in_array(Auth::user()->role_id,[3,6,7]))
                 <li>
                     <a href="#">
-                        <i class="fa fa-sort-desc"></i> {!! trans("admin/menu.Consulting") !!}
+                        <i class="fa fa-sort-desc"></i> @if(in_array(Auth::user()->role_id,[4])) {!! trans("admin/menu.getDocs") !!} @else {!! trans("admin/menu.Consulting") !!} @endif
                         <span class="fa arrow"></span>
                     </a>
                     <ul class="nav collapse">
                         <li>
                             <a href="{{url('teacher')}}">
-                                <i class="glyphicon glyphicon-list"></i> {!! trans("admin/menu.addConsulting") !!}
+                                <i class="glyphicon glyphicon-list"></i> @if(in_array(Auth::user()->role_id,[4])) {!! trans("admin/menu.getDocsPart") !!} @else {!! trans("admin/menu.addConsulting") !!}  @endif
                             </a>
                         </li>
                     </ul>

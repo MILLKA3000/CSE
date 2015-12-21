@@ -7,7 +7,7 @@ return [
 	'import' => 'Import',
 	'export' => 'Export',
     'importXLS' => 'Import XLS',
-    'arhive' => 'Arhive',
+    'arhive' => 'Archive',
     'arhiveExam' => 'Archive Exam',
     'Consulting' => 'Consulting',
     'addConsulting' => 'Add Consulting',
@@ -17,4 +17,6 @@ return [
     'language' => 'Language',
     'settings' => 'Settings',
     'viewLogs' => 'View Logs',
+    'getDocs' => 'All Docs',
+    'getDocsPart' => 'View archive',
 	];
