@@ -117,11 +117,21 @@ class Excel extends Model
     private function findFirstPage($dataSecondPage){
         foreach($this->firstSheetsOriginal as $key => $firstSheets) { // iteration in first sheet
             $data = $this->convertCellFromFirstSheet($firstSheets);
-            if($data['code'] == $dataSecondPage['code'] && $data['page'] == 1){
+            if($data['code'] == $dataSecondPage['code']){
+
+
+
                 for($i=0;$i < count($dataSecondPage['exam_grade']);$i++){
                     $firstSheets["concat_from_2_page_".$i] = $dataSecondPage['exam_grade'][$i];
                 }
+
+//                if(($firstSheets['storinka']!=1)){
+//                    $firstSheets['storinka']=1;
+//                    $this->firstSheetsOriginal[$key] = $firstSheets;
+//                }
+
                 $this->firstSheetsOriginal[$key] = $firstSheets;
+
                 return true;
             }
         }

@@ -9,6 +9,7 @@ use App\GradesFiles;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Model\CreateDocuments\ConsultingDocuments;
+use App\Model\CreateDocuments\DeaneryDocuments;
 use App\Model\CreateDocuments\Documents;
 use App\Model\Gaps\GetEmailEachStudent;
 use App\XmlAgregate;
@@ -51,6 +52,16 @@ class DocumentsController extends Controller
     public function getAllConsultingDocuments($depId,$numPlan,$check)
     {
         $doc = new ConsultingDocuments($depId,$numPlan,$check);
+        return redirect($doc->formDocuments());
+    }
+
+    /**
+     * @param $numPlan
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function getAllDocumentsDeanery($depId,$numPlan,$check)
+    {
+        $doc = new DeaneryDocuments($depId,$numPlan,$check);
         return redirect($doc->formDocuments());
     }
 
