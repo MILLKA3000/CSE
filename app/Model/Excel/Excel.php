@@ -88,8 +88,8 @@ class Excel extends Model
      * This func has all functions of validate
      */
     private function validateTables(){
-        $this->concatAnotherPage();
         $checkError = true;
+        $this->concatAnotherPage();
         $this->rebuildDataInFirstSheets(); // for find student code in index array
         $this->rebuildDataInSecondSheets();
         $this->rebuildDataInThreeSheets();
@@ -118,23 +118,24 @@ class Excel extends Model
         foreach($this->firstSheetsOriginal as $key => $firstSheets) { // iteration in first sheet
             $data = $this->convertCellFromFirstSheet($firstSheets);
             if($data['code'] == $dataSecondPage['code']){
-
-
-
                 for($i=0;$i < count($dataSecondPage['exam_grade']);$i++){
                     $firstSheets["concat_from_2_page_".$i] = $dataSecondPage['exam_grade'][$i];
                 }
-
-//                if(($firstSheets['storinka']!=1)){
-//                    $firstSheets['storinka']=1;
-//                    $this->firstSheetsOriginal[$key] = $firstSheets;
-//                }
-
+                if(($data['page']!=1)){
+                    $data['page']=1;
+                    $this->firstSheetsOriginal[$key][key(array_values((array)$this->firstSheetsOriginal[$key])[1])]=1;
+                    for($i=0;$i < count($data['exam_grade']);$i++){
+                        $firstSheets[$i] = 0;
+                    }
+                    $this->firstSheetsOriginal[$key] = $firstSheets;
+                    return false;
+                }
                 $this->firstSheetsOriginal[$key] = $firstSheets;
 
                 return true;
             }
         }
+
         return false;
     }
 
