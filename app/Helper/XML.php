@@ -53,9 +53,7 @@ class XML extends Model
                     $student->credits_test = $examGrade->exam_grade+(isset($consultingGrades->grade_consulting)?$consultingGrades->grade_consulting:0);
                 }
             }
-//            $obj->setContent($d);
         }
-//        dd($obj);
         return $obj->getContent()->asXml(public_path() . DIRECTORY_SEPARATOR."tmp".DIRECTORY_SEPARATOR."XML".DIRECTORY_SEPARATOR.$name);
     }
 
