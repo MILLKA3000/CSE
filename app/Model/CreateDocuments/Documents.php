@@ -82,7 +82,7 @@ class Documents extends Model
             foreach($students as $student) {
                 $exam_grade = ($student->exam_grade == 0) ? "0(не склав)" : $student->exam_grade;
                 $exam_grade = ($student->code == 999) ? "(не з'явився)" : $exam_grade;
-                $this->shablon .= "<tr><td width=10%>" . ($num++) . "</td><td width=50%>" . $student->fio . "</td><td width=15%>" . (is_int(ContStudent::getStudentBookNum($student->id_student))?ContStudent::getStudentBookNum($student->id_student):'' . "</td><td width=10%>" . $exam_grade . "</td></tr>";
+                $this->shablon .= "<tr><td width=10%>" . ($num++) . "</td><td width=50%>" . $student->fio . "</td><td width=15%>" . (int)ContStudent::getStudentBookNum($student->id_student) . "</td><td width=10%>" . $exam_grade . "</td></tr>";
             }
             $this->createFooterShablon();
             File::makeDirectory(public_path() . $this->DOC_PATH . DIRECTORY_SEPARATOR.'docs', 0775, true, true);
