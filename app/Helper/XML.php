@@ -45,7 +45,7 @@ class XML extends Model
     static public function putGradesInXml($obj,$name)
     {
         foreach ($obj->getContent() as $d) {
-            $module = GradesFiles::where('ModuleVariantID',$d->modulevariantid)->get()->last();
+            $module = GradesFiles::where('ModuleVariantID',$d->modulevariantid)->orderBy('created_at', 'desc')->get()->first();
             foreach ($d->students->student as $student) {
                 $examGrade = Grades::where('id_student',$student->id)->where('grade_file_id',$module->id)->get()->last();
                 $consultingGrades = ConsultingGrades::where('id_student',$student->id)->where('id_num_plan',$module->ModuleVariantID)->get()->last();
@@ -53,8 +53,9 @@ class XML extends Model
                     $student->credits_test = $examGrade->exam_grade+(isset($consultingGrades->grade_consulting)?$consultingGrades->grade_consulting:0);
                 }
             }
+//            $obj->setContent($d);
         }
-        $obj->setContent($d);
+//        dd($obj);
         return $obj->getContent()->asXml(public_path() . DIRECTORY_SEPARATOR."tmp".DIRECTORY_SEPARATOR."XML".DIRECTORY_SEPARATOR.$name);
     }
 
