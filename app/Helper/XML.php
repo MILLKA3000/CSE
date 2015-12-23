@@ -46,8 +46,8 @@ class XML extends Model
     {
         foreach ($obj->getContent() as $d) {
             $module = GradesFiles::where('ModuleVariantID',$d->modulevariantid)->orderBy('created_at', 'desc')->get()->first();
-            foreach ($d->students->student as $student) {;
-                $examGrade = Grades::where('id_student',$student->id)->where('grade_file_id',142)->orderBy('created_at', 'desc')->get()->first();
+            foreach ($d->students->student as $student) {
+                $examGrade = Grades::where('id_student',$student->id)->whereIn('grade_file_id',(array)$module->lists('id')->toArray())->get()->last();
                 $consultingGrades = ConsultingGrades::where('id_student',$student->id)->where('id_num_plan',$module->ModuleVariantID)->get()->first();
 		dd($examGrade);
                 if(isset($examGrade)){
