@@ -58,6 +58,7 @@ class DeaneryDocuments extends Model
             ->where('DepartmentId', $depId)
             ->get();
         $this->typeExam = ($this->dataEachOfFile->first()->type_exam_id==2)?'exam':($this->dataEachOfFile->first()->type_exam_id==1)?(AllowedDiscipline::where('arrayAllowed', 'like', '%'.$this->dataEachOfFile->first()->DisciplineVariantID.'%')->get()->first())?'exam':'dz':'dz';
+        dd($this->dataEachOfFile);
         Storage::deleteDirectory($this->DOC_PATH);
     }
 
@@ -73,7 +74,8 @@ class DeaneryDocuments extends Model
         $this->speciality = CacheSpeciality::getSpeciality(Students::getStudentSpeciality($students[0]->id_student))->name;
         $this->department = CacheDepartment::getDepartment(Students::getStudentDepartment($students[0]->id_student))->name;
         foreach ($students as $student) {
-            $student->grade_consulting = ConsultingGrades::where('id_student',$student['id_student'])->get()->first();
+            $student->grade_consulting = ConsultingGrades::where('id_student',$student['id_student'])->where('id_num_plan', $this->dataEachOfFile->first()->ModuleVariantID)->get()->last();
+
             (isset($student->grade_consulting))?$student->grade_consulting = $student->grade_consulting->grade_consulting:$student->grade_consulting='';
             $this->studentsOfGroup[Students::getStudentGroup($student['id_student'])][] = $student;
         }
@@ -92,7 +94,7 @@ class DeaneryDocuments extends Model
             $num = 1;
             foreach($students as $student) {
                 $exam_grade = ($student->exam_grade == 0) ? "0(не склав)" : $student->exam_grade;
-                $this->shablon .= "<tr><td width=10% align=center>" . ($num++) . "</td><td width=50%>" . Students::getStudentFIO($student->id_student) . "</td><td width=15%>" . ContStudent::getStudentBookNum($student->id_student) . "</td><td>".$exam_grade."</td>";
+                $this->shablon .= "<tr><td width=10% align=center>" . ($num++) . "</td><td width=50%>" . Students::getStudentFIO($student->id_student) . "</td><td width=15%>" . ContStudent::getStudentBookNum($student->id_student) . "</td><td>".$student->grade."</td><td>".$exam_grade."</td>";
                 if($this->typeExam=='exam') {
                     $this->shablon .= "<td width=10%>".(($this->gradePrint=="true")?(isset($student->grade_consulting))?($student->grade_consulting=='0')?'0(не склав)':$student->grade_consulting:'':'')."</td>";
                 }
@@ -141,22 +143,11 @@ class DeaneryDocuments extends Model
                 <td width=80%>  Спеціальність <u>" . $this->speciality . "</u></td><td></td>
             </tr>
         </table>
-        <p align=center> Зведенна відомість №__________ </p>
+        <p align=center> Зведена відомість №__________ </p>
         <p>З <u>" . $this->dataEachOfFile->first()->ModuleNum . ". " . $this->dataEachOfFile->first()->NameDiscipline . "</u> - <u>" . $this->dataEachOfFile->first()->NameModule . "</u></p>
         <table class=guestbook width=625 align=center cellspacing=0 cellpadding=3 border=0>
             <tr>
                 <td width=30%>За _<u>" . $this->dataEachOfFile->first()->Semester . "</u>___ навчальний семестр,</td><td width=20%><u>_" . date('d.m.Y') . "___</u></td><td width=50%></td>
-            </tr>
-            <tr>
-                <td width=30%></td><td width=20% style='font-size: 60%'>(дата усної співбесіди)</td><td width=50%></td>
-            </tr>
-        </table>
-        <table class=guestbook width=625 align=center cellspacing=0 cellpadding=3 border=0>
-            <tr>
-                <td width=57%> Викладач(і), який(і) проводить(ять) усну співбесіду </td><td width=43%>_________________________________________</td>
-            </tr>
-            <tr>
-                <td width=60%></td><td width=40% style='font-size: 60%'>(вчене звання, прізвище та ініціали)</td>
             </tr>
         </table>
         <table class=guestbook width=620 align=center cellspacing=0 cellpadding=3 border=1>
@@ -169,11 +160,14 @@ class DeaneryDocuments extends Model
                 </td>
                 <td width=10% align=center>
                     <b>№ індиві-дуального навч. плану</b>
-                </td>";
+                </td>
+                <td width=10%>
+                        <b>Поточна оцінка</b>
+                    </td>";
                 if($this->typeExam=='exam') {
                     $this->shablon .= "
                     <td width=10%>
-                        <b>Екзаменаційна оцінка</b>
+                        <b>Оцінка за тест</b>
                     </td>
                     <td width=15% align=center>
                         <b>Оцінка за співбесіду</b>
@@ -181,11 +175,11 @@ class DeaneryDocuments extends Model
                 }else{
                     $this->shablon .= "
                     <td width=10%>
-                        <b>Кількість балів</b>
+                        <b>Оцінка за тест</b>
                     </td>";
                 }
         $this->shablon .= "<td width=10%>
-                    <b>Остаточна оцінка</b>
+                    <b>Загальна оцінка</b>
                 </td>
             </tr>
 
@@ -197,36 +191,17 @@ class DeaneryDocuments extends Model
      */
     private function createFooterShablon()
     {
-        $name = UserToDepartments::select('name')->where('user_id',Auth::user()->id)->join('departments','departments.id','=','user_to_departament.departments_id')->get()->first();
-        $this->shablon .= "
+        $this->shablon .= "</table><br />
+        Голова комісії _______________________________________________________________ <br>
+        (вчені звання, прізвище та ініціали)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(підпис)<br />
+        Члени комісії ________________________________________________________________ <br>
+        (вчені звання, прізвище та ініціали)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(підпис)<br />
+        ____________________________________________________________________________ <br><br>
+        ____________________________________________________________________________ <br><br>
 
-        </table>
-        <br />
-        <table class=guestbook width=625 align=center cellspacing=0 cellpadding=3 border=0>
-            <tr>
-                <td width=25%>Студентів у групі</td><td width=10%>___<u>".$this->numStud."</u>___</td><td width=20%></td><td width=12%>Екзаменатор(и)</td><td width=13%>________________</td>
-            </tr>
-            <tr>
-                <td width=25%>Не допущено</td><td width=10%>________</td><td width=20%></td><td width=12%></td><td width=13% ><span align=center style='font-size: 60%'>(підпис) </span></td>
-            </tr>
-            <tr>
-                <td width=25%>Не з’явилось</td><td width=10%>________</td><td width=20%></td><td width=12%>Зав. кафедри</td><td width=13%>________________</td>
-            </tr>
-            <tr>
-                <td width=25%>Декан факультету</td><td width=20%>________________________</td><td width=10%></td><td width=12%></td><td width=13% ><span align=center style='font-size: 60%'>(підпис) </span></td>
-            </tr>
-            <tr>
-                <td width=25%></td><td width=10%><span align=center style='font-size: 60%'>(прізвище та ініціали) </span></td>
-            </tr>
-            <tr>
-                <td width=25%></td><td width=10%>________</td>
-            </tr>
-            <tr>
-                <td width=25%></td><td width=10%><span align=center style='font-size: 60%'>(підпис)</span></td>
-            </tr>
-        </table><br />
-        1.       Проти прізвища студента, який не з’явився на підсумковий контроль, екзаменатор вказує – „не з’явився”.<br />
-        2.       Відомість подається в деканат в день проведення усної співбесіди.";
+        1. Проти прізвища студента, який не з’явився  на підсумковий контроль, екзаменатор вказує – „не з’явився”.<br>
+        2. Відомість подається в деканат не пізніше наступного дня після проведення підсумкового контролю.
+         ";
     }
 
 
