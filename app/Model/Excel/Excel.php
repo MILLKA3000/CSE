@@ -73,11 +73,10 @@ class Excel extends Model
     public function SaveData(){
         if($this->validateTables()){
             $this->id_file = $this->setFileInfo();
-            $module = 0;
-            foreach($this->OriginalData->get()[3] as $fourSheets) {
+            foreach($this->OriginalData->get()[3] as $key=>$fourSheets) {
                 $this->id_grade_info = $this->setGradeFile($fourSheets);
-                $this->setGrades($this->dataToSave[$module]);
-                $module++;
+                if(isset($this->dataToSave[$key]))
+                    $this->setGrades($this->dataToSave[$key]);
             }
             $this->messages['success'][] = 'Save data complicated!';
         }
