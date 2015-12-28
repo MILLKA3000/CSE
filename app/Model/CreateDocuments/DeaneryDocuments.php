@@ -69,7 +69,8 @@ class DeaneryDocuments extends Model
         /**
          * find each student and sort of groupNum
          */
-        $students = Grades::select('id_student','fio','group','code','exam_grade','grade')->whereIn('grade_file_id', (array) $this->dataEachOfFile->lists('id')->toArray())->distinct()->get();
+        $students = Grades::select('id_student','fio','group','code','exam_grade','grade')->whereIn('grade_file_id', (array) $this->dataEachOfFile->lists('id')->toArray())->distinct('id_student')->get();
+	dd($students);
         $this->speciality = CacheSpeciality::getSpeciality(Students::getStudentSpeciality($students[0]->id_student))->name;
         $this->department = CacheDepartment::getDepartment(Students::getStudentDepartment($students[0]->id_student))->name;
         foreach ($students as $student) {
