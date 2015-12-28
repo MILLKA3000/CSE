@@ -58,7 +58,6 @@ class DeaneryDocuments extends Model
             ->where('DepartmentId', $depId)
             ->get();
         $this->typeExam = ($this->dataEachOfFile->first()->type_exam_id==2)?'exam':($this->dataEachOfFile->first()->type_exam_id==1)?(AllowedDiscipline::where('arrayAllowed', 'like', '%'.$this->dataEachOfFile->first()->DisciplineVariantID.'%')->get()->first())?'exam':'dz':'dz';
-        dd($this->dataEachOfFile);
         Storage::deleteDirectory($this->DOC_PATH);
     }
 
