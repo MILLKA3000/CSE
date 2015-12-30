@@ -45,10 +45,10 @@ class XML extends Model
     static public function putGradesInXml($obj,$name)
     {
         foreach ($obj->getContent() as $d) {
-            $module = GradesFiles::where('ModuleVariantID',$d->modulevariantid)->orderBy('created_at', 'desc')->get()->first();
+            $module = GradesFiles::where('ModuleVariantID',$d->modulevariantid)->orderBy('created_at', 'desc')->get();
             foreach ($d->students->student as $student) {
                 $examGrade = Grades::where('id_student',$student->id)->whereIn('grade_file_id',(array)$module->lists('id')->toArray())->get()->last();
-                $consultingGrades = ConsultingGrades::where('id_student',$student->id)->where('id_num_plan',$module->ModuleVariantID)->get()->first();
+                $consultingGrades = ConsultingGrades::where('id_student',$student->id)->where('id_num_plan',$d->modulevariantid)->get()->first();
                 if(isset($examGrade)){
                     $student->credits_test = $examGrade->exam_grade+(isset($consultingGrades->grade_consulting)?$consultingGrades->grade_consulting:0);
                 }
