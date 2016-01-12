@@ -140,6 +140,7 @@ class TeacherSetGrade extends Controller
             $this->about_module = GradesFiles::where('ModuleVariantID',$grade->ModuleVariantID)->where('DepartmentId', $grade->DepartmentId)->get();
             $gradesEachStud = Grades::select('id_student')->distinct('id_student')->whereIn('grade_file_id', (array)$this->about_module->lists('id')->toArray())->get()->count();
             $consultGradeEachStud = ConsultingGrades::select('id_student')->distinct('id_student')->where('id_num_plan',$grade->ModuleVariantID)->where('department_id', $grade->DepartmentId)->get()->count();
+            $consultGradeEachStud = ($consultGradeEachStud==0) ? 1 : $consultGradeEachStud;
             $grade->percent = number_format($consultGradeEachStud/$gradesEachStud*100,2).'%';
         }
 
