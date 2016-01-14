@@ -65,11 +65,11 @@ class ConsultingDocuments extends Model
         /**
          * find each student and sort of groupNum
          */
-        $students = Grades::whereIn('grade_file_id', (array) $this->dataEachOfFile->lists('id')->toArray())->get();
+        $students = Grades::select('id_student')->whereIn('grade_file_id', (array) $this->dataEachOfFile->lists('id')->toArray())->distinct()->get();
         $this->speciality = CacheSpeciality::getSpeciality(Students::getStudentSpeciality($students[0]->id_student))->name;
         $this->department = CacheDepartment::getDepartment(Students::getStudentDepartment($students[0]->id_student))->name;
         foreach ($students as $student) {
-            $student->grade_consulting = ConsultingGrades::where('id_student',$student['id_student'])->get()->first();
+            $student->grade_consulting = ConsultingGrades::where('id_student',$student['id_student'])->where('id_num_plan', $this->dataEachOfFile->first()->ModuleVariantID)->get()->last();
             (isset($student->grade_consulting))?$student->grade_consulting = $student->grade_consulting->grade_consulting:$student->grade_consulting='';
             $this->studentsOfGroup[Students::getStudentGroup($student['id_student'])][] = $student;
         }
