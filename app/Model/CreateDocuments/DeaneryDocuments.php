@@ -74,7 +74,7 @@ class DeaneryDocuments extends Model
         $this->speciality = CacheSpeciality::getSpeciality(Students::getStudentSpeciality($students[0]->id_student))->name;
         $this->department = CacheDepartment::getDepartment(Students::getStudentDepartment($students[0]->id_student))->name;
         foreach ($students as $student) {
-            $student = Grades::select('id_student','fio','group','code','exam_grade','grade')->where('id_student',$student->id_student)->whereIn('grade_file_id', (array) $this->dataEachOfFile->lists('id')->toArray())->distinct()->get()->last();
+            $student = Grades::select('id_student','fio','group','code','exam_grade','grade')->where('id_student',$student->id_student)->whereIn('grade_file_id', (array) $this->dataEachOfFile->lists('id')->toArray())->distinct()->orderBy('exam_grade', 'asc')->get()->last();
 
             $student->grade_consulting = ConsultingGrades::where('id_student',$student['id_student'])->where('id_num_plan', $this->dataEachOfFile->first()->ModuleVariantID)->get()->last();
 
