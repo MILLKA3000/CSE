@@ -19,4 +19,5 @@ return [
     'viewLogs' => 'View Logs',
     'getDocs' => 'All Docs',
     'getDocsPart' => 'View archive',
+    'getDeanerDocs' => 'Get Deanery docs'
 	];

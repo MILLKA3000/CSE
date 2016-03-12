@@ -72,8 +72,9 @@ class DeaneryDocuments extends Model
         $students = Grades::select('id_student')->whereIn('grade_file_id', (array) $this->dataEachOfFile->lists('id')->toArray())->distinct()->get();
         $this->speciality = CacheSpeciality::getSpeciality(Students::getStudentSpeciality($students[0]->id_student))->name;
         $this->department = CacheDepartment::getDepartment(Students::getStudentDepartment($students[0]->id_student))->name;
+
         foreach ($students as $student) {
-            $student = Grades::select('id_student','fio','group','code','exam_grade','grade')->where('id_student',$student->id_student)->whereIn('grade_file_id', (array) $this->dataEachOfFile->lists('id')->toArray())->distinct()->orderBy('exam_grade', 'asc')->get()->last();
+            $student = Grades::select('id_student','fio','group','code','exam_grade','grade')->where('id_student',$student->id_student)->whereIn('grade_file_id', (array) $this->dataEachOfFile->lists('id')->toArray())->distinct()->orderBy('exam_grade', 'DESC')->get()->last();
 
             $student->grade_consulting = ConsultingGrades::where('id_student',$student['id_student'])->where('id_num_plan', $this->dataEachOfFile->first()->ModuleVariantID)->get()->last();
 
@@ -94,6 +95,7 @@ class DeaneryDocuments extends Model
             $this->createHeaderShablon($group);
             $num = 1;
             foreach($students as $student) {
+
                 $exam_grade = ($student->exam_grade == 0) ? "0(не склав)" : $student->exam_grade;
                 $this->shablon .= "<tr><td width=10% align=center>" . ($num++) . "</td><td width=50%>" . Students::getStudentFIO($student->id_student) . "</td><td width=15%>" . ContStudent::getStudentBookNum($student->id_student) . "</td><td>".$student->grade."</td><td>".$exam_grade."</td>";
                 if($this->typeExam=='exam') {
