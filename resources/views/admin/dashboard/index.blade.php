@@ -77,7 +77,7 @@
                             </div>
                             <div class="col-xs-9 text-right">
                                 <div class="huge"></div>
-                                <div>{{ trans("admin/menu.addConsulting") }}!</div>
+                                <div>@if(in_array(Auth::user()->role_id,[4]) ){{ trans("admin/menu.getDeanerDocs") }} @else {{ trans("admin/menu.addConsulting") }}! @endif </div>
                             </div>
                         </div>
                     </div>

@@ -10,7 +10,11 @@
             padding-right: 0px;
         }
         table.dataTable tr td:nth-child(9) {
-            display: flex;
+            /*display: flex;*/
+        }
+
+        table.dataTable tr td .btn{
+            width: 100%!important;
         }
     </style>
 @stop
