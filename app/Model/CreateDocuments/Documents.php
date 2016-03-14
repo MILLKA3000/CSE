@@ -77,12 +77,15 @@ class Documents extends Model
     private function formHtml()
     {
         foreach ($this->studentsOfGroup as $group=>$students) {
-            $this->createHeaderShablon($group);
-            $num = 1;
+            $this->shablon = '';
+            $this->group = $group;
+            $this->createHeaderShablon();
+            $num = 0;
             foreach($students as $student) {
-                $exam_grade = ($student->exam_grade == 0) ? "0(не склав)" : $student->exam_grade;
-                $exam_grade = ($student->code == 999) ? "(не з'явився)" : $exam_grade;
-                $this->shablon .= "<tr><td width=10%>" . ($num++) . "</td><td width=50%>" . $student->fio . "</td><td width=15%>" . (int)ContStudent::getStudentBookNum($student->id_student) . "</td><td width=10%>" . $exam_grade . "</td></tr>";
+                $student->num = ++$num;
+                $student->exam_grade = ($student->exam_grade == 0) ? "0(не склав)" : $student->exam_grade;
+                $student->exam_grade = ($student->code == 999) ? "(не з'явився)" :  $student->exam_grade;
+                $this->shablon .= view('admin.docs.exam.general')->with('student',$student);
             }
             $this->createFooterShablon();
             File::makeDirectory(public_path() . $this->DOC_PATH . DIRECTORY_SEPARATOR.'docs', 0775, true, true);
@@ -102,44 +105,11 @@ class Documents extends Model
     /**
      * Create block for header of shablon
      */
-    private function createHeaderShablon($group)
+    private function createHeaderShablon()
     {
-        $this->shablon = "
-        <html>
-        <head>
-            <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
-            <style>
-                body {font-size:14px;}
-            </style>
-        </head>
-        <body>
-        <p align=center>МІНІСТЕРСТВО ОХОРОНИ ЗДОРОВЯ УКРАЇНИ </p>
-        <p align=center><b><u>Тернопільський державний медичний університет імені І.Я. Горбачевського</u></b></p>
-        <span align=left> Факультет <u>" . $this->department . "</u></span><br>
-        <span align=left> Спеціальність <u>" . $this->speciality . "</u></span>
-        <span align=right>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Група_<u>" . $group . "</u>___</span>
-        &nbsp;&nbsp;&nbsp;&nbsp;" . $this->dataEachOfFile->EduYear . "/" . ($this->dataEachOfFile->EduYear + 1) . " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Курс _<u>" . $this->findSemester() . "</u>___<br />
-        <p align=center>ЕКЗАМЕНАЦІЙНА ВІДОМІСТЬ №____ </p>
-        <p>З <u>" . $this->dataEachOfFile->ModuleNum . ". " . $this->dataEachOfFile->NameDiscipline . "</u> - <u>" . $this->dataEachOfFile->NameModule . "</u></p>
-        <p>За _<u>" . $this->dataEachOfFile->Semester . "</u>___ навчальний семестр, екзамен <u>_" . ((Session::has('date')) ? Session::get('date') : date('d.m.Y')) . "___</u></p>
-        <table class=guestbook width=600 align=center cellspacing=0 cellpadding=3 border=1>
-            <tr>
-                <td width=10%>
-                    <b>№ п/п</b>
-                </td>
-                <td width=50%>
-                    <b>Прізвище, ім'я по-батькові</b>
-                </td>
-                <td width=10%>
-                    <b>№ індиві-дуального навч. плану</b>
-                </td>
-                <td width=10%>
-                    <b>Кількість балів</b>
-                </td>
-            </tr>
-        ";
+        $this->semester = $this->findSemester();
+        $this->date = date('d.m.Y');
+        $this->shablon .= view('admin.docs.exam.header')->with('this',$this);
     }
 
     /**
@@ -147,17 +117,7 @@ class Documents extends Model
      */
     private function createFooterShablon()
     {
-        $this->shablon .= "</table><br />
-        Голова комісії _______________________________________________________________ <br>
-        (вчені звання, прізвище та ініціали)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(підпис)<br />
-        Члени комісії ________________________________________________________________ <br>
-        (вчені звання, прізвище та ініціали)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(підпис)<br />
-        ____________________________________________________________________________ <br><br>
-        ____________________________________________________________________________ <br><br>
-
-        1. Проти прізвища студента, який не з’явився  на підсумковий контроль, екзаменатор вказує – „не з’явився”.<br>
-        2. Відомість подається в деканат не пізніше наступного дня після проведення підсумкового контролю.
-         ";
+        $this->shablon .= view('admin.docs.exam.footer');
     }
 
 
