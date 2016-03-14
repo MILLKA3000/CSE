@@ -8,11 +8,9 @@ use App\ConsultingGrades;
 use App\Grades;
 use App\GradesFiles;
 use App\Model\Contingent\Students;
-use App\UserToDepartments;
 use Chumper\Zipper\Facades\Zipper;
 use Illuminate\Database\Eloquent\Model;
 use File;
-use Illuminate\Support\Facades\Auth;
 use Storage;
 use App\CacheDepartment;
 
@@ -110,7 +108,7 @@ class DeaneryDocuments extends Model
                 if($this->typeExam=='exam') {
                     $student->checkExam = (($this->gradePrint == "true") ? (isset($student->grade_consulting)) ? ($student->grade_consulting == '0') ? '0(не склав)' : $student->grade_consulting : '' : '');
                 }
-                $this->shablon .= view('admin.docs.exam.general')->with('student',$student);
+                $this->shablon .= view('admin.docs.deanery.general')->with('student',$student);
             }
             $this->numStud = $num-1;
             $this->createFooterShablon();
@@ -135,7 +133,7 @@ class DeaneryDocuments extends Model
     {
         $this->semester = $this->findSemester();
         $this->date = date('d.m.Y');
-        $this->shablon .= view('admin.docs.exam.header')->with('this',$this);
+        $this->shablon .= view('admin.docs.deanery.header')->with('this',$this);
     }
 
     /**
@@ -143,7 +141,7 @@ class DeaneryDocuments extends Model
      */
     private function createFooterShablon()
     {
-        $this->shablon .= view('admin.docs.exam.footer');
+        $this->shablon .= view('admin.docs.deanery.footer');
     }
 
 

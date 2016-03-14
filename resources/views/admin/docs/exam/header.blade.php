@@ -1,3 +1,4 @@
+
 <html>
 <head>
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
@@ -7,52 +8,29 @@
 </head>
 <body>
 <p align=center>МІНІСТЕРСТВО ОХОРОНИ ЗДОРОВЯ УКРАЇНИ </p>
-<p align=center><b><u>ДВНЗ «Тернопільський державний медичний університет імені І.Я. Горбачевського МОЗ України</u></b></p>
-<table class=guestbook width=625 align=center cellspacing=0 cellpadding=3 border=0>
+<p align=center><b><u>Тернопільський державний медичний університет імені І.Я. Горбачевського</u></b></p>
+<span align=left> Факультет <u>{{$this['department']}}</u></span><br>
+<span align=left> Спеціальність <u>{{$this['speciality']}}</u></span>
+<span align=right>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Група_<u>{{$this['group']}}</u>___</span>
+&nbsp;&nbsp;&nbsp;&nbsp;{{$this['dataEachOfFile']->EduYear}}/{{($this['dataEachOfFile']->EduYear + 1)}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Курс _<u>{{$this['semester']}}</u>___<br />
+<p align=center>ЕКЗАМЕНАЦІЙНА ВІДОМІСТЬ №____ </p>
+<p>З <u>{{$this['dataEachOfFile']->ModuleNum}}. {{$this['dataEachOfFile']->NameDiscipline}}</u> - <u>{{$this['dataEachOfFile']->NameModule}}</u></p>
+<p>За _<u>{{$this['dataEachOfFile']->Semester}}</u>___ навчальний семестр, екзамен <u>_{{((Session::has('date')) ? Session::get('date') : $this['date'])}}___</u></p>
+<table class=guestbook width=600 align=center cellspacing=0 cellpadding=3 border=1>
     <tr>
-        <td width=80%> Факультет <u>{{ $this['department'] }}</u></td><td>Група_<u>{{ $this['group'] }}</u>___</td>
-    </tr>
-    <tr>
-        <td width=80%> <u> {{ $this['dataEachOfFile']->first()->EduYear }} / {{($this['dataEachOfFile']->first()->EduYear + 1)}}</u> навчальний рік</td><td>Курс _<u> {{ $this['semester'] }}</u>___</td>
-    </tr>
-    <tr>
-        <td width=80%>  Спеціальність <u>" . $this->speciality . "</u></td><td></td>
-    </tr>
-</table>
-<p align=center> Зведена відомість №__________ </p>
-<p>З <u>{{ $this['dataEachOfFile']->first()->ModuleNum }} . {{ $this['dataEachOfFile']->first()->NameDiscipline }}</u> - <u>{{ $this['dataEachOfFile']->first()->NameModule }}</u></p>
-<table class=guestbook width=625 align=center cellspacing=0 cellpadding=3 border=0>
-    <tr>
-        <td width=30%>За _<u>{{ $this['dataEachOfFile']->first()->Semester }}</u>___ навчальний семестр,</td><td width=20%><u>_{{ $this['date'] }}___</u></td><td width=50%></td>
-    </tr>
-</table>
-<table class=guestbook width=620 align=center cellspacing=0 cellpadding=3 border=1>
-    <tr>
-        <td width=5% align=center>
-            <b>№ <br />п/п</b>
+        <td width=10%>
+            <b>№ п/п</b>
         </td>
         <td width=50%>
             <b>Прізвище, ім'я по-батькові</b>
         </td>
-        <td width=10% align=center>
+        <td width=10%>
             <b>№ індиві-дуального навч. плану</b>
         </td>
         <td width=10%>
-            <b>Поточна оцінка</b>
-        </td>
-        @if($this['typeExam']=='exam')
-            <td width=10%>
-                <b>Оцінка за тест</b>
-            </td>
-            <td width=15% align=center>
-                <b>Оцінка за співбесіду</b>
-            </td>
-        @else
-            <td width=10%>
-                <b>Оцінка за тест</b>
-            </td>
-        @endif
-        <td width=10%>
-            <b>Загальна оцінка</b>
+            <b>Кількість балів</b>
         </td>
     </tr>
+        
