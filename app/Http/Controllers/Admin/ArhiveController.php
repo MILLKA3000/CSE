@@ -35,26 +35,6 @@ class ArhiveController extends Controller
         return view('admin.archive.docs.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
      * Display the specified resource.
@@ -79,45 +59,11 @@ class ArhiveController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-    /**
      * Show a list of archive.
      *
      * @return Datatables JSON
      */
-    public function data()
+    public function data(Request $request)
     {
 
         $modules = FileInfo::select(array(
@@ -134,7 +80,7 @@ class ArhiveController extends Controller
         ))
             ->join('grades_files','grades_files.file_info_id', '=', 'xls_file_info.id')
             ->join('users', 'users.id', '=', 'xls_file_info.user_id')
-
+            ->orderBy('created_at','DESC')
             ->distinct()
             ->get();
 
