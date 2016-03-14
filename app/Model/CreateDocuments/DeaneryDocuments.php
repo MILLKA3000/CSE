@@ -11,7 +11,6 @@ use App\Model\Contingent\Students;
 use App\UserToDepartments;
 use Chumper\Zipper\Facades\Zipper;
 use Illuminate\Database\Eloquent\Model;
-use App\Model\Contingent\Students as ContStudent;
 use File;
 use Illuminate\Support\Facades\Auth;
 use Storage;
@@ -74,10 +73,17 @@ class DeaneryDocuments extends Model
         $this->department = CacheDepartment::getDepartment(Students::getStudentDepartment($students[0]->id_student))->name;
 
         foreach ($students as $student) {
-            $student = Grades::select('id_student','fio','group','code','exam_grade','grade')->where('id_student',$student->id_student)->whereIn('grade_file_id', (array) $this->dataEachOfFile->lists('id')->toArray())->distinct()->orderBy('exam_grade', 'ASC')->get()->last();
-
-            $student->grade_consulting = ConsultingGrades::where('id_student',$student['id_student'])->where('id_num_plan', $this->dataEachOfFile->first()->ModuleVariantID)->get()->last();
-
+            $student = Grades::select('id_student','fio','group','code','exam_grade','grade')
+                ->where('id_student',$student->id_student)
+                ->whereIn('grade_file_id', (array) $this->dataEachOfFile->lists('id')->toArray())
+                ->distinct()
+                ->orderBy('exam_grade', 'ASC')
+                ->get()
+                ->last();
+            $student->grade_consulting = ConsultingGrades::where('id_student',$student['id_student'])
+                ->where('id_num_plan', $this->dataEachOfFile->first()->ModuleVariantID)
+                ->get()
+                ->last();
             (isset($student->grade_consulting))?$student->grade_consulting = $student->grade_consulting->grade_consulting:$student->grade_consulting='';
             $this->studentsOfGroup[Students::getStudentGroup($student['id_student'])][] = $student;
         }
@@ -91,17 +97,20 @@ class DeaneryDocuments extends Model
      */
     private function formHtml()
     {
-        foreach ($this->studentsOfGroup as $group=>$students) {
-            $this->createHeaderShablon($group);
-            $num = 1;
-            foreach($students as $student) {
 
-                $exam_grade = ($student->exam_grade == 0) ? "0(не склав)" : $student->exam_grade;
-                $this->shablon .= "<tr><td width=10% align=center>" . ($num++) . "</td><td width=50%>" . Students::getStudentFIO($student->id_student) . "</td><td width=15%>" . ContStudent::getStudentBookNum($student->id_student) . "</td><td>".$student->grade."</td><td>".$exam_grade."</td>";
+        foreach ($this->studentsOfGroup as $group=>$students) {
+            $this->shablon = '';
+            $this->group = $group;
+            $this->createHeaderShablon();
+            $num = 0;
+            foreach($students as $student) {
+                $student->num = ++$num;
+                $student->exam_grade = ($student->exam_grade == 0) ? "0(не склав)" : $student->exam_grade;
+                $student->final_grade = (($student->grade_consulting=='0' || $student->exam_grade == 0) ? '0(не склав)' : ($this->typeExam=='exam') ? $student->exam_grade + $student->grade_consulting : $student->exam_grade);
                 if($this->typeExam=='exam') {
-                    $this->shablon .= "<td width=10%>".(($this->gradePrint=="true")?(isset($student->grade_consulting))?($student->grade_consulting=='0')?'0(не склав)':$student->grade_consulting:'':'')."</td>";
+                    $student->checkExam = (($this->gradePrint == "true") ? (isset($student->grade_consulting)) ? ($student->grade_consulting == '0') ? '0(не склав)' : $student->grade_consulting : '' : '');
                 }
-                $this->shablon .= "<td>".(($student->grade_consulting=='0' || $student->exam_grade == 0) ? '0(не склав)' : ($this->typeExam=='exam') ? $exam_grade+$student->grade_consulting : $exam_grade)."</td></tr>";
+                $this->shablon .= view('admin.docs.exam.general')->with('student',$student);
             }
             $this->numStud = $num-1;
             $this->createFooterShablon();
@@ -122,71 +131,11 @@ class DeaneryDocuments extends Model
     /**
      * Create block for header of shablon
      */
-    private function createHeaderShablon($group)
+    private function createHeaderShablon()
     {
-        $this->shablon = "
-        <html>
-        <head>
-            <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
-            <style>
-                body {font-size:14px;}
-            </style>
-        </head>
-        <body>
-        <p align=center>МІНІСТЕРСТВО ОХОРОНИ ЗДОРОВЯ УКРАЇНИ </p>
-        <p align=center><b><u>ДВНЗ «Тернопільський державний медичний університет імені І.Я. Горбачевського МОЗ України</u></b></p>
-        <table class=guestbook width=625 align=center cellspacing=0 cellpadding=3 border=0>
-            <tr>
-                <td width=80%> Факультет <u>" . $this->department . "</u></td><td>Група_<u>" . $group . "</u>___</td>
-            </tr>
-            <tr>
-                <td width=80%> <u>" . $this->dataEachOfFile->first()->EduYear . "/" . ($this->dataEachOfFile->first()->EduYear + 1) . "</u> навчальний рік</td><td>Курс _<u>" . $this->findSemester() . "</u>___</td>
-            </tr>
-            <tr>
-                <td width=80%>  Спеціальність <u>" . $this->speciality . "</u></td><td></td>
-            </tr>
-        </table>
-        <p align=center> Зведена відомість №__________ </p>
-        <p>З <u>" . $this->dataEachOfFile->first()->ModuleNum . ". " . $this->dataEachOfFile->first()->NameDiscipline . "</u> - <u>" . $this->dataEachOfFile->first()->NameModule . "</u></p>
-        <table class=guestbook width=625 align=center cellspacing=0 cellpadding=3 border=0>
-            <tr>
-                <td width=30%>За _<u>" . $this->dataEachOfFile->first()->Semester . "</u>___ навчальний семестр,</td><td width=20%><u>_" . date('d.m.Y') . "___</u></td><td width=50%></td>
-            </tr>
-        </table>
-        <table class=guestbook width=620 align=center cellspacing=0 cellpadding=3 border=1>
-            <tr>
-                <td width=5% align=center>
-                    <b>№ <br />п/п</b>
-                </td>
-                <td width=50%>
-                    <b>Прізвище, ім'я по-батькові</b>
-                </td>
-                <td width=10% align=center>
-                    <b>№ індиві-дуального навч. плану</b>
-                </td>
-                <td width=10%>
-                        <b>Поточна оцінка</b>
-                    </td>";
-                if($this->typeExam=='exam') {
-                    $this->shablon .= "
-                    <td width=10%>
-                        <b>Оцінка за тест</b>
-                    </td>
-                    <td width=15% align=center>
-                        <b>Оцінка за співбесіду</b>
-                    </td>";
-                }else{
-                    $this->shablon .= "
-                    <td width=10%>
-                        <b>Оцінка за тест</b>
-                    </td>";
-                }
-        $this->shablon .= "<td width=10%>
-                    <b>Загальна оцінка</b>
-                </td>
-            </tr>
-
-        ";
+        $this->semester = $this->findSemester();
+        $this->date = date('d.m.Y');
+        $this->shablon .= view('admin.docs.exam.header')->with('this',$this);
     }
 
     /**
@@ -194,10 +143,7 @@ class DeaneryDocuments extends Model
      */
     private function createFooterShablon()
     {
-        $this->shablon .= "</table><br />
-        Заступник декана _______________________________________________________________ <br>
-        (прізвище та ініціали)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(підпис)<br />
-         ";
+        $this->shablon .= view('admin.docs.exam.footer');
     }
 
 
