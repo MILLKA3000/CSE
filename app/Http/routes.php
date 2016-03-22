@@ -57,7 +57,7 @@ Route::group(['prefix' => '/', 'middleware' => 'auth'], function() {
             Route::get('documents/{id}/getAllDocuments', 'Admin\DocumentsController@getAllDocuments');
             Route::get('documents/{id}/remove', 'Admin\DocumentsController@remove');
             Route::get('documents/{depId}/{id}/{check}/getAllConsultingDocuments', 'Admin\DocumentsController@getAllConsultingDocuments');
-            Route::get('documents/{depId}/{id}/{check}/getAllDocumentsDeanery', 'Admin\DocumentsController@getAllDocumentsDeanery');
+            Route::get('documents/{specId}/{depId}/{id}/{check}/getAllDocumentsDeanery', 'Admin\DocumentsController@getAllDocumentsDeanery');
             Route::get('documents/{id}/sendEmails', 'Admin\DocumentsController@sendEmails');
         #Statistics
             Route::get('documents/{id}/getAllStatistics', 'Admin\DocumentsController@getAllStatistics');

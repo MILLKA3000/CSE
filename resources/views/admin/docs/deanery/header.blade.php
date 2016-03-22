@@ -16,7 +16,7 @@
         <td width=80%> <u> {{ $this['dataEachOfFile']->first()->EduYear }} / {{($this['dataEachOfFile']->first()->EduYear + 1)}}</u> навчальний рік</td><td>Курс _<u> {{ $this['semester'] }}</u>___</td>
     </tr>
     <tr>
-        <td width=80%>  Спеціальність <u>" . $this->speciality . "</u></td><td></td>
+        <td width=80%>  Спеціальність <u> {{ $this['speciality'] }} </u></td><td></td>
     </tr>
 </table>
 <p align=center> Зведена відомість №__________ </p>
@@ -40,7 +40,7 @@
         <td width=10%>
             <b>Поточна оцінка</b>
         </td>
-        @if($this['typeExam']=='exam')
+        @if($this['type']=='exam')
             <td width=10%>
                 <b>Оцінка за тест</b>
             </td>

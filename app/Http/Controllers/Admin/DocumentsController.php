@@ -6,7 +6,7 @@ use App\ConsultingGrades;
 use App\FileInfo;
 use App\Grades;
 use App\GradesFiles;
-use App\Http\Requests;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Model\CreateDocuments\ConsultingDocuments;
 use App\Model\CreateDocuments\DeaneryDocuments;
@@ -18,6 +18,7 @@ use App\Model\CreateDocuments\Statistics;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Response;
+
 
 
 
@@ -49,19 +50,24 @@ class DocumentsController extends Controller
      * @param $numPlan
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function getAllConsultingDocuments($depId,$numPlan,$check)
+    public function getAllConsultingDocuments($depId,$numPlan,$check,Request $requests)
     {
         $doc = new ConsultingDocuments($depId,$numPlan,$check);
         return redirect($doc->formDocuments());
     }
 
     /**
+     * @param $depId
      * @param $numPlan
+     * @param $check
+     * @param Request $requests
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function getAllDocumentsDeanery($depId,$numPlan,$check)
+    public function getAllDocumentsDeanery($specId,$depId,$numPlan,$check,Request $requests)
     {
-        $doc = new DeaneryDocuments($depId,$numPlan,$check);
+        $dep = $depId;
+        $doc = new DeaneryDocuments($specId,$dep,$numPlan,$check);
+
         return redirect($doc->formDocuments());
     }
 

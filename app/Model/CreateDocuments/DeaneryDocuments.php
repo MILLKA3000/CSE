@@ -43,7 +43,7 @@ class DeaneryDocuments extends Model
 
     private $gradePrint = 1;
 
-    public function __construct($depId,$idFileGrade,$gradePrint = false)
+    public function __construct($specId,$depId,$idFileGrade,$gradePrint = false)
     {
         $this->gradePrint = $gradePrint;
 
@@ -53,8 +53,17 @@ class DeaneryDocuments extends Model
         $this->DOC_PATH = DIRECTORY_SEPARATOR.'consultingDocuments'.DIRECTORY_SEPARATOR;
         $this->dataEachOfFile = GradesFiles::where('ModuleVariantID', $idFileGrade)
             ->where('DepartmentId', $depId)
+            ->where('SpecialityId', $specId)
             ->get();
-        $this->typeExam = ($this->dataEachOfFile->first()->type_exam_id==2)?'exam':($this->dataEachOfFile->first()->type_exam_id==1)?(AllowedDiscipline::where('arrayAllowed', 'like', '%'.$this->dataEachOfFile->first()->DisciplineVariantID.'%')->get()->first())?'exam':'dz':'dz';
+//        $this->typeExam = ($this->dataEachOfFile->first()->type_exam_id==2)?'exam':($this->dataEachOfFile->first()->type_exam_id==1)?(AllowedDiscipline::where('arrayAllowed', 'like', '%'.$this->dataEachOfFile->first()->DisciplineVariantID.'%')->get()->first())?'exam':'dz':'dz';
+        $this->typeExam = 'dz';
+        if($this->dataEachOfFile->first()->type_exam_id==2){
+            $this->typeExam = 'exam';
+        }else if($this->dataEachOfFile->first()->type_exam_id==1){
+            if ((AllowedDiscipline::where('arrayAllowed', 'like', '%'.$this->dataEachOfFile->first()->DisciplineVariantID.'%')->get()->first())){
+                $this->typeExam = 'exam';
+            }
+        }
         Storage::deleteDirectory($this->DOC_PATH);
     }
 
@@ -69,7 +78,6 @@ class DeaneryDocuments extends Model
         $students = Grades::select('id_student')->whereIn('grade_file_id', (array) $this->dataEachOfFile->lists('id')->toArray())->distinct()->get();
         $this->speciality = CacheSpeciality::getSpeciality(Students::getStudentSpeciality($students[0]->id_student))->name;
         $this->department = CacheDepartment::getDepartment(Students::getStudentDepartment($students[0]->id_student))->name;
-
         foreach ($students as $student) {
             $student = Grades::select('id_student','fio','group','code','exam_grade','grade')
                 ->where('id_student',$student->id_student)
@@ -99,6 +107,7 @@ class DeaneryDocuments extends Model
         foreach ($this->studentsOfGroup as $group=>$students) {
             $this->shablon = '';
             $this->group = $group;
+            $this->type = $this->typeExam;
             $this->createHeaderShablon();
             $num = 0;
             foreach($students as $student) {
