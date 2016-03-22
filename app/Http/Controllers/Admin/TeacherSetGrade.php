@@ -123,6 +123,7 @@ class TeacherSetGrade extends Controller
             'grades_files.ModuleVariantID',
             'grades_files.DisciplineVariantID',
             'grades_files.DepartmentId as DepartmentId',
+            'grades_files.SpecialityId as SpecialityId',
         ))->distinct('ModuleVariantID')
             ->join('cache_department','cache_department.id_from','=','grades_files.DepartmentId')
             ->join('type_exam','grades_files.type_exam_id', '=', 'type_exam.id')
@@ -149,11 +150,12 @@ class TeacherSetGrade extends Controller
             ->edit_column('EduYear', '{{$EduYear}}/{{$EduYear+1}}')
             ->edit_column('NameModule', '{{$ModuleNum}}. {{$NameModule}}')
             ->add_column('percent','{{$percent}}')
-            ->add_column('actions','@if(in_array(Auth::user()->role_id, [1,2,3,5,8])) <a href="{{ URL::to(\'teacher/\'.$DepartmentId.\'/\' . $ModuleVariantID . \'/edit\' )}}" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-pencil"></span>  {{ trans("admin/modules/consulting.grades") }}</a><a href="{{ URL::to(\'documents/\'.$DepartmentId.\'/\' . $ModuleVariantID . \'/false/getAllConsultingDocuments\' )}}" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-pencil"></span> Пустий шаблон </a>@endif @if (in_array(Auth::user()->role_id, [1,2,3,4,8])) <a href="{{ URL::to(\'documents/\'.$DepartmentId.\'/\' . $ModuleVariantID . \'/true/getAllDocumentsDeanery\' )}}" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-pencil"></span>  Зведена відомість @endif')
+            ->add_column('actions','@if(in_array(Auth::user()->role_id, [1,2,3,5,8])) <a href="{{ URL::to(\'teacher/\'.$DepartmentId.\'/\' . $ModuleVariantID . \'/edit\' )}}" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-pencil"></span>  {{ trans("admin/modules/consulting.grades") }}</a><a href="{{ URL::to(\'documents/\'.$DepartmentId.\'/\' . $ModuleVariantID . \'/false/getAllConsultingDocuments\' )}}" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-pencil"></span> Пустий шаблон </a>@endif @if (in_array(Auth::user()->role_id, [1,2,3,4,8])) <a href="{{ URL::to(\'documents/\'.$SpecialityId.\'/\'.$DepartmentId.\'/\' . $ModuleVariantID . \'/true/getAllDocumentsDeanery\' )}}" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-pencil"></span>  Зведена відомість @endif')
             ->remove_column('ModuleVariantID')
             ->remove_column('DisciplineVariantID')
             ->remove_column('ModuleNum')
             ->remove_column('DepartmentId')
+            ->remove_column('SpecialityId')
             ->make();
     }
 }
