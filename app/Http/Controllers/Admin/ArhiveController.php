@@ -13,8 +13,8 @@ use App\TypeExam;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Datatables;
 use Illuminate\Support\Facades\Session;
+use Datatables;
 
 class ArhiveController extends Controller
 {
@@ -106,6 +106,17 @@ class ArhiveController extends Controller
             ->edit_column('created_at', '<?php echo date("Y-m-d", strtotime($created_at)) ?>')
             ->edit_column('disciplines', '<?php $i=0; ?>@foreach($disciplines as $discipline) <span style="border-bottom: 1px solid #64DD8A;width:100%;display: block;">{{++$i}}. {{$discipline["NameDiscipline"]}}({{$discipline["NameModule"]}}), <br></span> @endforeach')
             ->edit_column('typeExamName', '@foreach($typeExamName as $typeName){{$typeName["name"]}} @endforeach')
+            ->add_column('groups', function($module){
+                return implode(', ',Grades::select('group')
+                    ->whereGradeFileId($module['id'])
+                    ->groupBy('group')
+                    ->orderBy('group')
+                    ->get()
+                    ->lists('group')
+                    ->toArray()
+                );
+
+            })
             ->add_column('actions', '<a href="{{{ URL::to(\'arhive/\' . $id) }}}" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-pencil"></span> {{ trans("admin/modal.detail") }}</a>')
             ->remove_column('id')
             ->remove_column('path')

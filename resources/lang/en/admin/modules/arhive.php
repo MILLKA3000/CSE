@@ -13,6 +13,7 @@ return [
     'typeExam' => 'Type Exam',
     'user' => 'User created',
     'created' => 'Date created',
+    'groups' => 'Groups',
     'changeDate' => 'Change Date Please...',
 
 
