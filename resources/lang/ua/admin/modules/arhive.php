@@ -13,6 +13,7 @@ return [
     'typeExam' => 'Тип здачі',
     'user' => 'Користувач',
     'created' => 'Дата',
+    'groups' => 'Групи',
     'changeDate' => 'Змініть дату...',
 
 
