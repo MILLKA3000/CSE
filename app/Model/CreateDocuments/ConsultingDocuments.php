@@ -89,7 +89,7 @@ class ConsultingDocuments extends Model
             $this->createHeaderShablon($group);
             $num = 1;
             foreach($students as $student) {
-                $student->num = $this->numStud = ++$num;
+                $student->num = $this->numStud = $num++;
                 $student->grade_consulting = (($this->gradePrint=="true")?(isset($student->grade_consulting))?($student->grade_consulting=='0')?'0(не склав)':$student->grade_consulting:'':'');
                 $this->shablon .= view('admin.docs.consulting.general')->with('student',$student);
             }

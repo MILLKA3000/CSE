@@ -88,6 +88,9 @@
     <script src="{{ asset('js/dataTablesSelect.js') }}"></script>
     <script>
         $('#table2').dataTableHelper();
+
+
+        initJS = function(){
             $('.add').on('click', function () {
                 var self = this;
                 $.post("/teacher/saveGrade", {
@@ -96,12 +99,11 @@
                     '_token': $("#_token").val(),
                     'student': $(this).attr('id'),
                     'value': $("#i" + $(this).attr('id')).val()
-                }).done(function (data) {
+                }).then(function (data) {
                     data = JSON.parse(data);
                     if (data.status == 'true') {
                         $('#tr' + $(self).data('student-id')).css({'backgroundColor': '#C8FFC8', 'color': 'black'});
                     } else if (data.status == 'false') {
-                        alert(data.message);
                         $('#i' + $(self).data('student-id')).val(data.grade);
                         $('#tr' + $(self).data('student-id')).css({'backgroundColor': '#FFE3C8', 'color': 'black'});
                     }
@@ -116,44 +118,16 @@
                     '_token': $("#_token").val(),
                     'student': $(this).attr('id'),
                     'value': $("#i" + $(this).attr('id')).val()
-                }).done(function (data) {
-                    data = JSON.parse(data);
+                }).then(function (data) {
+                    $('#tr' + $(self).data('student-id')).css({'backgroundColor': '#FFE3C8', 'color': 'black'});
                     $('#i' + $(self).data('student-id')).val('');
                 })
             });
+        }
+
+        initJS();
         $('.pagination li a, select, input').on('click', function () {
-            $("body").delegate(".add", "click", function(e) {
-                var self = this;
-                $.post("/teacher/saveGrade", {
-                    'modnum':{{$about_module->ModuleVariantID}},
-                    'depId':{{$about_module->DepartmentId}},
-                    '_token': $("#_token").val(),
-                    'student': $(this).attr('id'),
-                    'value': $("#i" + $(this).attr('id')).val()
-                }).done(function (data) {
-                    data = JSON.parse(data);
-                    if (data.status == 'true') {
-                        $('#tr' + $(self).data('student-id')).css({'backgroundColor': '#C8FFC8', 'color': 'black'});
-                    } else if (data.status == 'false') {
-                        alert(data.message);
-                        $('#i' + $(self).data('student-id')).val(data.grade);
-                        $('#tr' + $(self).data('student-id')).css({'backgroundColor': '#FFE3C8', 'color': 'black'});
-                    }
-                })
-            });
-            $("body").delegate(".clear", "click", function(e) {
-                var self = this;
-                $.post("/teacher/clearGrade", {
-                    'modnum':{{$about_module->ModuleVariantID}},
-                    'depId':{{$about_module->DepartmentId}},
-                    '_token': $("#_token").val(),
-                    'student': $(this).attr('id'),
-                    'value': $("#i" + $(this).attr('id')).val()
-                }).done(function (data) {
-                    data = JSON.parse(data);
-                    $('#i' + $(self).data('student-id')).val('');
-                })
-            });
+            initJS();
         });
     </script>
 @stop
