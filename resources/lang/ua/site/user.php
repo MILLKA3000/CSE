@@ -2,7 +2,7 @@
 
 return [
 	'login' => 'Увійти',
-	'login_to_account' => 'Увійти під вашим користувачем',
+	'login_to_account' => 'Вхід для адміністратора',
 	'submit' => 'Підтвердити',
 //	'register' => 'Створити нового користувача',
 	'remember' => 'Нагадати',
@@ -19,5 +19,4 @@ return [
 	'password_required' => 'Введіть ваш пароль',
 	'password_confirmed' => 'Введіть пароль повторно',
     'change_password' => 'Змінити пароль',
-
 ];

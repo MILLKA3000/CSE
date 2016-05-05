@@ -16192,7 +16192,13 @@ label {
         #cboxClose:hover{background-position:bottom center;}
 
 
-
 #wrapper {
     min-width: 1280px!important;
+}
+
+.ruslan-login-spoiler >  input + .ruslan-login-box {
+  display: none;
+}
+.ruslan-login-spoiler >  input:checked + .ruslan-login-box {
+  display: block;
 }
