@@ -12,9 +12,10 @@
         <meta name="author" content="Jon Doe"/>
     @show @section('meta_description')
         <meta name="description"
-              content="Lorem ipsum dolor sit amet, nihil fabulas et sea, nam posse menandri scripserit no, mei."/>
+              content=""/>
     @show
     <link href="{{ asset('css/admin.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/dataTables.responsive.css') }}" rel="stylesheet">
     <script src="{{ asset('js/admin.js') }}"></script>
     @yield('styles')
 </head>
@@ -25,7 +26,7 @@
         @yield('main')
     </div>
 </div>
-
+<script src="{{ asset ("/js/dataTables.responsive.min.js") }}" type="text/javascript"></script>
 <script type="text/javascript">
     var oTable;
     $(document).ready(function () {
@@ -63,6 +64,7 @@
                     }
                 });
             }
+
         });
     });
 </script>

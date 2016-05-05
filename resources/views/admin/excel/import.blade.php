@@ -4,6 +4,10 @@
 @section('title') {!! trans("admin/modules/Excel.loadXLStitle") !!} :: @parent
 @stop
 
+@section('styles')
+    <link href="{{ asset('css/fileinput.min.css') }}" rel="stylesheet">
+@endsection
+
 {{-- Content --}}
 @section('main')
     <div class="page-header">
@@ -23,25 +27,41 @@
                 {!! trans("admin/modules/Excel.Change_XLS_file") !!}
             </div>
             <div class="panel-body">
-                @if(Session::has('success'))
-                    <div class="alert-box success">
-                        <h2>{!! Session::get('success') !!}</h2>
-                    </div>
+                @if(isset($error))
+                    <p class="alert alert-danger">{!! $error !!}</p>
                 @endif
                 {!! Form::open(array('url'=>'excel/importXLS','method'=>'post', 'files'=>true)) !!}
+
+                    <div class="form-group col-xs-3 {{ $errors->has('qtyQuestions') ? 'has-error' : '' }}">
+                        {!! Form::label('qtyQuestions', trans("admin/modules/getExcel.type_exam"), array('class' => 'control-label')) !!}
+                        <div class="controls">
+                            {!! Form::select('qtyQuestions', ['0'=>'Виберіть зі списку (обовязково)','24'=>'24','48'=>'48'], '',array('id'=>"qtyQuestions",'class' => 'form-control')) !!}
+                            <span class="help-block">{{ $errors->first('qtyQuestions', ':message') }}</span>
+                        </div>
+                    </div>
+
                 <div class="control-group">
                     <div class="controls">
-                        {!! Form::file('xls') !!}
+                        <label class="control-label">Select File</label>
+                        <input id="input-1a"
+                               type="file"
+                               class="file btn btn-success btn-sm"
+                               multiple="false"
+                               name="xls"
+                               data-show-upload="false"
+                               data-show-preview="false"
+                               data-show-caption="true"
+                               data-allowed-file-extensions='["xls", "xlsx"]'>
                         <p class="errors">{!!$errors->first('xls')!!}</p>
-                        @if(isset($error))
-                            <p class="text-danger">{!! $error !!}</p>
-                        @endif
+
                     </div>
                 </div>
                 <div id="success"> </div>
                 {!! Form::submit('Upload', array('class'=>'btn btn-success btn-sm cboxElement')) !!}
                 {!! Form::close() !!}
+
             </div>
+
 
         </div>
 
@@ -57,8 +77,13 @@
 
 {{-- Scripts --}}
 @section('scripts')
-    <script>
+        <script src="{{ asset('js/fileinput.js') }}"></script>
 
+    <script>
+        $(document).ready(function () {
+            $('.btn.btn-file , .btn.fileinput-remove').attr('style','height:35px');
+            $('.glyphicon.glyphicon-folder-open, .glyphicon.glyphicon-trash').hide();
+        });
         $('#tablet').DataTable();
 
     </script>

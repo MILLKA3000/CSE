@@ -8,7 +8,7 @@ return [
 	'remember' => 'Remember',
 	'password' => 'Password',
 	'e_mail' => 'E-Mail Address',
-	'register' => 'Register',
+//	'register' => 'Register',
 	'password_confirmation' => 'Password confirmation',
 	'confirmation_required' => 'Confirmation is required',
 	'name' => 'Name',

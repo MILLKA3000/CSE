@@ -29,6 +29,10 @@ This package is created to handle [server-side](https://www.datatables.net/manua
 - Works with Laravel Dependency Injection and IoC Container.
 - Provides a [DataTable Html Builder](http://datatables.yajrabox.com/html) to help you use the package with less code.
 - Provides XSS filtering function to optionally escape all or specified column values using `escapeColumns('*'\['column'])` method.
+- Provides Query Logging when application is in debug state. **Important: Make sure that debug is set to false when your code is in production**
+
+## Laravel 4.2 & DataTables v1.9.x Users 
+Most of the latest updates/features are not available on these versions. Please check [L4 Branch](https://github.com/yajra/laravel-datatables/tree/L4) and [L5 DT1.9](https://github.com/yajra/laravel-datatables/tree/L5-DT1.9) for old documentations of its features.
 
 ## Buy me a beer
 <a href='https://pledgie.com/campaigns/29515'><img alt='Click here to lend your support to: Laravel Datatables and make a donation at pledgie.com !' src='https://pledgie.com/campaigns/29515.png?skin_name=chrome' border='0' ></a>

@@ -6,6 +6,7 @@
 
 {{-- Content --}}
 @section('main')
+    <link href="{{ asset('css/datePicker/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
     <div class="page-header">
         <h3>
             {!! trans("admin/modules/Excel.loadXLStitle") !!}
@@ -16,6 +17,36 @@
             </div>
         </h3>
     </div>
+    @if(isset($message['success']))
+        <div class="alert alert-success">
+            {!! $message['success'][0] !!}
+        </div>
+    @elseif(isset($message['error']))
+        <div class="alert alert-danger">
+            <h4>System has next problems. Please recheck them</h4>
+            <ul>
+            @foreach($message['error'] as $err)
+                <li>{!! $err !!}</li>
+            @endforeach
+            </ul>
+        </div>
+    @endif
+
+    @if(isset($message['success']))
+        <div class="form-group col-xs-4">
+            <div class='input-group date' id='datetimepicker1'>
+                <input type='text' class="form-control" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+            </div>
+        </div>
+        <div class="form-group col-xs-4">
+            <a href="/documents/{{$id_file}}/getAllDocuments" id="vid" class="btn btn-warning btn-sm "> Get all Documents </a>
+            <a href="/documents/{{$id_file}}/getAllStatistics" id="stat" class="btn btn-warning btn-sm "> Get all Statistics </a>
+        </div>
+    @endif
+
     <div class="row ">
         <div class="col-xs-12">
             <h3 class="text-center">{!! trans("admin/modules/Excel.dataInFile") !!}</h3>
@@ -31,10 +62,9 @@
                 <div class="tab-content">
 
 
-                    <?php $i=0 ?>
+                    <?php $i=1 ?>
                     @foreach($data->get() as $item)
-                        <? $i++ ?>
-                        <div class="tab-pane" id="tab{{$i}}">
+                        <div class="tab-pane" id="tab{{$i++}}">
                             <br/>
 
                             <table id="tablet{{$i}}" class="table table-striped table-hover">
@@ -44,7 +74,7 @@
                                         @foreach ($it as $key=>$col)
                                             <th>{{$key}}</th>
                                         @endforeach
-                                        <? break; ?>
+                                        <?php break; ?>
                                     @endforeach
                                 </tr>
                                 </thead>
@@ -74,9 +104,21 @@
 
 {{-- Scripts --}}
 @section('scripts')
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
+    <script src="{{ asset('js/datePicker/bootstrap-datetimepicker.min.js') }}"></script>
     <script>
-        $('#tablet1').DataTable();
+        $(function () {
+            dp = $('#datetimepicker1').datetimepicker({
+                format: 'DD.MM.YYYY',
+                defaultDate: 'moment'
+            }).on('dp.change', function (e) {
+                $.get("/settings/toSessionDate", {
+                    'date':moment(e.date).format("DD.MM.YYYY")
+                });
+            });
+        });
         $('#tablet2').DataTable();
         $('#tablet3').DataTable();
+        $('#tablet4').DataTable();
     </script>
 @stop

@@ -1,22 +1,22 @@
 <?php namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Controller;
 use App\Role;
 use App\User;
 use App\Http\Requests\Admin\UserRequest;
 use Datatables;
 use App\Logs;
 
-class UserController extends AdminController
+class UserController extends Controller
 {
 
 
     public function __construct()
     {
-        $this->middleware('role:Admin');
+        $this->middleware('role:Admin,Self-Admin');
         view()->share('type', 'user');
     }
-
     /*
     * Display a listing of the resource.
     *
@@ -52,6 +52,7 @@ class UserController extends AdminController
         $user->confirmation_code = str_random(32);
         $user->save();
         Logs::_create('User create '.$user->name);
+        return redirect('/user');
     }
 
     /**
@@ -84,6 +85,7 @@ class UserController extends AdminController
         }
         Logs::_create('User update '.$user->name);
         $user->update($request->except('password','password_confirmation'));
+        return redirect('/user');
     }
 
     /**
@@ -111,7 +113,7 @@ class UserController extends AdminController
         $users = User::all(array('users.id', 'users.name', 'users.email', 'users.confirmed', 'users.created_at','users.role_id'));
 
         foreach($users as $user){
-            $user->role_id = $user->roles()->first()->name;
+            $user->role_id = $user->getNameRole()->first()->name;
         }
 
         return Datatables::of($users)

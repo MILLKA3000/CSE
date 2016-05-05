@@ -3,6 +3,7 @@
 namespace App\Helper;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Model\Contingent\Students as ContStudent;
 
 class Array_ extends Model
 {
@@ -13,16 +14,44 @@ class Array_ extends Model
      * @param $obj
      * @return array
      */
-    static public function formXLSArrayGrade($obj)
+    static public function formXLSConnectTable($obj)
     {
         $data = [];
-        foreach ($obj as $d) {
+        foreach ($obj->getContent() as $d) {
             foreach ($d->students->student as $student) {
-                $data[] = [(string)$student->id, (string)$student->fio, '', (string)$d->groupnum, (string)$student->credits_cur];
+                $data[(string)$student->id] = [(string)$student->id, (string)$student->fio, '', (string)$d->groupnum];
             }
         }
         return $data;
     }
+
+
+    /**
+     * Get data from XML and form array for XLS
+     *
+     * @param $datas
+     * @return array
+     */
+    static public function formXLSArrayGrade($datas)
+    {
+        $data = [];
+        $moduleNum = 2;
+        foreach($datas as $d){
+            foreach ($d['data']->getContent() as $module) {
+                foreach ($module->students->student as $student) {
+                        foreach($module->students->student as $findRepeate){
+                            if(!isset($data[(string)$student->id])) $data[(string)$student->id] = [(string)$student->id, (string)$student->fio,(string)$findRepeate->credits_cur];
+                            if($findRepeate->id == $student->id){
+                               $data[(string)$student->id][$moduleNum] = (string)$findRepeate->credits_cur;
+                            }
+                    }
+                }
+            }
+            $moduleNum++;
+        }
+        return $data;
+    }
+
 
     /**
      * Get information of module
@@ -34,14 +63,21 @@ class Array_ extends Model
     static public function getInfoForXLS($obj)
     {
         $data = [];
-        $data[] = [
-            (string)$obj->testlist->testlistid,
-            (string)$obj->testlist->disciplineid,
-            (string)$obj->testlist->disciplinevariantid,
-            (string)$obj->testlist->modulevariantid,
-            (string)$obj->testlist->discipline,
-            (string)$obj->testlist->moduletheme,
-        ];
+        $specialityId = ContStudent::getStudentSpeciality($obj[0]['data']->getContent()->testlist->students->student->id);
+        foreach($obj as $d) {
+            $content = $d['data']->getContent();
+            $data[] = [
+                (string)$content->testlist->eduyear,
+                (string)$content->testlist->semester,
+                (string)$content->testlist->departmentid,
+                $specialityId,
+                (string)$content->testlist->disciplinevariantid,
+                (string)$content->testlist->modulevariantid,
+                (string)$content->testlist->modulenum,
+                (string)$content->testlist->discipline,
+                (string)$content->testlist->moduletheme,
+            ];
+        }
         return $data;
     }
 

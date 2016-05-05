@@ -3,6 +3,9 @@
 return [
     'create' => 'Create',
     'edit' => 'Edit',
+    'save' => 'Save',
+    'view' => 'View',
+    'detail' => 'Detail',
     'reset' => 'Reset',
     'cancel' => 'Cancel',
     'general' => 'General',
@@ -11,6 +14,8 @@ return [
     'delete' => 'Delete',
     'items' => 'Items',
     'delete_message' => 'Did you want to delete this item?',
-    'delete' => 'Delete',
+    'yes' => 'Yes',
+    'no' => 'No',
+    'this' => 'This',
 
 ];

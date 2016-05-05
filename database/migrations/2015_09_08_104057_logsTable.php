@@ -13,9 +13,9 @@ class LogsTable extends Migration
     public function up()
     {
         Schema::create('logs', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
-            $table->increments('id')->unsigned();
-            $table->integer('user_id')->references('id')->on('user')->onDelete('set null');
+            $table->increments('id');
+            $table->unsignedInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             $table->string('title');
             $table->timestamps();
         });

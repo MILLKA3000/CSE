@@ -2,10 +2,15 @@
 
 namespace App\Helper;
 
+use App\ConsultingGrades;
+use App\Grades;
+use App\GradesFiles;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Container\Container;
+use Illuminate\Support\Facades\Storage;
 use Orchestra\Parser\Xml\Document;
 use Orchestra\Parser\Xml\Reader;
+use File as FileOr;
 
 class XML extends Model
 {
@@ -35,4 +40,21 @@ class XML extends Model
 
         return $students_q;
     }
+
+
+    static public function putGradesInXml($obj,$name)
+    {
+        foreach ($obj->getContent() as $d) {
+            $module = GradesFiles::where('ModuleVariantID',$d->modulevariantid)->orderBy('created_at', 'desc')->get();
+            foreach ($d->students->student as $student) {
+                $examGrade = Grades::where('id_student',$student->id)->whereIn('grade_file_id',(array)$module->lists('id')->toArray())->get()->last();
+                $consultingGrades = ConsultingGrades::where('id_student',$student->id)->where('id_num_plan',$d->modulevariantid)->get()->first();
+                if(isset($examGrade)){
+                    $student->credits_test = $examGrade->exam_grade+(isset($consultingGrades->grade_consulting)?$consultingGrades->grade_consulting:0);
+                }
+            }
+        }
+        return $obj->getContent()->asXml(public_path() . DIRECTORY_SEPARATOR."tmp".DIRECTORY_SEPARATOR."XML".DIRECTORY_SEPARATOR.$name);
+    }
+
 }

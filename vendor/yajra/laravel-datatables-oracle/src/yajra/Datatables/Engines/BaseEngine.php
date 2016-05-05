@@ -556,10 +556,12 @@ abstract class BaseEngine implements DataTableEngine
     {
         $this->totalRecords = $this->count();
 
-        $this->orderRecords( ! $orderFirst);
-        $this->filterRecords();
-        $this->orderRecords($orderFirst);
-        $this->paginate();
+        if ($this->totalRecords) {
+            $this->orderRecords( ! $orderFirst);
+            $this->filterRecords();
+            $this->orderRecords($orderFirst);
+            $this->paginate();
+        }
 
         return $this->render($mDataSupport);
     }
@@ -659,6 +661,9 @@ abstract class BaseEngine implements DataTableEngine
 
         if (isset($this->transformer)) {
             $fractal = new Manager();
+            if ($this->request->get('include')) {
+                $fractal->parseIncludes($this->request->get('include'));
+            }
 
             //Get transformer reflection
             //Firs method parameter should be data/object to transform

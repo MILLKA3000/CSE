@@ -4,6 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Support\Facades\DB;
+use PDOException;
 
 class Authenticate
 {
@@ -34,6 +36,11 @@ class Authenticate
      */
     public function handle($request, Closure $next)
     {
+        try {
+            DB::connection('firebird')->getDatabaseName();
+        } catch(PDOException $e){
+            return view('errors.503');
+        }
         if ($this->auth->guest()) {
             if ($request->ajax()) {
                 return response('Unauthorized.', 401);

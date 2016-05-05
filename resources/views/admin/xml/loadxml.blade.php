@@ -4,11 +4,15 @@
 @section('title') {!! trans("admin/modules/getExcel.loadXMLtitle") !!} :: @parent
 @stop
 
+@section('styles')
+    <link href="{{ asset('css/fileinput.min.css') }}" rel="stylesheet">
+@endsection
+
 {{-- Content --}}
 @section('main')
     <div class="page-header">
         <h3>
-            {!! trans("admin/modules/getExcel.loadXMLtitle") !!}
+            {{ trans("admin/modules/getExcel.".$title)}}
             <div class="pull-right">
                 <div class="pull-right">
 
@@ -20,7 +24,7 @@
 
         <div class="panel panel-info">
             <div class="panel-heading" style="color:#000000">
-                {!! trans("admin/modules/getExcel.Change_XML_file") !!}
+                {{ trans("admin/modules/getExcel.".$title)}}
             </div>
             <div class="panel-body">
                 @if(Session::has('success'))
@@ -28,16 +32,21 @@
                         <h2>{!! Session::get('success') !!}</h2>
                     </div>
                 @endif
-                {!! Form::open(array('url'=>'excel/loadXML','method'=>'post', 'files'=>true)) !!}
-                <div class="control-group">
-                    <div class="controls">
-                        {!! Form::file('xml') !!}
+                {!! Form::open(array('url'=>(isset($path))?$path:'excel/loadXML','method'=>'post', 'files'=>true)) !!}
+
+                        <label class="control-label">Select XML or ZIP File</label>
+                    <input id="input-2" type="file"
+                           class="file btn btn-success btn-sm"
+                           multiple="true"
+                           name="xml[]"
+                           data-show-upload="false"
+                           data-show-caption="true"
+                           data-allowed-file-extensions='["xml", "zip"]'>
+                        {{--{!! Form::file('xml[]', array('multiple'=>true,'array'=>'file','data-show-upload'=>'false','data-show-caption'=>'true')) !!}--}}
                         <p class="errors">{!!$errors->first('xml')!!}</p>
                         @if(isset($error))
                             <p class="text-danger">{!! $error !!}</p>
                         @endif
-                    </div>
-                </div>
                 <div id="success"> </div>
                 {!! Form::submit('Upload', array('class'=>'btn btn-success btn-sm cboxElement')) !!}
                 {!! Form::close() !!}
@@ -57,9 +66,15 @@
 
 {{-- Scripts --}}
 @section('scripts')
-    <script>
 
-        $('#tablet').DataTable();
+    <script src="{{ asset('js/fileinput.js') }}"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.btn.btn-file , .btn.fileinput-remove').attr('style','height:35px');
+            $('.glyphicon.glyphicon-folder-open, .glyphicon.glyphicon-trash').hide();
+        });
+//        $('#tablet').DataTable();
 
     </script>
 @stop

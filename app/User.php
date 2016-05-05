@@ -29,4 +29,9 @@ class User extends Model implements AuthenticatableContract,
         return $this->belongsTo('App\Role','id');
     }
 
+    public function getNameRole()
+    {
+        return $this->hasOne('App\Role','id','role_id');
+    }
+
 }

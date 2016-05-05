@@ -1,8 +1,8 @@
 <?php namespace Cviebrock\EloquentSluggable;
 
+use Closure;
 use Illuminate\Routing\Router;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-
 
 /**
  * Class SluggableRouter
@@ -11,7 +11,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class SluggableRouter extends Router
 {
-
     /**
      * Register a model binder for a wildcard. However, it's changed so that if the
      * model implements the SluggableInterface, we'll use a different method.

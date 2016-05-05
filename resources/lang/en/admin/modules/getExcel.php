@@ -15,7 +15,9 @@ return [
     'count_group' =>'Quantity Group in File',
     'dataInFile' => 'Datas in file',
     'count_student'=>'Quantity Students in File',
-    'Change_XML_file' => 'Change XML File.',
-    'downloadXls' => 'Download XLS Mockup'
+    'Change_XML_file' => 'Change XML Files for download Xls Mockup',
+    'Change_XML_file_For_Import' => 'Parse XML Files for adding exams-grades in them',
+    'downloadXls' => 'Download XLS Mockup',
+    'type_exam' => 'Type Exams'
 
 ];

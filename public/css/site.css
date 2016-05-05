@@ -8,9 +8,11 @@ html {
   font-family: sans-serif;
   -webkit-text-size-adjust: 100%;
       -ms-text-size-adjust: 100%;
+    min-width: 1280px!important;
 }
 body {
   margin: 0;
+
 }
 article,
 aside,
@@ -16188,3 +16190,15 @@ label {
         #cboxNext:hover{background-position:bottom right;}
         #cboxClose{position:absolute; top:5px; right:5px; display:block; background:url(images/controls.png) no-repeat top center; width:38px; height:19px; text-indent:-9999px;}
         #cboxClose:hover{background-position:bottom center;}
+
+
+#wrapper {
+    min-width: 1280px!important;
+}
+
+.ruslan-login-spoiler >  input + .ruslan-login-box {
+  display: none;
+}
+.ruslan-login-spoiler >  input:checked + .ruslan-login-box {
+  display: block;
+}

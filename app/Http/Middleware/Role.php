@@ -2,8 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use Auth;
 use Closure;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 
 class Role
 {
@@ -18,6 +19,7 @@ class Role
     public function handle($request, Closure $next, ...$params)
     {
         $rolesList = array();
+        App::setLocale(Auth::user()->lang);
 
         #if no auth -> 404
         if (!Auth::user()) {
@@ -25,7 +27,7 @@ class Role
         }
 
 
-        $rolesList[] = Auth::user()->roles->name;
+        $rolesList[] = Auth::user()->getNameRole->name;
 
 
         // if $params is an array type then we must work with foreach loop

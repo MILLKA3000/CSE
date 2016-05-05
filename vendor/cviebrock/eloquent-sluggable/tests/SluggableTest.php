@@ -3,13 +3,11 @@
 use Illuminate\Support\Str;
 use Orchestra\Testbench\TestCase;
 
-
 /**
  * Class SluggableTest
  */
 class SluggableTest extends TestCase
 {
-
     /**
      * Setup the test environment.
      */
@@ -17,11 +15,8 @@ class SluggableTest extends TestCase
     {
         parent::setUp();
 
-        // Create an artisan object for calling migrations
-        $artisan = $this->app->make('Illuminate\Contracts\Console\Kernel');
-
         // Call migrations specific to our tests, e.g. to seed the db
-        $artisan->call('migrate', [
+        $this->artisan('migrate', [
           '--database' => 'testbench',
           '--path' => '../tests/database/migrations',
         ]);
@@ -569,7 +564,7 @@ class SluggableTest extends TestCase
 
         $post3 = $this->makePost('My third post');
         $post3->save();
-        
+
         $post4 = $this->makePost(5);
         $post4->save();
 
@@ -580,7 +575,7 @@ class SluggableTest extends TestCase
         $post = Post::findBySlugOrId(3);
 
         $this->assertEquals($post3->id, $post->id);
-        
+
         $post = Post::findBySlugOrId(5);
 
         $this->assertEquals($post4->id, $post->id);
@@ -601,7 +596,7 @@ class SluggableTest extends TestCase
 
         $post3 = $this->makePost('My third post');
         $post3->save();
-        
+
         $post4 = $this->makePost(5);
         $post4->save();
 
@@ -610,9 +605,9 @@ class SluggableTest extends TestCase
 
         $post = Post::findBySlugOrIdOrFail(3);
         $this->assertEquals($post3->id, $post->id);
-        
+
         $post = Post::findBySlugOrIdOrFail(5);
-		$this->assertEquals($post4->id, $post->id);
+        $this->assertEquals($post4->id, $post->id);
 
         try {
             Post::findBySlugOrFail('my-fourth-post');
@@ -668,8 +663,7 @@ class SluggableTest extends TestCase
         $post2->dummy = 'Some update happens, and the unique value increments...';
         $post2->save(); // before fix, my-test-post-2
 
-        $this->assertEquals($post2->slug,
-          'my-test-post-1'); // previously failed
+        $this->assertEquals('my-test-post-1', $post2->slug); // previously failed
     }
 
     /**
@@ -685,7 +679,7 @@ class SluggableTest extends TestCase
         ]);
         $post->author()->associate($author);
         $post->save();
-        $this->assertEquals($post->slug, 'arthur-conan-doyle-first');
+        $this->assertEquals('arthur-conan-doyle-first', $post->slug);
     }
 
     /**
@@ -699,7 +693,7 @@ class SluggableTest extends TestCase
           'title' => 'First'
         ]);
         $post->save();
-        $this->assertEquals($post->slug, 'first');
+        $this->assertEquals('first', $post->slug);
     }
 
     /**
@@ -715,7 +709,7 @@ class SluggableTest extends TestCase
         ]);
 
         $post->save();
-        $this->assertEquals($post->slug, null);
+        $this->assertEquals(null, $post->slug);
     }
 
     /**
@@ -729,7 +723,7 @@ class SluggableTest extends TestCase
           'title' => 'The quick brown fox jumps over the lazy dog'
         ]);
         $post->save();
-        $this->assertEquals($post->slug, 'tha-qaack-brawn-fax-jamps-avar-tha-lazy-dag');
+        $this->assertEquals('tha-qaack-brawn-fax-jamps-avar-tha-lazy-dag', $post->slug);
     }
 
     /**
@@ -740,13 +734,13 @@ class SluggableTest extends TestCase
     public function testSluggingEvent()
     {
         // test event to modify the model before slugging
-        Post::registerModelEvent('slugging', function($post) {
+        Post::registerModelEvent('slugging', function ($post) {
             $post->title = 'Modified by event';
         });
 
         $post = new Post(['title' => 'My Test Post']);
         $post->save();
-        $this->assertEquals($post->slug, 'modified-by-event');
+        $this->assertEquals('modified-by-event', $post->slug);
     }
 
     /**
@@ -757,13 +751,13 @@ class SluggableTest extends TestCase
     public function testCancelSluggingEvent()
     {
         // test event to cancel the slugging
-        Post::registerModelEvent('slugging', function($post) {
+        Post::registerModelEvent('slugging', function ($post) {
             return false;
         });
 
         $post = new Post(['title' => 'My Test Post']);
         $post->save();
-        $this->assertEquals($post->slug, null);
+        $this->assertEquals(null, $post->slug);
     }
 
     /**
@@ -773,14 +767,36 @@ class SluggableTest extends TestCase
      */
     public function testSluggedEvent()
     {
-        Post::registerModelEvent('slugged', function($post) {
+        Post::registerModelEvent('slugged', function ($post) {
             $post->subtitle = 'I have been slugged!';
         });
 
         $post = new Post(['title' => 'My Test Post']);
         $post->save();
-        $this->assertEquals($post->slug, 'my-test-post');
-        $this->assertEquals($post->subtitle, 'I have been slugged!');
+        $this->assertEquals('my-test-post', $post->slug);
+        $this->assertEquals('I have been slugged!', $post->subtitle);
     }
 
+    /**
+     * Test that we can generate a slug statically.
+     *
+     * @test
+     */
+    public function testStaticSlugGenerator()
+    {
+        $this->assertEquals('my-test-post', Post::createSlug('My Test Post'));
+    }
+
+    /**
+     * Test that we generate unique slugs in a static context.
+     *
+     * @test
+     */
+    public function testStaticSlugGeneratorWhenEntriesExist()
+    {
+        $post = Post::create(['title' => 'My Test Post']);
+
+        $this->assertEquals('my-test-post', $post->slug);
+        $this->assertEquals('my-test-post-1', Post::createSlug('My Test Post'));
+    }
 }

@@ -3,5 +3,12 @@
 .env.php
 .env
 /config/database.php
+/config/mail.php
 /.idea/*
 /node_modules/*
+/vendor/*
+/public/consultingDocuments/*
+/public/xls/*
+/public/xml/*
+/public/tmp/*
+/public/documents/*
