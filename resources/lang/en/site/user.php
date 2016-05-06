@@ -2,7 +2,9 @@
 
 return [
 	'login' => 'Login',
-	'login_to_account' => 'Login into your account',
+	'teacher_login' => 'Login for teacher',
+	'google_login_button' => 'Sing in with Google',
+	'login_to_account' => 'Administrator login',
 	'submit' => 'Submit',
 	'register' => 'Create a new account',
 	'remember' => 'Remember',
@@ -19,5 +21,4 @@ return [
 	'password_required' => 'You need to provide your password',
 	'password_confirmed' => 'You need to provide confirm password',
     'change_password' => 'Change password',
-
 ];

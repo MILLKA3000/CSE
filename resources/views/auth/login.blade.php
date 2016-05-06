@@ -7,14 +7,14 @@
 @section('content')
     <div class="row">
         <div class="page-header">
-            <h2>Вхід для відповідальних на кафедрах</h2>
+            <h2>{!! trans('site/user.teacher_login') !!}</h2>
         </div>
     </div>
     <div class="container-fluid">
         <div class="row">
             <div class="form-group">
                 <div class="col-md-4 col-md-offset-4">
-                    <a class="btn btn-primary" href="{{ URL::to('/googleOauth2') }}"><i></i>Вхід за допомогою Google</a>
+                    <a class="btn btn-primary" href="{{ URL::to('/googleOauth2') }}">{!! trans('site/user.google_login_button') !!}</a>
                 </div>
             </div>
         </div>
