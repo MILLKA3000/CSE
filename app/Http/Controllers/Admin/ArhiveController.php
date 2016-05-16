@@ -75,7 +75,7 @@ class ArhiveController extends Controller
             'users.id as typeExamName',
             'users.name as userName',
             'xls_file_info.id as file_id',
-            'grades_files.id as file_grade_id',
+//            'grades_files.id as file_grade_id',
             'xls_file_info.path',
             'grades_files.name',
         ))
@@ -119,14 +119,12 @@ class ArhiveController extends Controller
                 return CacheSpeciality::getSpeciality($module->SpecialityId)->name;
             })
             ->add_column('groups', function($module){
-                return implode(', ',Grades::select('group')
-                    ->where('grade_file_id',$module->file_grade_id)
-                    ->distinct()
-                    ->get()
-                    ->lists('group')
-                    ->toArray()
-                );
-
+                $modules = GradesFiles::where('file_info_id',$module->file_id)->get();
+                $group = [];
+                foreach($modules as $module){
+                    $group = Grades::select('group')->where('grade_file_id',$module->id)->distinct()->get()->lists('group','group')->toArray()+$group;
+                }
+                return implode(', ',$group);
             })
             ->add_column('actions', '<a href="{{{ URL::to(\'arhive/\' . $file_id) }}}" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-pencil"></span> {{ trans("admin/modal.detail") }}</a>')
             ->remove_column('file_id')
