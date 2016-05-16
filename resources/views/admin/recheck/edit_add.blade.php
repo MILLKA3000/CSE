@@ -59,7 +59,7 @@
                                             <td>{{$student->grade}}</td>
                                             <td>
                                                 <input type="text" value="{{$student->exam_grade}}"  style="width:50px;margin-right: 10px;" id="i{{$student->id}}" class="form-control input-sm" />
-                                                <a href="#!inline" data-student-id="{{$student->id}}" data-module="{{$item->id}}" class="add btn  btn-success left">Recheck</a>
+                                                <a href="#!inline" data-student-id="{{$student->id}}" data-module="{{$item->id}}" class="addGrade btn  btn-success left">Recheck</a>
                                             </td>
                                         </tr>
                                 @endforeach
@@ -83,32 +83,26 @@
             $.each($('.table'),function(){
                 $(this).dataTableHelper();
             });
-
-            $('.add').on('click',function(){
-                var self = this;
-                $.post( "/recheck/saveGrade", {'id':$(this).data('student-id'),'_token':$("#_token").val(),'value':$("#i"+$(this).data('student-id')).val()}).done(function(data){
-                   if(data=='true')
-                    {
-                        $('#tr'+$(self).data('student-id')).css({'backgroundColor': '#C8FFC8', 'color': 'black'});
-                    }else if(data=='false'){
-                       $('#tr'+$(self).data('student-id')).css({'backgroundColor': '#FFE3C8', 'color': 'black'});
-                   }
-                });
-            })
-
-            $('.pagination li a').on('click', function () {
-                $("body").delegate(".add", "click", function(e) {
+            initJS = function(){
+                $("body").delegate(".addGrade", "click", function(e) {
                     var self = this;
                     $.post( "/recheck/saveGrade", {'id':$(this).data('student-id'),'_token':$("#_token").val(),'value':$("#i"+$(this).data('student-id')).val()}).done(function(data){
-                        if(data=='true')
+                       if(data=='true')
                         {
                             $('#tr'+$(self).data('student-id')).css({'backgroundColor': '#C8FFC8', 'color': 'black'});
                         }else if(data=='false'){
-                            $('#tr'+$(self).data('student-id')).css({'backgroundColor': '#FFE3C8', 'color': 'black'});
-                        }
+                           $('#tr'+$(self).data('student-id')).css({'backgroundColor': '#FFE3C8', 'color': 'black'});
+                       }
                     });
                 });
+            };
+
+            $('.pagination li a, select, input').on('click', function () {
+                $("body").undelegate("click");
+                initJS();
             });
+
+            initJS();
         })
 
     </script>

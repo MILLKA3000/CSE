@@ -74,7 +74,8 @@ class ArhiveController extends Controller
             'users.id as disciplines',
             'users.id as typeExamName',
             'users.name as userName',
-            'xls_file_info.id',
+            'xls_file_info.id as file_id',
+            'grades_files.id as file_grade_id',
             'xls_file_info.path',
             'grades_files.name',
         ))
@@ -84,41 +85,52 @@ class ArhiveController extends Controller
             ->distinct()
             ->get();
 
-        foreach($modules as $module){
-            $module['disciplines'] =  GradesFiles::select(array(
-                'grades_files.NameDiscipline',
-                'grades_files.NameModule',
-            ))->where('file_info_id',$module['id'])
-                ->get();
-
-            $module['typeExamName'] =  GradesFiles::select(array(
-                'type_exam.name',
-            ))->where('file_info_id',$module['id'])
-                ->join('type_exam','grades_files.type_exam_id', '=', 'type_exam.id')
-                ->distinct()
-                ->get();
-
-            $module->DepartmentId = CacheDepartment::getDepartment($module->DepartmentId)->name;
-            $module->SpecialityId = CacheSpeciality::getSpeciality($module->SpecialityId)->name;
-        }
 
         return Datatables::of($modules)
             ->edit_column('created_at', '<?php echo date("Y-m-d", strtotime($created_at)) ?>')
-            ->edit_column('disciplines', '<?php $i=0; ?>@foreach($disciplines as $discipline) <span style="border-bottom: 1px solid #64DD8A;width:100%;display: block;">{{++$i}}. {{$discipline["NameDiscipline"]}}({{$discipline["NameModule"]}}), <br></span> @endforeach')
-            ->edit_column('typeExamName', '@foreach($typeExamName as $typeName){{$typeName["name"]}} @endforeach')
+            ->edit_column('disciplines', function($module){
+                $disc = GradesFiles::select(array(
+                    'grades_files.NameDiscipline',
+                    'grades_files.NameModule',
+                ))->where('file_info_id',$module->file_id)
+                    ->get();
+                $str = '';
+                $i=0;
+                foreach($disc as $discipline){
+                    $str.= '<span style="border-bottom: 1px solid #64DD8A;width:100%;display: block;">'.++$i.'. '. $discipline->NameDiscipline.'('.$discipline->NameModule.') <br></span>';
+                }
+                return $str;
+            })
+            ->edit_column('typeExamName', function($module){
+                return implode(', ',GradesFiles::select(array(
+                    'type_exam.name',
+                ))->where('file_info_id',$module->file_id)
+                    ->join('type_exam','grades_files.type_exam_id', '=', 'type_exam.id')
+                    ->distinct()
+                    ->get()
+                    ->lists('name')
+                    ->toArray()
+                );
+            })
+            ->edit_column('DepartmentId', function($module){
+                return CacheDepartment::getDepartment($module->DepartmentId)->name;
+            })
+            ->edit_column('SpecialityId', function($module){
+                return CacheSpeciality::getSpeciality($module->SpecialityId)->name;
+            })
             ->add_column('groups', function($module){
                 return implode(', ',Grades::select('group')
-                    ->whereGradeFileId($module['id'])
-                    ->groupBy('group')
-                    ->orderBy('group')
+                    ->where('grade_file_id',$module->file_grade_id)
+                    ->distinct()
                     ->get()
                     ->lists('group')
                     ->toArray()
                 );
 
             })
-            ->add_column('actions', '<a href="{{{ URL::to(\'arhive/\' . $id) }}}" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-pencil"></span> {{ trans("admin/modal.detail") }}</a>')
-            ->remove_column('id')
+            ->add_column('actions', '<a href="{{{ URL::to(\'arhive/\' . $file_id) }}}" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-pencil"></span> {{ trans("admin/modal.detail") }}</a>')
+            ->remove_column('file_id')
+            ->remove_column('file_grade_id')
             ->remove_column('path')
             ->remove_column('name')
             ->make();

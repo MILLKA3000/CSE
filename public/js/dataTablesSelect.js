@@ -112,7 +112,6 @@
     }
 
     function highlightColumn (column, index, val) {
-        console.log (column)
         if (val == '') {
             $(column.header ()).removeClass ('highlight')
             $(column.nodes ()).removeClass ('highlight')
