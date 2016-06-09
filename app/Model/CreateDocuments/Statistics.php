@@ -177,9 +177,9 @@ class Statistics extends Model
     {
         $text = '';
         $text .= '<br /><p align=center>
-        '. ($this->department == 'факультет по роботі з іноземними студентами') ? 'Факультет іноземних студентів' : ucfirst($this->department).'
+        '. ($this->department == 'факультет по роботі з іноземними студентами') ? 'Факультет іноземних студентів' : ucfirst($this->department) .'
         , '.$this->findSemester().' - курс
-        ,'.(($this->sumGrades['gradeOfFiveTypes']['type']=='exam')?' Іспит "'.$this->dataOfFile[0]->NameDiscipline .'"' : ' Диференцыйований залік ' ).'
+        ,'.(($this->sumGrades['gradeOfFiveTypes']['type']=='exam')?' Іспит ' : ' Диференційований залік ' ).'
         ,'. date('d.m.Y') .'
         </p><br />
 
