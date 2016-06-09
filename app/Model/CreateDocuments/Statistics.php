@@ -88,7 +88,7 @@ class Statistics extends Model
         $this->shablons['body'] = '';
         $this->shablons['title'] = trans("admin/modules/stat.gStat");
         $this->shablons['body'] .= $this->formHeader();
-        $this->shablons['body'] .= '<br> Не склало – '.count($this->countOfAll2).' ('.number_format(count($this->countOfAll2) / count($this->studentOfModule)*100, 2).'%)';
+        $this->shablons['body'] .= '<br> Не склало – '.count($this->countOfAll2).' ('.number_format(count($this->countOfAll2) / count($this->studentOfModule)*100, 2).'%) <table class="table table-hover " border="1" style="10px" font-size="10px">';
         $this->shablons['body'] .= '<tr><td>№</td><td>Курс</td><td> Назва дисципліни</td><td>Загальна кількість студентів</td><td>Кількість студентів , що склали дисципліну на \'незадовіль-но\' (відсоток)';
         $this->shablons['body'] .= '</td><td>Кількість студентів , що склали дисципліну на \'задовільно\' (відсоток)</td><td>Кількість студентів , що склали дисципліну на \'добре\' (відсоток)</td><td>Кількість студентів , що склали дисципліну на \'відмінно\' (відсоток)';
         $this->shablons['body'] .= '</td><td>Cередній бал </td> <td>Середній бал поточної успішності</td><td>Важкі</td><td>Легкі</td><td>Середній показник</td></tr>';
@@ -130,7 +130,7 @@ class Statistics extends Model
         $this->shablons['body'] = '';
         $this->shablons['title'] = trans("admin/modules/stat.gBCStat");
         $this->shablons['body'] .= $this->formHeader('Загальні дані : '. ($this->EDUBASISID["C"] + $this->EDUBASISID["B"]) .' Контрактні студенти: ' . $this->EDUBASISID["C"] . ', Державні студенти: ' . $this->EDUBASISID["B"] . ')');
-        $this->shablons['body'] .= '<br> Не склало – '.count($this->countOfAll2).' ('.number_format(count($this->countOfAll2) / count($this->studentOfModule)*100, 2).'%)';
+        $this->shablons['body'] .= '<br> Не склало – '.count($this->countOfAll2).' ('.number_format(count($this->countOfAll2) / count($this->studentOfModule)*100, 2).'%) <table class="table table-hover " border="1" style="10px" font-size="10px">';
         $this->shablons['body'] .= '<tr><td>№</td><td>Курс</td><td> Назва дисципліни</td><td>Загальна кількість студентів</td><td>Кількість контрактних студентів , що склали дисципліну на \'незадовіль-но\' (відсоток)</td><td>Кількість державних студентів , що склали дисципліну на \'незадовіль-но\' (відсоток)';
         $this->shablons['body'] .= '</td><td>Кількість контрактних студентів , що склали дисципліну на \'задовільно\' (відсоток)</td><td>Кількість державних студентів , що склали дисципліну на \'задовільно\' (відсоток)</td><td>Кількість контрактних студентів , що склали дисципліну на \'добре\' (відсоток)</td><td>Кількість державних студентів , що склали дисципліну на \'добре\' (відсоток)</td><td>Кількість контрактних студентів , що склали дисципліну на \'відмінно\' (відсоток)</td><td>Кількість державних студентів , що склали дисципліну на \'відмінно\' (відсоток)';
         $this->shablons['body'] .= '</td><td>Cередній бал контрактних студентів</td><td>Cередній бал державних студентів </td> <td>Середній бал поточної успішності контрактних студентів</td><td>Середній бал поточної успішності державних студентів</td></tr>';
@@ -175,15 +175,16 @@ class Statistics extends Model
 
     public function formHeader($beforeTable = '')
     {
+        $this->department = ucfirst($this->department);
         $text = '';
         $text .= '<br /><p align=center>
-        '. ($this->department == 'факультет по роботі з іноземними студентами') ? 'Факультет іноземних студентів' : ucfirst($this->department) .'
+        '. ($this->department == 'Факультет по роботі з іноземними студентами') ? 'Факультет іноземних студентів' : $this->department .'
         , '.$this->findSemester().' - курс
         ,'.(($this->sumGrades['gradeOfFiveTypes']['type']=='exam')?' Іспит ' : ' Диференційований залік ' ).'
         ,'. date('d.m.Y') .'
         </p><br />
 
-        '.$beforeTable.'<br /><table class="table table-hover " border="1" style="10px" font-size="10px">';
+        '.$beforeTable.'<br />';
         return $text;
     }
 
