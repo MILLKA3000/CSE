@@ -175,7 +175,7 @@ class Statistics extends Model
 
     public function formHeader($beforeTable = '')
     {
-        $this->department = ($this->department == 'факультет по роботі з іноземними студентами') ? 'Факультет іноземних студентів' : ucfirst($this->department);
+        $this->department = ($this->department == 'факультет по роботі з іноземними студентами') ? 'Факультет іноземних студентів' : $this->mb_ucfirst($this->department);
         $text = '';
         $text .= '<br /><p align=center>
         '. $this->department .'
@@ -242,6 +242,14 @@ class Statistics extends Model
         }
         
         return $data;
+    }
+
+    private function mb_ucfirst($value)
+    {
+        $firstLetter = mb_strtoupper(mb_substr($value, 0, 1), 'UTF-8');
+        $otherLetters = mb_substr($value, 1);
+
+        return $firstLetter . $otherLetters;
     }
 
 }
