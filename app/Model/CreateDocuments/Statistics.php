@@ -175,12 +175,12 @@ class Statistics extends Model
 
     public function formHeader($beforeTable = '')
     {
-        $this->department = ($this->department == 'Факультет по роботі з іноземними студентами') ? 'Факультет іноземних студентів' : ucfirst($this->department);
+        $this->department = ($this->department == 'факультет по роботі з іноземними студентами') ? 'Факультет іноземних студентів' : ucfirst($this->department);
         $text = '';
         $text .= '<br /><p align=center>
         '. $this->department .'
         , '.$this->findSemester().' - курс
-        ,'.(($this->sumGrades['gradeOfFiveTypes']['type']=='exam')?' Іспит ' : ' Диференційований залік ' ).'
+        ,'.(($this->sumGrades['gradeOfFiveTypes']['type']=='exam')?' Іспит " ' . $this->dataOfFile[0]->NameDiscipline . ' "' : ' Диференційований залік ' ).'
         ,'. date('d.m.Y') .'
         </p><br />
 
