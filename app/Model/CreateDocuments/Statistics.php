@@ -88,7 +88,7 @@ class Statistics extends Model
         $this->shablons['body'] = '';
         $this->shablons['title'] = trans("admin/modules/stat.gStat");
         $this->shablons['body'] .= $this->formHeader();
-        $this->shablons['body'] .= '<br> Не склало – '.count($this->countOfAll2).' ('.number_format(count($this->countOfAll2) / count($this->studentOfModule)*100, 2).'%) <table class="table table-hover " border="1" style="10pt" >';
+        $this->shablons['body'] .= '<br> Не склало – '.count($this->countOfAll2).' ('.number_format(count($this->countOfAll2) / count($this->studentOfModule)*100, 2).'%) <table class="table table-hover" style="font-size:10pt;" border="1">';
         $this->shablons['body'] .= '<tr><td>№</td><td>Курс</td><td> Назва дисципліни</td><td>Загальна кількість студентів</td><td>Кількість студентів , що склали дисципліну на \'незадовіль-но\' (відсоток)';
         $this->shablons['body'] .= '</td><td>Кількість студентів , що склали дисципліну на \'задовільно\' (відсоток)</td><td>Кількість студентів , що склали дисципліну на \'добре\' (відсоток)</td><td>Кількість студентів , що склали дисципліну на \'відмінно\' (відсоток)';
         $this->shablons['body'] .= '</td><td>Cередній бал </td> <td>Середній бал поточної успішності</td><td>Важкі</td><td>Легкі</td><td>Середній показник</td></tr>';
@@ -129,8 +129,8 @@ class Statistics extends Model
         }
         $this->shablons['body'] = '';
         $this->shablons['title'] = trans("admin/modules/stat.gBCStat");
-        $this->shablons['body'] .= $this->formHeader('Загальні дані : '. ($this->EDUBASISID["C"] + $this->EDUBASISID["B"]) .' Контрактні студенти: ' . $this->EDUBASISID["C"] . ', Державні студенти: ' . $this->EDUBASISID["B"] . ')');
-        $this->shablons['body'] .= '<br> Не склало – '.count($this->countOfAll2).' ('.number_format(count($this->countOfAll2) / count($this->studentOfModule)*100, 2).'%) <table class="table table-hover " border="1" style="10pt">';
+        $this->shablons['body'] .= $this->formHeader('Загальні дані ( Бюджет - ' . $this->EDUBASISID["B"] .', Контракт - ' . $this->EDUBASISID["C"] .')');
+        $this->shablons['body'] .= '<br> Не склало – '.count($this->countOfAll2).' ('.number_format(count($this->countOfAll2) / count($this->studentOfModule)*100, 2).'%) <table class="table table-hover" style="font-size:10pt;" border="1" >';
         $this->shablons['body'] .= '<tr><td>№</td><td>Курс</td><td> Назва дисципліни</td><td>Загальна кількість студентів</td><td>Кількість контрактних студентів , що склали дисципліну на \'незадовіль-но\' (відсоток)</td><td>Кількість державних студентів , що склали дисципліну на \'незадовіль-но\' (відсоток)';
         $this->shablons['body'] .= '</td><td>Кількість контрактних студентів , що склали дисципліну на \'задовільно\' (відсоток)</td><td>Кількість державних студентів , що склали дисципліну на \'задовільно\' (відсоток)</td><td>Кількість контрактних студентів , що склали дисципліну на \'добре\' (відсоток)</td><td>Кількість державних студентів , що склали дисципліну на \'добре\' (відсоток)</td><td>Кількість контрактних студентів , що склали дисципліну на \'відмінно\' (відсоток)</td><td>Кількість державних студентів , що склали дисципліну на \'відмінно\' (відсоток)';
         $this->shablons['body'] .= '</td><td>Cередній бал контрактних студентів</td><td>Cередній бал державних студентів </td> <td>Середній бал поточної успішності контрактних студентів</td><td>Середній бал поточної успішності державних студентів</td></tr>';
@@ -178,10 +178,7 @@ class Statistics extends Model
         $this->department = ($this->department == 'факультет по роботі з іноземними студентами') ? 'Факультет іноземних студентів' : $this->mb_ucfirst($this->department);
         $text = '';
         $text .= '<br /><p align=center>
-        '. $this->department .'
-        , '.$this->findSemester().' - курс
-        ,'.(($this->sumGrades['gradeOfFiveTypes']['type']=='exam')?' Іспит " ' . $this->dataOfFile[0]->NameDiscipline . ' "' : ' Диференційований залік ' ).'
-        ,'. date('d.m.Y') .'
+        '. $this->department .', '.$this->findSemester().' - курс, групи:'.$this->_getAllGroup().', '.(($this->sumGrades['gradeOfFiveTypes']['type']=='exam')?' Іспит "' . $this->dataOfFile[0]->NameDiscipline . '"' : ' Диференційований залік' ).', '. date('d.m.Y') .'
         </p><br />
 
         '.$beforeTable.'<br />';
@@ -250,6 +247,37 @@ class Statistics extends Model
         $otherLetters = mb_substr($value, 1);
 
         return $firstLetter . $otherLetters;
+    }
+
+    private function _getAllGroup(){
+        $groups = [];
+        $transform_groups = [];
+        foreach($this->dataOfFile as $module){
+            $groups = Grades::select('group')->where('grade_file_id',$module->id)->distinct()->get()->lists('group','group')->toArray()+$groups;
+        }
+        $groups = array_sort_recursive($groups);
+
+        $count = 1;
+
+        foreach($groups as $key => $group){
+            if (isset($groups[$key]))
+                $transform_groups[$count][] = $groups[$key];
+                if (isset($groups[$key+1])) {
+                    $transform_groups[$count][] = $groups[$key+1];
+                }
+            else{
+                $count++;
+            }
+        }
+        foreach($transform_groups as $key => $group) {
+            if (count($group) > 1) {
+                $finalGroups[] = $group[0] . ' - ' . $group[count($group) - 1];
+            } else {
+                $finalGroups[] = $group[0];
+            }
+        }
+
+        return implode(', ',$finalGroups);
     }
 
 }
